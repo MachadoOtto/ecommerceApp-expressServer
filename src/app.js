@@ -19,7 +19,7 @@ const initializeProductManager = async (productManager) => {
     console.log('[INIT] Initializing Product Manager...');
     let quantity = await productManager.getProductsQuantity();
     if (quantity < 10) {
-        console.log('[INIT] Less than 10 products in the file. Generating a new file wih 10 products...');
+        console.log('[INIT] Less than 10 products in the file. Generating a new file with 10 products...');
         await productManager.deleteAllProducts();
         await productManager.addProduct({title:"Shrek", description:"Pelicula animada, Dreamworks", price:99.99, tumbnail:"./shrek.png", code:"SRK100", stock:10});
         await productManager.addProduct({title:"Fast and Furious", description:"Pelicula de acción, Universal", price:69.99, tumbnail:"./fast.png", code:"F4ST01", stock:15});
