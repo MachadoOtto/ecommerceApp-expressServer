@@ -159,8 +159,8 @@ class ProductManager {
      */
     async getProductById(id) {
         try {
-            let file = await fs.promises.readFile(this.#path, 'utf-8');
-            let product = JSON.parse(file).products.find(p => p.id === id);
+            let products = JSON.parse(await fs.promises.readFile(this.#path, 'utf-8')).products;
+            let product = products.find(p => p.id === id);
             if (product === undefined) {
                 throw new Error(`The product with id ${id} does not exist`);
             } else {
@@ -173,16 +173,32 @@ class ProductManager {
 
     /**
      * Returns an array with all the `Product` objects contained in the `products` array of the ProductManager file.
+     * @param {Number} limit Maximum number of products to be returned. If 0 or less, all the products are returned.
      * @returns {Array<Product>} An array of `Product` objects.
      * @throws {Error} If the read operation fails.
      */
-    async getProducts() {
+    async getProducts(limit = 0) {
         try {
+            if (limit < 0) {
+                limit = 0;
+            }
             let file = await fs.promises.readFile(this.#path, 'utf-8');
+            if (limit > 0) {
+                return JSON.parse(file).products.slice(0, limit);
+            }
             return JSON.parse(file).products;
         } catch (error) {
             throw new Error(`An error occurred while reading the products: ` + error.message);
         }
+    }
+
+    /**
+     * Returns the quantity of `Product` objects contained in the `products` array of the ProductManager file.
+     * @returns {Number} The quantity of `Product` objects.
+     */
+    async getProductsQuantity() {
+        let products = await this.getProducts();
+        return products.length;
     }
 
     /**
@@ -238,7 +254,20 @@ class ProductManager {
         } catch (error) {
             throw new Error(`An error occurred while deleting the product with id ${id}: ` + error.message);
         }
-    }        
+    }
+
+    /**
+     * Deletes all the `Product` objects contained in the `products` array of the ProductManager file.
+     * Also, resets the `lastId` property to 0.
+     * @throws {Error} If the write operation fails.
+     */
+    async deleteAllProducts() {
+        try {
+            await fs.promises.writeFile(this.#path, generateProductJSON(this.#lastId = 0, []));
+        } catch (error) {
+            throw new Error(`An error occurred while deleting all the products: ` + error.message);
+        }
+    }
 }
 
 /* Testing code */
@@ -397,8 +426,8 @@ const testDeleteProduct = async () => {
     console.log('DeleteProduct test finished!');
 }
 
-// Ejecución de los tests, descomentar  la línea correspondiente para ejecutar el test deseado.
-// Eliminar el archivo products_<test_name>.json antes de ejecutar cada test!!!
+// Execution of the tests, uncomment the line corresponding to the test to be executed.
+// Remove the products_<test_name>.json file before executing each test!!!
 // testAddProduct();
 // testUpdateProduct();
 // testDeleteProduct();

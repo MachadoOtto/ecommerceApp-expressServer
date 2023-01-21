@@ -1,4 +1,95 @@
 {
-	"lastId": 0,
-	"products": []
+	"lastId": 10,
+	"products": [
+		{
+			"id": 1,
+			"title": "Shrek",
+			"description": "Pelicula animada, Dreamworks",
+			"price": 99.99,
+			"tumbnail": "./shrek.png",
+			"code": "SRK100",
+			"stock": 10
+		},
+		{
+			"id": 2,
+			"title": "Fast and Furious",
+			"description": "Pelicula de acción, Universal",
+			"price": 69.99,
+			"tumbnail": "./fast.png",
+			"code": "F4ST01",
+			"stock": 15
+		},
+		{
+			"id": 3,
+			"title": "Harry Potter",
+			"description": "Pelicula de fantasía, Warner",
+			"price": 79.99,
+			"tumbnail": "./harry.png",
+			"code": "P0TT3R",
+			"stock": 20
+		},
+		{
+			"id": 4,
+			"title": "Toy Story",
+			"description": "Pelicula animada, Pixar",
+			"price": 39.99,
+			"tumbnail": "./toy_story.png",
+			"code": "T0Y5TR",
+			"stock": 25
+		},
+		{
+			"id": 5,
+			"title": "Titanic",
+			"description": "Pelicula romántica, Paramount",
+			"price": 49.99,
+			"tumbnail": "./titanic.png",
+			"code": "T1T4NC",
+			"stock": 5
+		},
+		{
+			"id": 6,
+			"title": "Avatar",
+			"description": "Pelicula de ciencia ficción, 20th Century Fox",
+			"price": 59.99,
+			"tumbnail": "./avatar.png",
+			"code": "4V4T4R",
+			"stock": 10
+		},
+		{
+			"id": 7,
+			"title": "Star Wars",
+			"description": "Pelicula de ciencia ficción, Lucasfilm",
+			"price": 29.99,
+			"tumbnail": "./star_wars.png",
+			"code": "ST4RWR",
+			"stock": 15
+		},
+		{
+			"id": 8,
+			"title": "The Lord of the Rings",
+			"description": "Pelicula de fantasía, New Line Cinema",
+			"price": 59.99,
+			"tumbnail": "./lord_of_the_rings.png",
+			"code": "L0TR01",
+			"stock": 20
+		},
+		{
+			"id": 9,
+			"title": "The Lion King",
+			"description": "Pelicula animada, Walt Disney Pictures",
+			"price": 39.99,
+			"tumbnail": "./lion_king.png",
+			"code": "LNK1NG",
+			"stock": 25
+		},
+		{
+			"id": 10,
+			"title": "The Avengers",
+			"description": "Pelicula de superhéroes, Marvel Studios",
+			"price": 49.99,
+			"tumbnail": "./avengers.png",
+			"code": "4V3NGR",
+			"stock": 5
+		}
+	]
 }
