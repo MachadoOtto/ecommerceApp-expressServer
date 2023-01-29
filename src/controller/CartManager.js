@@ -7,6 +7,7 @@
 
 const fs = require('fs');
 const Cart = require('../models/Cart.js');
+const ProductManager = require('./ProductManager.js');
 
 /* Class CartManager */
 
@@ -62,6 +63,35 @@ class CartManager {
             }
         } catch (err) {
             throw new Error(`An error occurred while searching for the cart with id ${id}: ` + err.message);
+        }
+    }
+
+    /**
+     * Adds a new `Product` object to the `Cart` object with the specified `id`. If the `Product` object already exists in the `Cart` object, its quantity is increased by 1.
+     * @param {Number} id The `id` of the `Cart` object to which the `Product` object will be added.
+     * @param {Number} productId The `Product` ID object to be added to the `Cart` object.
+     * @returns {Cart} The `Cart` object with the specified `id`.
+     * @throws {Error} Throws an error if the file cannot be read or written, or if the `Cart` object with the specified `id` does not exist.
+     * @throws {Error} Throws an error if the `Product` object with the specified `id` does not exist.
+     */
+    async addProductToCart(id, productId) {
+        try {
+            let carts = await JSON.parse(fs.readFileSync(this.#path, 'utf-8')).carts;
+            let cart = carts.find(cart => cart.id === id);
+            if (cart === undefined) {
+                throw new Error(`Not found: Cart with ID ${id} does not exist`);
+            } else {
+                await new ProductManager('./products.json').getProductById(productId);
+                if (cart.products.find(product => product.pid === productId) === undefined) {
+                    cart.products.push({ pid: productId, quantity: 1 });
+                } else {
+                    cart.products.find(product => product.pid === productId).quantity++;
+                }
+                await fs.promises.writeFile(this.#path, JSON.stringify({ lastId: this.#lastId, carts: carts }, null, '\t'));
+                return cart;
+            }
+        } catch (err) {
+            throw new Error(`An error occurred while adding the product with id ${productId} to the cart with id ${id}: ` + err.message);
         }
     }
 }
