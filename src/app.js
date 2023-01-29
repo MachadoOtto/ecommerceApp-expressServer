@@ -1,13 +1,13 @@
-/* Desafio entregable: Servidor con Express */
-// Archivo: app.js
-// Autor: Jorge Machado Ottonelli
-// CoderHouse - Curso: Programación Backend
+/* Ecommerce Server - Final Project */
+// Archive: app.js
+// Author: Jorge Machado Ottonelli
+// CoderHouse - Course: Backend Programming
 
 /* Imports */
 
 const express = require('express');
 const productsRouter = require('./routes/products.router.js');
-// const cartsRouter = require('./routes/carts.router.js')
+const cartsRouter = require('./routes/carts.router.js')
 
 /* Main Server Logic */
 
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.use('/api/products', productsRouter);
-// app.use('/api/carts', cartsRouter);
+app.use('/api/carts', cartsRouter);
 
 app.disable('x-powered-by');
 

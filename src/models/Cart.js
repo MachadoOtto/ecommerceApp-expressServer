@@ -1,14 +1,14 @@
-/* Desafio entregable: Servidor con Express */
-// Archivo: Cart.js
-// Autor: Jorge Machado Ottonelli
-// CoderHouse - Curso: Programación Backend
+/* Ecommerce Server - Final Project */
+// Archive: Cart.js
+// Author: Jorge Machado Ottonelli
+// CoderHouse - Course: Backend Programming
 
 /* Class Cart */
 
 class Cart {
-    constructor(id, products) {
+    constructor(id) {
         this.id = id; // unique id
-        this.products = products; // array of products
+        this.products = []; // array of products
     }
 
     /**
