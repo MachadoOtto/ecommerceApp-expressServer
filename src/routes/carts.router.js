@@ -54,7 +54,8 @@ cartsRouter.post('/:cid/product/:pid', async (req, res) => {
         res.status(400).send('Bad Request: The product ID must be a number greater than 0.');
     } else {
         try {
-            res.send(JSON.stringify(await cartManager.addProductToCart(parseInt(cid), parseInt(pid)), null, '\t'));
+            await cartManager.addProductToCart(parseInt(cid), parseInt(pid))
+            res.send(`Product added to cart successfully. Cart ID: ${cid}. Product ID: ${pid}.`);
         } catch (err) {
             if (err.message.includes('Not found')) {
                 if (err.message.includes('Cart')) {

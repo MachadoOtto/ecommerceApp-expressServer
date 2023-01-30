@@ -59,6 +59,12 @@ class CartManager {
             if (cart === undefined) {
                 throw new Error(`Not found: Cart with ID ${id} does not exist`);
             } else {
+                if (cart.products.length > 0) {
+                    cart.products = await Promise.all(cart.products.map(async product => {
+                        let productObj = await new ProductManager('./products.json').getProductById(product.pid);
+                        return { pid: product.pid, quantity: product.quantity, productInfo: productObj};
+                    }));
+                }
                 return cart;
             }
         } catch (err) {
