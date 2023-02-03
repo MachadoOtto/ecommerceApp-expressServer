@@ -35,7 +35,7 @@ app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '/views'));
 
 // Routes
-app.use('/', viewsRouter);
+app.use('/test', viewsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 

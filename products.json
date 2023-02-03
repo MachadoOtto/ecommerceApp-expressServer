@@ -1,4 +1,33 @@
 {
-	"lastId": 0,
-	"products": []
+	"lastId": 2,
+	"products": [
+		{
+			"id": 1,
+			"title": "texto",
+			"description": "TestDesc",
+			"price": 30,
+			"code": "asdada",
+			"status": true,
+			"stock": 39,
+			"category": "test",
+			"thumbnails": [
+				"ostras",
+				"julian"
+			]
+		},
+		{
+			"id": 2,
+			"title": "texto",
+			"description": "TestDesc",
+			"price": 30,
+			"code": "sdadad",
+			"status": true,
+			"stock": 39,
+			"category": "test",
+			"thumbnails": [
+				"ostras",
+				"julian"
+			]
+		}
+	]
 }
