@@ -11,7 +11,8 @@ const handlebars = require('express-handlebars');
 const { Server } = require('socket.io');
 const viewsRouter = require('./routes/views.router.js');
 const productsRouter = require('./routes/products.router.js');
-const cartsRouter = require('./routes/carts.router.js')
+const cartsRouter = require('./routes/carts.router.js');
+const ProductManager = require('./controller/ProductManager.js');
 
 /* Main Server Logic */
 
@@ -35,7 +36,7 @@ app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '/views'));
 
 // Routes
-app.use('/test', viewsRouter);
+app.use('/', viewsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 
@@ -43,9 +44,12 @@ app.disable('x-powered-by');
 
 /* Socket.io */
 
-socketServer.on('connection', (socket) => {
+socketServer.on('connection', async (socket) => {
     console.log('[SOCKET] New connection: ', socket.id);
+    socket.emit('products', await new ProductManager('./products.json').getProducts());
 });
+
+app.set('io', socketServer);
 
 /* Error Handling */
 

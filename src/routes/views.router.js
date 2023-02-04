@@ -9,12 +9,10 @@ let counter = 0;
 viewsRouter.get('/', async (req, res) => {
     let products = await new ProductManager('./products.json').getProducts();
     res.render('home', { products });
-    console.log(products);
 });
 
-viewsRouter.get('/counter', (req, res) => {
-    res.render('counter', { counter });
-    ++counter;
+viewsRouter.get('/realtimeproducts', (req, res) => {
+    res.render('realTimeProducts');
 });
 
 module.exports = viewsRouter;
