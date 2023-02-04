@@ -49,14 +49,20 @@ productsRouter.get('/:pid', async (req, res) => {
 productsRouter.post('/', async (req, res) => {
     let { title, description, code, price, status, stock, category, thumbnails } = req.body;
     console.log(`[POST] ${req.ip} -> /api/products`);
-    if (!title || !description || !code || !price || !status || !stock || !category) {
+    console.log(req.body);
+    if (!title || (String(title).trim() === '') || !description || (String(description).trim() === '') || !code || !price 
+        || !stock || !category || (String(category).trim() === '')) {
         res.status(400).send('Bad Request: The product must have a title, description, code, price, status, stock and category.');
     } else {
         try {
+            thumbnails = thumbnails.filter(elements => {
+                return (elements != null && elements !== undefined && elements !== "");
+            });
             if (!thumbnails) {
                 thumbnails = [];
             }
-            await productManager.addProduct({ title, description, code, price, status, stock, category, thumbnails });
+            let product = await productManager.addProduct({ title, description, code, price, status, stock, category, thumbnails });
+            res.app.get('io').emit('newProduct', product);
             res.send(`The product "${title}" was added successfully.`);
         } catch (err) {
             if (err.message.includes('Code already exists')) {
@@ -64,7 +70,6 @@ productsRouter.post('/', async (req, res) => {
             } else if (err.message.includes('The product could not be added')) {
                 res.status(400).send(`Bad Request: ${err.message}.`);
             } else {
-                console.log(err.message)
                 res.status(500).send('Internal Server Error: An error ocurred while trying to add a new product.');
             }
         }
@@ -80,6 +85,7 @@ productsRouter.put('/:pid', async (req, res) => {
     } else {
         try {
             let { errorFields } = await productManager.updateProduct(parseInt(pid), req.body);
+            res.app.get('io').emit('updateProduct', await productManager.getProductById(parseInt(pid)));
             if (errorFields && errorFields.length > 0) {
                 res.send(`The product with the ID ${pid} was updated successfully. The following fields were not updated: ${errorFields.join(', ')}.`);
             } else {
@@ -106,6 +112,7 @@ productsRouter.delete('/:pid', async (req, res) => {
     } else {
         try {
             await productManager.deleteProduct(parseInt(pid));
+            res.app.get('io').emit('deleteProduct', parseInt(pid));
             res.send(`The product with the ID ${pid} was deleted successfully.`);
         } catch (err) {
             if (err.message.includes('Not found')) {

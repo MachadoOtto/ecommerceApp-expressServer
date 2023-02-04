@@ -23,13 +23,19 @@ const checkField = (field, fieldName) => {
         case 'description':
         case 'code':
         case 'category':
-            if (!field) {
+            if (!field || String(field).trim() === '') {
                 throw new Error(`The field ${fieldName} is required`);
             }
             return true;
         case 'thumbnails':
             if (!Array.isArray(field)) {
                 throw new Error(`The field ${fieldName} must be an array`);
+            }
+            let auxThumbnails = field.filter(elements => {
+                return (elements != null && elements !== undefined && elements !== "");
+            });
+            if (!auxThumbnails) {
+                throw new Error(`The field ${fieldName} must have at least one valid element`);
             }
             return true;
         case 'id':
@@ -194,7 +200,11 @@ class ProductManager {
                             if (k === 'code' && !this.validateCode(obj[k], products)) {
                                 throw new Error('Code already exists');
                             }
-                            product[k] = obj[k];
+                            if (k === 'status') {
+                                product[k] = new Boolean(obj[k]);
+                            } else {
+                                product[k] = obj[k];
+                            }
                         }
                     } catch { 
                         errorFields.push(k);

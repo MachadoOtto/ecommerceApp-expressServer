@@ -4,12 +4,15 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
+    "dev": "nodemon --watch src src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Jorge Machado Ottonelli",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.7",
+    "socket.io": "^4.5.4"
   },
   "repository": {
     "type": "git",

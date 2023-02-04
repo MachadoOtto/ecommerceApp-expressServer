@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-primary-subtle">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01"
+                aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-target="#modalAddProduct" data-bs-toggle="modal" href="#modalAddProduct">AddProduct</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-target="#modalUpdateProduct" data-bs-toggle="modal" href="#modalUpdateProduct">UpdateProduct</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-target="#modalDeleteProduct" data-bs-toggle="modal" href="#modalDeleteProduct">DeleteProduct</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/realtimeproducts">RealTimeProducts</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {{{body}}}
+    <!-- Modal AddProduct -->
+    <div class="modal fade" id="modalAddProduct" tabindex="-1" aria-labelledby="modalAddProductLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalAddProductLabel">Add Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="title" placeholder="Title">
+                        <label for="floatingInput">Title</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="description" placeholder="Description">
+                        <label for="floatingInput">Description</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" min="0" class="form-control" id="price" placeholder="Price">
+                        <label for="floatingInput">Price</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="code" placeholder="Code">
+                        <label for="floatingInput">Code</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="status" checked>
+                            <label class="form-check-label" for="status"><strong>Status</strong></label>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" min="0" class="form-control" id="stock" placeholder="Stock">
+                        <label for="floatingInput">Stock</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="category" placeholder="Category">
+                        <label for="floatingInput">Category</label>
+                    </div>
+                    <div id="thumbnailsDiv" class="">
+                        <div class="row">
+                            <div class="col form-floating mb-2">
+                                <input type="text" class="form-control" id="thumbnail-0" placeholder="Thumbnails">
+                                <label for="floatingInput">Thumbnails</label>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-primary" id="addThumbnail">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeAdd">Close</button>
+                    <button type="button" class="btn btn-primary" id="addProduct">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Update -->
+    <div class="modal fade" id="modalUpdateProduct" tabindex="-1" aria-labelledby="modalUpdateProductLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalUpdateProductLabel">Update Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                        <input type="number" min="0" class="form-control" id="updateID" placeholder="ID">
+                        <label for="floatingInput">ID</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="updateTitle" placeholder="Title">
+                        <label for="floatingInput">Title</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="updateDescription" placeholder="Description">
+                        <label for="floatingInput">Description</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" min="0" class="form-control" id="updatePrice" placeholder="Price">
+                        <label for="floatingInput">Price</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="updateCode" placeholder="Code">
+                        <label for="floatingInput">Code</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="updateStatus" checked>
+                            <label class="form-check-label" for="status"><strong>Status</strong></label>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="number" min="0" class="form-control" id="updateStock" placeholder="Stock">
+                        <label for="floatingInput">Stock</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="updateCategory" placeholder="Category">
+                        <label for="floatingInput">Category</label>
+                    </div>
+                    <div id="thumbnailsDivUpdate" class="">
+                        <div class="row">
+                            <div class="col form-floating mb-2">
+                                <input type="text" class="form-control" id="updateThumbnail-0" placeholder="Thumbnails">
+                                <label for="floatingInput">Thumbnails</label>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-primary" id="addThumbnailUpdate">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeUpdate">Close</button>
+                    <button type="button" class="btn btn-primary" id="updateProduct">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Delete -->
+    <div class="modal fade" id="modalDeleteProduct" tabindex="-1" aria-labelledby="modalDeleteProductLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalDeleteProductLabel">Delete Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb">
+                        <input type="number" min="0" class="form-control" id="productDeleteId" placeholder="Product ID">
+                        <label for="floatingInput">Product ID</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="deleteProduct">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Toast -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toastAddProduct" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                Product successfully added!
+            </div>
+        </div>
+    </div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toastAddProductFail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                Product can not be added! Please check all fields.
+            </div>
+        </div>
+    </div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toastUpdateProduct" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                Product successfully updated!
+            </div>
+        </div>
+    </div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toastUpdateProductFail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                Product can not be updated! Please check all fields.
+            </div>
+        </div>
+    </div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toastDeleteProduct" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                Product successfully deleted!
+            </div>
+        </div>
+    </div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toastDeleteProductFail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                Product can not be deleted! Please check the product ID.
+            </div>
+        </div>
+    </div>
+    <script src="/js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>
