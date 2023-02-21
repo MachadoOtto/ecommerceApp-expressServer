@@ -5,9 +5,9 @@
 
 /* Imports */
 
-const fs = require('fs');
-const Cart = require('../models/Cart.js');
-const ProductManager = require('./ProductManager.js');
+import fs from 'fs';
+import Cart from './models/Cart.js';
+import ProductManager from './ProductManager.js';
 
 /* Class CartManager */
 
@@ -104,4 +104,4 @@ class CartManager {
 
 /* Exports */
 
-module.exports = CartManager;
+export default CartManager;

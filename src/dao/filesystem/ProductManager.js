@@ -5,8 +5,8 @@
 
 /* Imports */
 
-const fs = require('fs');
-const Product = require('../models/Product.js');
+import fs from 'fs';
+import Product from './models/Product.js';
 
 /* Auxiliar functions */
 
@@ -256,4 +256,4 @@ class ProductManager {
 
 /* Exports */
 
-module.exports = ProductManager;
+export default ProductManager;

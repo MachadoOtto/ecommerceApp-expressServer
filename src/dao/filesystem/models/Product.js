@@ -47,4 +47,4 @@ class Product {
 
 /* Exports */
 
-module.exports = Product;
+export default Product;

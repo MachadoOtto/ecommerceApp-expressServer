@@ -1,17 +1,18 @@
 <u1>
     {{#each products}}
-    <div class="accordion m-2" id="accordionPanelsStayOpen{{id}}">
+    <div class="accordion m-2" id="accordionPanelsStayOpen{{_id}}">
         <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-h{{id}}">
+            <h2 class="accordion-header" id="panelsStayOpen-h{{_id}}">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-{{id}}" aria-expanded="true"
-                    aria-controls="panelsStayOpen-{{id}}">
-                    <strong>ID: {{id}} | {{title}}</strong> 
+                    data-bs-target="#panelsStayOpen-{{_id}}" aria-expanded="true"
+                    aria-controls="panelsStayOpen-{{_id}}">
+                    <strong>ID: {{_id}} | {{title}}</strong> 
                 </button>
             </h2>
-            <div id="panelsStayOpen-{{id}}" class="accordion-collapse collapse"
-                aria-labelledby="panelsStayOpen-h{{id}}">
+            <div id="panelsStayOpen-{{_id}}" class="accordion-collapse collapse"
+                aria-labelledby="panelsStayOpen-h{{_id}}">
                 <div class="accordion-body">
+                    <strong>ID: {{product._id}}</strong><br>
                     <strong>Title: {{title}}</strong><br>
                     Description: {{description}}<br>
                     Price: <code>${{price}}</code><br>

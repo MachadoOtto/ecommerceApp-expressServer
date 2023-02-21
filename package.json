@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "servidores-web",
   "version": "1.0.0",
   "main": "src/app.js",
@@ -10,8 +11,11 @@
   "author": "Jorge Machado Ottonelli",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-handlebars": "^6.0.7",
+    "mongoose": "^6.9.1",
+    "serve-favicon": "^2.5.0",
     "socket.io": "^4.5.4"
   },
   "repository": {
