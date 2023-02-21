@@ -15,7 +15,7 @@ import mongoose from 'mongoose';
 import logger from './middlewares/logger.middleware.js';
 import viewsRouter from './routes/views.router.js';
 import productsRouter from './routes/products.router.js';
-// import cartsRouter from './routes/carts.router.js';
+import cartsRouter from './routes/carts.router.js';
 import ProductService from './services/products.services.js';
 
 /* Main Server Logic */
@@ -23,6 +23,7 @@ import ProductService from './services/products.services.js';
 console.log('[SERVER] Starting server...');
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const MONGODB_URL = 'REDACTED';
 const app = express();
 const PORT = process.env.PORT || 8080;
 const httpServer = app.listen(PORT, () => {
@@ -32,7 +33,7 @@ const httpServer = app.listen(PORT, () => {
 
 /* MongoDB */
 
-mongoose.connect('mongodb+srv://server:<REDACTED>@ecommerce.vi6swdd.mongodb.net/ecommerce?retryWrites=true&w=majority', (error) => {
+mongoose.connect(MONGODB_URL, (error) => {
     if (error) {
         console.log('[MONGODB] Cannot connect to database: ', error);
         process.exit(1);
@@ -58,7 +59,7 @@ app.set('views', path.join(__dirname, '/views'));
 // Routes
 app.use('/', logger, viewsRouter);
 app.use('/api/products', productsRouter);
-// app.use('/api/carts', cartsRouter);
+app.use('/api/carts', cartsRouter);
 
 app.disable('x-powered-by');
 

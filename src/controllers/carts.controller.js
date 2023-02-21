@@ -5,68 +5,79 @@
 
 /* Imports */
 
-import CartManager from '../dao/filesystem/CartManager.js';
+import CartService from "../services/carts.services.js";
+import ProductService from "../services/products.services.js";
 
 /* Main Controller Logic */
 
-const cartManager = new CartManager('./carts.json');
-
-// Creates a new cart instance.
-const createCart = async (req, res) => {
-    console.log(`[POST] ${req.ip} -> /api/carts`);
-    try {
-        let cart = await cartManager.newCart();
-        res.status(201).send(`Cart created successfully. ID: ${cart.id}`);
-    } catch (err) {
-        res.status(500).send('Internal Server Error: The cart could not be created.');
-    }
-};
-
-// Returns the cart with the specified ID. If the cart doesn't exist, it returns an error.
-const getCart = async (req, res) => {
-    let { id } = req.params;
-    console.log(`[GET] ${req.ip} -> /api/carts/${id}`);
-    if (!isFinite(String(id).trim() || NaN) || parseInt(id) <= 0) {
-        res.status(400).send('Bad Request: The product ID must be a number greater than 0.');
-    } else {
+class CartController {
+    // Creates a new cart instance.
+    static async newCart(req, res) {
         try {
-            res.send(JSON.stringify(await cartManager.getCart(parseInt(id)), null, '\t'));
+            let cart = await CartService.createCart();
+            res.status(201).send( { status: 'success', message: `Cart created successfully. ID: ${cart._id}` } );
         } catch (err) {
-            if (err.message.includes('Not found')) {
-                res.status(404).send('Not Found: The cart with the specified ID does not exist.');
+            res.status(500).send( { status: 'error', message: 'Internal Server Error: The cart could not be created.' } );
+        }
+    };
+
+    // Returns all carts from database.
+    static async getCarts(req, res) {
+        try {
+            res.send( { status: 'success', data: await CartService.getCarts() });
+        } catch (err) {
+            res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to retrieve the carts.' } );
+        }
+    };
+
+    // Returns the cart with the specified ID. If the cart doesn't exist, it returns an error.
+    static async getCart(req, res) {
+        let { id } = req.params;
+        try {
+            let cart = await CartService.getCart(id);
+            if (cart === null) {
+                res.status(404).send( { status: 'error', message: 'Not Found: The cart with the specified ID does not exist.' } );
             } else {
-                res.status(500).send('Internal Server Error: An error ocurred while trying to retrieve the selected cart.');
+                cart.products = await Promise.all(cart.products.map( async (p) => {
+                    let product = await ProductService.getProductById(p.id);
+                    return { id: p.id, quantity: p.quantity, info: product };
+                }));
+                res.send( { status: 'success', data: cart } );
+            }
+        } catch (err) {
+            if (err.name === 'CastError') {
+                res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
+            } else {
+                res.send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to retrieve the cart.' } );
             }
         }
     }
-};
 
-// Adds a product to the cart with the specified ID. If the cart or the product doesn't exist, it returns an error.
-const addProductToCart = async (req, res) => {
-    let { cid, pid } = req.params;
-    console.log(`[POST] ${req.ip} -> /api/carts/${cid}/product/${pid}`);
-    if (!isFinite(String(cid).trim() || NaN) || parseInt(cid) <= 0) {
-        res.status(400).send('Bad Request: The cart ID must be a number greater than 0.');
-    } else if (!isFinite(String(pid).trim() || NaN) || parseInt(pid) <= 0) {
-        res.status(400).send('Bad Request: The product ID must be a number greater than 0.');
-    } else {
+    // Adds a product to the cart with the specified ID. If the cart or the product doesn't exist, it returns an error.
+    static async addProductToCart(req, res) {
+        let { cid, pid } = req.params;
         try {
-            await cartManager.addProductToCart(parseInt(cid), parseInt(pid))
-            res.send(`Product added to cart successfully. Cart ID: ${cid}. Product ID: ${pid}.`);
-        } catch (err) {
-            if (err.message.includes('Not found')) {
-                if (err.message.includes('Cart')) {
-                    res.status(404).send('Not Found: The cart with the specified ID does not exist.');
+            let product = await ProductService.getProductById(pid);
+            if (product === null) {
+                res.status(404).send( { status: 'error', message: 'Not Found: The product with the specified ID does not exist.' } );
+            } else {
+                let cart = await CartService.addProduct(cid, product._id.toString());
+                if (cart === null) {
+                    res.status(404).send( { status: 'error', message: 'Not Found: The cart with the specified ID does not exist.' } );
                 } else {
-                    res.status(404).send('Not Found: The product with the specified ID does not exist.');
+                    res.send( { status: 'success', message: 'Product added to cart successfully.' } );
                 }
+            }
+        } catch (err) {
+            if (err.name === 'CastError') {
+                res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
-                res.status(500).send('Internal Server Error: An error ocurred while trying to add the product to the cart.');
+                res.send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to add the product to the cart.' } );
             }
         }
     }
-};
+}
 
 /* Exports */
 
-export default { createCart, getCart, addProductToCart };
+export default CartController;

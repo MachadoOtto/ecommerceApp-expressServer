@@ -6,7 +6,7 @@
 /* Imports */
 
 import { Router } from 'express';
-import { createCart, getCart, addProductToCart } from '../controllers/carts.controller.js';
+import CartController from '../controllers/carts.controller.js';
 
 /* Main Router Logic */
 
@@ -15,13 +15,14 @@ const cartsRouter = Router();
 /* Routes */
 
 cartsRouter.route('/')
-    .post(createCart);
+    .get(CartController.getCarts)
+    .post(CartController.newCart);
 
 cartsRouter.route('/:id')
-    .get(getCart);
+    .get(CartController.getCart);
 
 cartsRouter.route('/:cid/product/:pid')
-    .post(addProductToCart);
+    .post(CartController.addProductToCart);
 
 /* Exports */
 

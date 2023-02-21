@@ -13,7 +13,7 @@ class ProductService {
     /**
      * Returns all products from database, limited by the limit parameter.
      * @param {Number} limit - Maximum number of products to return. 
-     * @returns {Object} - Object with all products.
+     * @returns {Promise<ProductModel[]>} - Object with all products.
      */
     static async getProducts(limit) {
         try {
@@ -26,11 +26,11 @@ class ProductService {
     /**
      * Returns a product from database, based on the id parameter.
      * @param {Number} id - Product id.
-     * @returns {Object} - Product object.
+     * @returns {Promise<ProductModel>} - Product object.
      */
     static async getProductById(id) {
         try {
-            return await ProductModel.find( { _id: id } ).lean();
+            return await ProductModel.findOne( { _id: id } ).lean();
         } catch (error) {
             throw error;
         }
@@ -39,7 +39,7 @@ class ProductService {
     /**
      * Adds a new product to the database.
      * @param {Object} product - Product object. 
-     * @returns {Object} - Product object added to the database.
+     * @returns {Promise<ProductModel>} - Product object added to the database.
      */
     static async addProduct(product) {
         try {
@@ -53,7 +53,7 @@ class ProductService {
      * Updates a product from the database.
      * @param {Number} id - Product id. 
      * @param {Object} updateFields - Object with the fields to update.
-     * @returns {Object} - Product object updated.
+     * @returns {Object} - Database response.
      */
     static async updateProduct(id, updateFields) {
         try {
@@ -66,7 +66,7 @@ class ProductService {
     /**
      * Deletes a product from the database.
      * @param {Number} id - Product id.
-     * @returns {Object} - Product object deleted.
+     * @returns {Object} - Database response.
      */
     static async deleteProduct(id) {
         try {

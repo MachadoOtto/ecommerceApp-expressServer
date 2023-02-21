@@ -25,7 +25,7 @@ class ProductController {
         let { pid } = req.params;
         try {
             let product = await ProductService.getProductById(pid);
-            if (product.length === 0) {
+            if (product === null) {
                 res.status(404).send( { status: 'error', message: "Not Found: The product with the specified ID does not exist." });
             } else {
                 res.send( { status: 'success', data: product } );
@@ -61,8 +61,8 @@ class ProductController {
             if (status.matchedCount === 0) {
                 res.status(404).send( { status: 'error', message: "Not Found: The product with the specified ID does not exist." } );
             } else {
-                res.send( { status: 'success', data: "Product updated successfully." } );
-                res.app.get('io').emit('updateProduct', await ProductService.getProductById(pid)[0]);
+                res.send( { status: 'success', message: "Product updated successfully." } );
+                res.app.get('io').emit('updateProduct', await ProductService.getProductById(pid));
             }
         } catch (err) {
             if (err.code === 11000) {
@@ -86,10 +86,10 @@ class ProductController {
             if (status.deletedCount === 0) {
                 res.status(404).send( { status: 'error', message: "Not Found: The product with the specified ID does not exist." } );
             } else {
-                res.send( { status: 'success', data: "Product deleted successfully." } );
+                res.send( { status: 'success', message: "Product deleted successfully." } );
             }
         } catch (err) {
-            res.status(500).send(err.message);
+            res.status(500).send( { status: 'success', message: "Internal Server Error: An error ocurred while trying to delete the product." } );
         }
     };
 };
