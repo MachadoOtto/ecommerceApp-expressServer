@@ -12,11 +12,6 @@ import mongoose from "mongoose";
 const messageCollection = "messages";
 
 const messageSchema = new mongoose.Schema({
-    id: {
-        type: Number,
-        required: true,
-        unique: true
-    },
     user: {
         type: String,
         required: true
@@ -24,6 +19,10 @@ const messageSchema = new mongoose.Schema({
     message: {
         type: String,
         required: true
+    },
+    date: {
+        type: Date,
+        default: Date.now
     }
 });
 

@@ -16,14 +16,16 @@ import logger from './middlewares/logger.middleware.js';
 import viewsRouter from './routes/views.router.js';
 import productsRouter from './routes/products.router.js';
 import cartsRouter from './routes/carts.router.js';
+import messagesRouter from './routes/messages.router.js'
 import ProductService from './services/products.services.js';
+import MessageService from './services/messages.services.js';
 
 /* Main Server Logic */
 
 console.log('[SERVER] Starting server...');
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const MONGODB_URL = 'REDACTED';
+const MONGODB_URL = //MongoDB URL goes here.;
 const app = express();
 const PORT = process.env.PORT || 8080;
 const httpServer = app.listen(PORT, () => {
@@ -60,6 +62,7 @@ app.set('views', path.join(__dirname, '/views'));
 app.use('/', logger, viewsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
+app.use('/api/messages', messagesRouter);
 
 app.disable('x-powered-by');
 
@@ -68,6 +71,7 @@ app.disable('x-powered-by');
 socketServer.on('connection', async (socket) => {
     console.log('[SOCKET] New connection: ', socket.id);
     socket.emit('products', await ProductService.getProducts());
+    socket.emit('messages', await MessageService.getMessages());
 });
 
 app.set('io', socketServer);

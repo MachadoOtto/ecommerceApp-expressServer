@@ -6,7 +6,7 @@
 /* Imports */
 
 import { Router } from 'express';
-import { getHome, getRealTimeProducts } from '../controllers/views.controller.js';
+import ViewController from '../controllers/views.controller.js';
 
 /* Main Router Logic */
 
@@ -15,10 +15,13 @@ const viewsRouter = Router();
 /* Routes */
 
 viewsRouter.route('/')
-    .get(getHome);
+    .get(ViewController.getHome);
 
 viewsRouter.route('/realtimeproducts')
-    .get(getRealTimeProducts);
+    .get(ViewController.getRealTimeProducts);
+
+viewsRouter.route('/chat')
+    .get(ViewController.getChat);
 
 /* Exports */
 
