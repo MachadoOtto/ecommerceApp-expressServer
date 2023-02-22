@@ -12,6 +12,7 @@ import favicon from 'serve-favicon';
 import handlebars from 'express-handlebars';
 import { Server } from 'socket.io';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 import logger from './middlewares/logger.middleware.js';
 import viewsRouter from './routes/views.router.js';
 import productsRouter from './routes/products.router.js';
@@ -22,10 +23,11 @@ import MessageService from './services/messages.services.js';
 
 /* Main Server Logic */
 
+dotenv.config(); // Read .env file
 console.log('[SERVER] Starting server...');
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const MONGODB_URL = //MongoDB URL goes here.;
+const MONGODB_URL = process.env.MONGODB_URL;
 const app = express();
 const PORT = process.env.PORT || 8080;
 const httpServer = app.listen(PORT, () => {
