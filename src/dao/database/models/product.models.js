@@ -6,6 +6,7 @@
 /* Imports */
 
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 /* Schema Model */
 
@@ -46,6 +47,8 @@ const productSchema = new mongoose.Schema({
         type: String
     }]
 });
+
+productSchema.plugin(mongoosePaginate);
 
 const productModel = mongoose.model(productCollection, productSchema);
 

@@ -1,0 +1,76 @@
+<nav aria-label="Page-navigation" class="m-2">
+    <ul class="pagination justify-content-end">
+        <li class="page-item {{#unless info.hasPrevPage}}disabled{{/unless}}">
+            <a class="page-link" href="/products/?page=1" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">First</span>
+            </a>
+        </li>
+        {{#if info.hasPrevPage}}
+        <li class="page-item"><a class="page-link" href="/products/?page={{info.prevPage}}">{{info.prevPage}}</a></li>
+        {{/if}}
+        <li class="page-item"><a class="page-link active" href="/products/?page={{info.page}}">{{info.page}}</a></li>
+        {{#if info.hasNextPage}}
+        <li class="page-item"><a class="page-link" href="/products/?page={{info.nextPage}}">{{info.nextPage}}</a></li>
+        {{/if}}
+        <li class="page-item {{#unless info.hasNextPage}}disabled{{/unless}}">
+            <a class="page-link" href="/products/?page={{info.totalPages}}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Last</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+<u1>
+    {{#each products}}
+    <div class="alert alert-dark m-2" role="alert">
+        <button type="submit" data-bs-target="#modalAddToCart" data-bs-toggle="modal" href="#modalAddToCart" id="mdl-addToCart-{{_id}}" class="btn btn-outline-success mb-2">
+            <script>
+                document.getElementById("mdl-addToCart-{{_id}}").addEventListener("click", function() {
+                    document.getElementById("mdl-addCart-productId").value = "{{_id}}";
+                });
+            </script>
+            <img src="/images/cart-box.png" alt="eStorage Products" width="30" height="24">
+            Add to Cart
+        </button>
+        <strong>ID: <a href="/products/{{_id}}">{{_id}}</a> | {{title}}</strong>
+    </div>
+    {{/each}}
+</u1>
+<!-- Modal GoToCart -->
+<div class="modal fade" id="modalAddToCart" tabindex="-1" aria-labelledby="modalAddToCartLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalAddToCartLabel">Add to Cart</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb">
+                    <input type="text" min="0" class="form-control" id="mdl-addCart-cartId" placeholder="Cart ID">
+                    <label for="floatingInput">Cart ID</label>
+                    <input type="hidden" id="mdl-addCart-productId" value="undefined">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-addToCart">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toastAddToCart" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            Product added to cart successfully!
+        </div>
+    </div>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toastAddToCartFail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            Product could not be added to cart!
+        </div>
+    </div>
+</div>
+<script src="/js/cartManagement.js"></script>

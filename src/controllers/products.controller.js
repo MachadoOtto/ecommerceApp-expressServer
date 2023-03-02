@@ -12,9 +12,26 @@ import ProductService from '../services/products.services.js';
 class ProductController {
     // Returns the product list. If the limit parameter is specified, it returns the first N products.
     static async getProductList(req, res) {
-        let { limit } = req.query;
+        let { limit, page, query, sort } = req.query;
+        limit = limit ? parseInt(limit) : 10;
+        page = page ? parseInt(page) : 1;
+        query = query ? JSON.parse(query) : {};
+        sort = (sort === 'asc' || sort === 'desc') ? sort : '';
         try {
-            res.send( { status: 'success', data: await ProductService.getProducts(parseInt(limit)) } );
+            let products = await ProductService.getProducts(limit, page, query, sort);
+            let response = {
+                status: 'success',
+                payload: JSON.parse(JSON.stringify(products.docs)),
+                totalPages: products.totalPages,
+                prevPage: products.prevPage,
+                nextPage: products.nextPage,
+                page: products.page,
+                hasPrevPage: products.hasPrevPage,
+                hasNextPage: products.hasNextPage,
+                prevLink: (products.hasPrevPage) ? `/api/productos?limit=${limit}&page=${products.prevPage}&query=${JSON.stringify(query)}&sort=${sort}` : null,
+                nextLink: (products.hasNextPage) ? `/api/productos?limit=${limit}&page=${products.nextPage}&query=${JSON.stringify(query)}&sort=${sort}` : null
+            };
+            res.send(response);
         } catch (err) {
             res.status(500).send( { status: 'error', message: "Internal Server Error: An error ocurred while trying to get the product list." });
         }

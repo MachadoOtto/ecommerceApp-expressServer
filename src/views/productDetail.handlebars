@@ -1,0 +1,54 @@
+<div class="alert alert-dark m-2" role="alert">
+    <strong>ID: {{product._id}}</strong><br>
+    <strong>Title: {{product.title}}</strong><br>
+    Description: {{product.description}}<br>
+    Price: <code>${{product.price}}</code><br>
+    Code: <code>{{product.code}}</code><br>
+    Status: {{product.status}}<br>
+    Stock: <code>{{product.stock}}</code><br>
+    Category: {{product.category}}<br>
+    Thumbnails:{{#each product.thumbnails}} {{this}};{{/each}}<br>
+</div>
+<div class="m-2">
+    <button type="submit" data-bs-target="#modalAddToCart" data-bs-toggle="modal" href="#modalAddToCart" class="btn btn-outline-success mb-2">
+        <img src="/images/cart-box.png" alt="eStorage Products" width="30" height="24">
+        Add to Cart
+    </button>
+</div>
+<!-- Modal GoToCart -->
+<div class="modal fade" id="modalAddToCart" tabindex="-1" aria-labelledby="modalAddToCartLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalAddToCartLabel">Add to Cart</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-floating mb">
+                    <input type="text" min="0" class="form-control" id="mdl-addCart-cartId" placeholder="Cart ID">
+                    <label for="floatingInput">Cart ID</label>
+                    <input type="hidden" id="mdl-addCart-productId" value="{{product._id}}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-addToCart">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Toast -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toastAddToCart" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            Product added to cart successfully!
+        </div>
+    </div>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toastAddToCartFail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            Product could not be added to cart!
+        </div>
+    </div>
+</div>
+<script src="/js/cartManagement.js"></script>

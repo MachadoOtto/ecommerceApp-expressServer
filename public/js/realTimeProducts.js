@@ -17,7 +17,7 @@ socket.on('products', (products) => {
                     <div id="panelsStayOpen-${product._id}" class="accordion-collapse collapse"
                         aria-labelledby="panelsStayOpen-h${product._id}">
                         <div class="accordion-body">
-                            <strong>ID: ${product._id}</strong><br>
+                            <strong>ID: <a href="/products/${product._id}">${product._id}</a></strong><br>
                             <strong>Title: ${product.title}</strong><br>
                             Description: ${product.description}<br>
                             Price: <code>$${product.price}</code><br>
@@ -49,7 +49,7 @@ socket.on('newProduct', (product) => {
                 <div id="panelsStayOpen-${product._id}" class="accordion-collapse collapse"
                     aria-labelledby="panelsStayOpen-h${product._id}">
                     <div class="accordion-body">
-                        <strong>ID: ${product._id}</strong><br>
+                        <strong>ID: <a href="/products/${product._id}">${product._id}</a></strong><br>
                         <strong>Title: ${product.title}</strong><br>
                         Description: ${product.description}<br>
                         Price: <code>$${product.price}</code><br>
@@ -79,7 +79,7 @@ socket.on('updateProduct', (product) => {
             <div id="panelsStayOpen-${product._id}" class="accordion-collapse collapse"
                 aria-labelledby="panelsStayOpen-h${product._id}">
                 <div class="accordion-body">
-                    <strong>ID: ${product._id}</strong><br>
+                    <strong>ID: <a href="/products/${product._id}">${product._id}</a></strong><br>
                     <strong>Title: ${product.title}</strong><br>
                     Description: ${product.description}<br>
                     Price: <code>$${product.price}</code><br>

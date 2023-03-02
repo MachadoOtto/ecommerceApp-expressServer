@@ -20,6 +20,15 @@ viewsRouter.route('/')
 viewsRouter.route('/realtimeproducts')
     .get(ViewController.getRealTimeProducts);
 
+viewsRouter.route('/products')
+    .get(ViewController.getProducts);
+
+viewsRouter.route('/products/:pid')
+    .get(ViewController.getProductDetail);
+
+viewsRouter.route('/cart/:cid')
+    .get(ViewController.getCart);
+
 viewsRouter.route('/chat')
     .get(ViewController.getChat);
 

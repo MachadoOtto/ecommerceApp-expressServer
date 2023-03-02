@@ -1,3 +1,26 @@
+<nav aria-label="Page-navigation" class="m-2">
+    <ul class="pagination justify-content-end">
+        <li class="page-item {{#unless info.hasPrevPage}}disabled{{/unless}}">
+            <a class="page-link" href="/?page=1" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">First</span>
+            </a>
+        </li>
+        {{#if info.hasPrevPage}}
+        <li class="page-item"><a class="page-link" href="/?page={{info.prevPage}}">{{info.prevPage}}</a></li>
+        {{/if}}
+        <li class="page-item"><a class="page-link active" href="/?page={{info.page}}">{{info.page}}</a></li>
+        {{#if info.hasNextPage}}
+        <li class="page-item"><a class="page-link" href="/?page={{info.nextPage}}">{{info.nextPage}}</a></li>
+        {{/if}}
+        <li class="page-item {{#unless info.hasNextPage}}disabled{{/unless}}">
+            <a class="page-link" href="/?page={{info.totalPages}}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Last</span>
+            </a>
+        </li>
+    </ul>
+</nav>
 <u1>
     {{#each products}}
     <div class="accordion m-2" id="accordionPanelsStayOpen{{_id}}">
@@ -12,7 +35,7 @@
             <div id="panelsStayOpen-{{_id}}" class="accordion-collapse collapse"
                 aria-labelledby="panelsStayOpen-h{{_id}}">
                 <div class="accordion-body">
-                    <strong>ID: {{_id}}</strong><br>
+                    <strong>ID: <a href="/products/{{_id}}">{{_id}}</a></strong><br>
                     <strong>Title: {{title}}</strong><br>
                     Description: {{description}}<br>
                     Price: <code>${{price}}</code><br>

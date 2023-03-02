@@ -12,12 +12,32 @@ import ProductModel from "../dao/database/models/product.models.js";
 class ProductService {
     /**
      * Returns all products from database, limited by the limit parameter.
-     * @param {Number} limit - Maximum number of products to return. 
+     * Uses the paginate plugin to return the products.
+     * @param {Number} limit - Maximum number of products to return.
+     * @param {Number} page - Page number to return.
+     * @param {Object} query - Query object to filter the results.
+     * @param {String} sort - Sort string to sort the results.
      * @returns {Promise<ProductModel[]>} - Object with all products.
      */
-    static async getProducts(limit) {
+    static async getProducts(limit = 10, page = 1, query = {}, sort = "") {
         try {
-            return await ProductModel.find().limit(limit).lean();
+            let options = {
+                limit: parseInt(limit),
+                page: parseInt(page),
+                sort: (sort) ? { price: sort === 'asc' ? 1 : -1 } : undefined };
+            return await ProductModel.paginate(query, options);
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    /**
+     * Returns all products from database.
+     * @returns {Promise<ProductModel[]>} - Object with all products.
+     */
+    static async getAllProducts() {
+        try {
+            return await ProductModel.find().lean();
         } catch (error) {
             throw error;
         }
