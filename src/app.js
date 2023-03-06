@@ -72,7 +72,7 @@ app.disable('x-powered-by');
 
 socketServer.on('connection', async (socket) => {
     console.log('[SOCKET] New connection: ', socket.id);
-    socket.emit('products', await ProductService.getProducts());
+    socket.emit('products', await ProductService.getAllProducts());
     socket.emit('messages', await MessageService.getMessages());
 });
 

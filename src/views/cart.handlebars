@@ -1,0 +1,31 @@
+<div class="alert alert-dark m-2" role="alert">
+    <strong>Cart ID: {{cart._id}}</strong><br>
+</div>
+{{#each cart.products}}
+<div class="accordion m-2" id="accordionPanelsStayOpen{{product._id}}">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="panelsStayOpen-h{{product._id}}">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#panelsStayOpen-{{product._id}}" aria-expanded="true"
+                aria-controls="panelsStayOpen-{{product._id}}">
+                <strong>Product ID: {{product._id}} | {{product.title}} | Quantity: {{quantity}}</strong> 
+            </button>
+        </h2>
+        <div id="panelsStayOpen-{{product._id}}" class="accordion-collapse collapse"
+            aria-labelledby="panelsStayOpen-h{{product._id}}">
+            <div class="accordion-body">
+                <strong>Product ID: <a href="/products/{{product._id}}">{{product._id}}</a></strong><br>
+                <strong>Quantity: {{quantity}}</strong><br>
+                <strong>Title: {{product.title}}</strong><br>
+                Description: {{product.description}}<br>
+                Price: <code>${{product.price}}</code><br>
+                Code: <code>{{product.code}}</code><br>
+                Status: {{product.status}}<br>
+                Stock: <code>{{product.stock}}</code><br>
+                Category: {{product.category}}<br>
+                Thumbnails:{{#each product.thumbnails}} {{this}};{{/each}}<br>
+            </div>
+        </div>
+    </div>
+</div>
+{{/each}}

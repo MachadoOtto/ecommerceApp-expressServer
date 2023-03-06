@@ -19,10 +19,14 @@ cartsRouter.route('/')
     .post(CartController.newCart);
 
 cartsRouter.route('/:id')
-    .get(CartController.getCart);
+    .get(CartController.getCart)
+    .put(CartController.updateCart)
+    .delete(CartController.removeAllProductsFromCart);
 
 cartsRouter.route('/:cid/product/:pid')
-    .post(CartController.addProductToCart);
+    .post(CartController.addProductToCart)
+    .put(CartController.modifyProductQuantityCart)
+    .delete(CartController.removeProductFromCart)
 
 /* Exports */
 

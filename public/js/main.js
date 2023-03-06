@@ -148,3 +148,9 @@ document.getElementById('deleteProduct').addEventListener('click', (event) => {
     xhr.open('DELETE', `/api/products/${document.getElementById('productDeleteId').value}`, true);
     xhr.send();
 });
+
+document.getElementById('btn-goToCart').addEventListener('click', (event) => {
+    event.preventDefault();
+    let cartId = document.getElementById('modalCartId').value;
+    window.location.href = `/cart/${cartId}`;
+});
