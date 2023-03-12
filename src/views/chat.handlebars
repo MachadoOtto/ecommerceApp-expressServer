@@ -1,14 +1,9 @@
 <div id="global-div-chat" class="m-2">
     <div class="container text-center">
-        <div class="row">
-            <div class="col" id="currentUsername-div">
-                Username: <span id="currentUsername"><strong>NewUser</strong></span>
-            </div>
-            <div class="col"></div>
-            <div class="col">
-                <a class="nav-link active" data-bs-target="#modalChangeUsername" data-bs-toggle="modal"
-                    href="#modalChangeUsername"><u>Change Username</u></a>
-            </div>
+        <div class="m-2">
+            Username: <span id="currentUsername"><strong>
+                {{#if user}}{{user.first_name}}_{{user.last_name}}{{else}}Anonymous{{/if}}
+            </strong></span>
         </div>
     </div>
     <div class="container-fluid d-flex flex-column flex-grow-1 vh-100 overflow-hidden">
@@ -21,30 +16,10 @@
         <div class="mb-3">
             <label for="messageInput" class="form-label">Write a message:</label>
             <input type="text" class="form-control" id="messageInput">
-            <input type="hidden" id="usernameInput" value="NewUser">
+            <input type="hidden" id="usernameInput" value="{{#if user}}{{user.first_name}}_{{user.last_name}}{{else}}Anonymous{{/if}}">
         </div>
         <button id="btn-send-message" class="btn btn-secondary">Send</button>
     </form>
-</div>
-<!-- Modal ChangeUsername -->
-<div class="modal fade" id="modalChangeUsername" tabindex="-1" aria-labelledby="modalChangeUsernameLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="modalChangeUsernameLabel">Change Chat Username</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="newUsername" placeholder="New Username">
-                    <label for="floatingInput">Username</label>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="changeUsername-btn">Change</button>
-            </div>
-        </div>
-    </div>
 </div>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/livechat.js"></script>

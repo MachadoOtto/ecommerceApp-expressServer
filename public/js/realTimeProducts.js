@@ -21,11 +21,8 @@ socket.on('products', (products) => {
                             <strong>Title: ${product.title}</strong><br>
                             Description: ${product.description}<br>
                             Price: <code>$${product.price}</code><br>
-                            Code: <code>${product.code}</code><br>
-                            Status: ${product.status}<br>
                             Stock: <code>${product.stock}</code><br>
                             Category: ${product.category}<br>
-                            Thumbnails: ${product.thumbnails}<br>
                         </div>
                     </div>
                 </div>
@@ -53,11 +50,8 @@ socket.on('newProduct', (product) => {
                         <strong>Title: ${product.title}</strong><br>
                         Description: ${product.description}<br>
                         Price: <code>$${product.price}</code><br>
-                        Code: <code>${product.code}</code><br>
-                        Status: ${product.status}<br>
                         Stock: <code>${product.stock}</code><br>
                         Category: ${product.category}<br>
-                        Thumbnails: ${product.thumbnails}<br>
                     </div>
                 </div>
             </div>
@@ -83,11 +77,8 @@ socket.on('updateProduct', (product) => {
                     <strong>Title: ${product.title}</strong><br>
                     Description: ${product.description}<br>
                     Price: <code>$${product.price}</code><br>
-                    Code: <code>${product.code}</code><br>
-                    Status: ${product.status}<br>
                     Stock: <code>${product.stock}</code><br>
                     Category: ${product.category}<br>
-                    Thumbnails: ${product.thumbnails}<br>
                 </div>
             </div>
         </div>`;

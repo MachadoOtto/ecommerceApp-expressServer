@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <title>eStorage Products</title>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg bg-primary-subtle">
         <div class="container-fluid">
@@ -16,17 +19,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-target="#modalAddProduct" data-bs-toggle="modal" href="#modalAddProduct">AddProduct</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-target="#modalUpdateProduct" data-bs-toggle="modal" href="#modalUpdateProduct">UpdateProduct</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-target="#modalDeleteProduct" data-bs-toggle="modal" href="#modalDeleteProduct">DeleteProduct</a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav mb-2 mb-lg-0">
                     <a class="navbar-brand" href="/">
                         <img src="/images/logo.png" alt="eStorage Products" width="30" height="24">
                     </a>
@@ -42,16 +34,50 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/chat">LiveChat</a>
                     </li>
+                    {{#if isAdmin}}
                     <li class="nav-item">
-                        <a class="nav-link active" data-bs-target="#modalGoToCart" data-bs-toggle="modal" href="#modalGoToCart">MyCart</a>
+                        <div class="dropdown">
+                            <a class="nav-link active" data-bs-toggle="dropdown" aria-expanded="false">Administration</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" data-bs-target="#modalAddProduct" data-bs-toggle="modal"
+                                        href="#modalAddProduct">AddProduct</a></li>
+                                <li><a class="dropdown-item" data-bs-target="#modalUpdateProduct" data-bs-toggle="modal"
+                                        href="#modalUpdateProduct">UpdateProduct</a></li>
+                                <li><a class="dropdown-item" data-bs-target="#modalDeleteProduct" data-bs-toggle="modal"
+                                        href="#modalDeleteProduct">DeleteProduct</a></li>
+                            </ul>
+                        </div>
                     </li>
+                    {{/if}}
+                </ul>
+                <ul class="navbar-nav mb-2 mb-lg-0">                
+                    {{#if user}}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/profile">Profile ({{user.first_name}}_{{user.last_name}})</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/cart">MyCart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/api/sessions/logout">Logout</a>
+                    </li>
+                    {{else}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                    {{/if}}                    
                 </ul>
             </div>
         </div>
     </nav>
     {{{body}}}
+    {{#if isAdmin}}
     <!-- Modal AddProduct -->
-    <div class="modal fade" id="modalAddProduct" tabindex="-1" aria-labelledby="modalAddProductLabel" aria-hidden="true">
+    <div class="modal fade" id="modalAddProduct" tabindex="-1" aria-labelledby="modalAddProductLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -97,10 +123,12 @@
                             </div>
                             <div class="col-2">
                                 <button type="button" class="btn btn-primary" id="addThumbnail">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path
+                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                                     </svg>
                                 </button>
                             </div>
@@ -115,7 +143,8 @@
         </div>
     </div>
     <!-- Modal Update -->
-    <div class="modal fade" id="modalUpdateProduct" tabindex="-1" aria-labelledby="modalUpdateProductLabel" aria-hidden="true">
+    <div class="modal fade" id="modalUpdateProduct" tabindex="-1" aria-labelledby="modalUpdateProductLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -165,10 +194,12 @@
                             </div>
                             <div class="col-2">
                                 <button type="button" class="btn btn-primary" id="addThumbnailUpdate">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-plus-circle" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path
+                                            d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
                                     </svg>
                                 </button>
                             </div>
@@ -176,14 +207,16 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeUpdate">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        id="closeUpdate">Close</button>
                     <button type="button" class="btn btn-primary" id="updateProduct">Update</button>
                 </div>
             </div>
         </div>
     </div>
     <!-- Modal Delete -->
-    <div class="modal fade" id="modalDeleteProduct" tabindex="-1" aria-labelledby="modalDeleteProductLabel" aria-hidden="true">
+    <div class="modal fade" id="modalDeleteProduct" tabindex="-1" aria-labelledby="modalDeleteProductLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -199,26 +232,6 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="deleteProduct">Delete</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal GoToCart -->
-    <div class="modal fade" id="modalGoToCart" tabindex="-1" aria-labelledby="modalGoToCartLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalGoToCartLabel">Go to Cart</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-floating mb">
-                        <input type="text" min="0" class="form-control" id="modalCartId" placeholder="Cart ID">
-                        <label for="floatingInput">Cart ID</label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" id="btn-goToCart">Go!</button>
                 </div>
             </div>
         </div>
@@ -266,7 +279,11 @@
             </div>
         </div>
     </div>
-    <script src="/js/main.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="/js/productManagement.js"></script>
+    {{/if}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>

@@ -31,11 +31,3 @@ document.getElementById('btn-send-message').addEventListener('click', (event) =>
     xhr.send(JSON.stringify({ user, message }));
     document.getElementById('messageInput').value = '';
 });
-
-document.getElementById('changeUsername-btn').addEventListener('click', (event) => {
-    event.preventDefault();
-    document.getElementById('usernameInput').value = document.getElementById('newUsername').value;
-    let span = document.getElementById('currentUsername');
-    span.innerHTML = '<strong>' + document.getElementById('newUsername').value + '</strong>';
-    document.getElementById('newUsername').value = '';
-});
