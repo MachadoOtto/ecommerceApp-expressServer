@@ -1,52 +1,32 @@
-<nav aria-label="Page-navigation" class="m-2">
-    <ul class="pagination justify-content-end">
-        <li class="page-item {{#unless info.hasPrevPage}}disabled{{/unless}}">
-            <a class="page-link" href="/?page=1" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">First</span>
+<div class="px-4 py-5 my-5 text-center">
+    <img class="d-block mx-auto mb-4" src="/images/logo.png" alt="" width="72" height="57">
+    <h1 class="display-5 fw-bold">eStorage Products</h1>
+    <div class="col-lg-6 mx-auto">
+        {{#if user}}
+        <p class="lead mb-4">Welcome back, <code>{{user.first_name}} {{user.last_name}}</code>! We're glad to see you again.<br>
+            Your role is: <code>{{user.role}}</code>.
+        </p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="/products">
+                <button type="button" class="btn btn-primary btn-lg px-4 gap-3">Browse movies</button>
             </a>
-        </li>
-        {{#if info.hasPrevPage}}
-        <li class="page-item"><a class="page-link" href="/?page={{info.prevPage}}">{{info.prevPage}}</a></li>
-        {{/if}}
-        <li class="page-item"><a class="page-link active" href="/?page={{info.page}}">{{info.page}}</a></li>
-        {{#if info.hasNextPage}}
-        <li class="page-item"><a class="page-link" href="/?page={{info.nextPage}}">{{info.nextPage}}</a></li>
-        {{/if}}
-        <li class="page-item {{#unless info.hasNextPage}}disabled{{/unless}}">
-            <a class="page-link" href="/?page={{info.totalPages}}" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Last</span>
+            <a href="/profile">
+                <button type="button" class="btn btn-outline-secondary btn-lg px-4">See profile</button>
             </a>
-        </li>
-    </ul>
-</nav>
-<u1>
-    {{#each products}}
-    <div class="accordion m-2" id="accordionPanelsStayOpen{{_id}}">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="panelsStayOpen-h{{_id}}">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#panelsStayOpen-{{_id}}" aria-expanded="true"
-                    aria-controls="panelsStayOpen-{{_id}}">
-                    <strong>ID: {{_id}} | {{title}}</strong> 
-                </button>
-            </h2>
-            <div id="panelsStayOpen-{{_id}}" class="accordion-collapse collapse"
-                aria-labelledby="panelsStayOpen-h{{_id}}">
-                <div class="accordion-body">
-                    <strong>ID: <a href="/products/{{_id}}">{{_id}}</a></strong><br>
-                    <strong>Title: {{title}}</strong><br>
-                    Description: {{description}}<br>
-                    Price: <code>${{price}}</code><br>
-                    Code: <code>{{code}}</code><br>
-                    Status: {{status}}<br>
-                    Stock: <code>{{stock}}</code><br>
-                    Category: {{category}}<br>
-                    Thumbnails:{{#each thumbnails}} {{this}};{{/each}}<br>
-                </div>
-            </div>
         </div>
+        {{else}}
+        <p class="lead mb-4">Welcome to our movie sales page! Here you'll find a selection of the best movies of all
+            time, from classic films to the latest and most acclaimed productions. With our wide range of titles, we're
+            confident you'll find something you'll love. So if you're a
+            movie lover, look no further! Explore our selection and find your next favorite movie today!</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="/register">
+                <button type="button" class="btn btn-primary btn-lg px-4 gap-3">Sign up!</button>
+            </a>
+            <a href="/login">
+                <button type="button" class="btn btn-outline-secondary btn-lg px-4">Log in</button>
+            </a>
+        </div>
+        {{/if}}
     </div>
-    {{/each}}
-</u1>
+</div>

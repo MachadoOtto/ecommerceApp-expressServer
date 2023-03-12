@@ -7,10 +7,13 @@
 
 import { Router } from 'express';
 import ViewController from '../controllers/views.controller.js';
+import middlewares from '../middlewares/auth.middleware.js';
 
 /* Main Router Logic */
 
 const viewsRouter = Router();
+const isAuthenticated = middlewares.isAuthenticated;
+const restrictSessionRoutes = middlewares.restrictSessionRoutes;
 
 /* Routes */
 
@@ -26,11 +29,20 @@ viewsRouter.route('/products')
 viewsRouter.route('/products/:pid')
     .get(ViewController.getProductDetail);
 
-viewsRouter.route('/cart/:cid')
+viewsRouter.route('/cart')
     .get(ViewController.getCart);
 
 viewsRouter.route('/chat')
     .get(ViewController.getChat);
+
+viewsRouter.route('/login')
+    .get(restrictSessionRoutes, ViewController.getLogin);
+
+viewsRouter.route('/register')
+    .get(restrictSessionRoutes, ViewController.getRegister);
+
+viewsRouter.route('/profile')
+    .get(isAuthenticated, ViewController.getProfile);
 
 /* Exports */
 

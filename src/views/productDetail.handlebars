@@ -9,33 +9,19 @@
     Category: {{product.category}}<br>
     Thumbnails:{{#each product.thumbnails}} {{this}};{{/each}}<br>
 </div>
+{{#if user}}
 <div class="m-2">
-    <button type="submit" data-bs-target="#modalAddToCart" data-bs-toggle="modal" href="#modalAddToCart" class="btn btn-outline-success mb-2">
+    <button type="submit" id="addToCart-{{_id}}" class="btn btn-outline-success mb-2">
+        <script>
+            document.getElementById("addToCart-{{_id}}").addEventListener("click", function () {
+                addToCart("{{product._id}}");
+            });
+        </script>
         <img src="/images/cart-box.png" alt="eStorage Products" width="30" height="24">
         Add to Cart
     </button>
 </div>
-<!-- Modal GoToCart -->
-<div class="modal fade" id="modalAddToCart" tabindex="-1" aria-labelledby="modalAddToCartLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="modalAddToCartLabel">Add to Cart</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="form-floating mb">
-                    <input type="text" min="0" class="form-control" id="mdl-addCart-cartId" placeholder="Cart ID">
-                    <label for="floatingInput">Cart ID</label>
-                    <input type="hidden" id="mdl-addCart-productId" value="{{product._id}}">
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btn-addToCart">Add</button>
-            </div>
-        </div>
-    </div>
-</div>
+{{/if}}
 <!-- Toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="toastAddToCart" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
