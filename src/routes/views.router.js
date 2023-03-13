@@ -18,22 +18,22 @@ const restrictSessionRoutes = middlewares.restrictSessionRoutes;
 /* Routes */
 
 viewsRouter.route('/')
-    .get(ViewController.getHome);
+    .get(isAuthenticated, ViewController.getHome);
 
 viewsRouter.route('/realtimeproducts')
-    .get(ViewController.getRealTimeProducts);
+    .get(isAuthenticated, ViewController.getRealTimeProducts);
 
 viewsRouter.route('/products')
-    .get(ViewController.getProducts);
+    .get(isAuthenticated, ViewController.getProducts);
 
 viewsRouter.route('/products/:pid')
-    .get(ViewController.getProductDetail);
+    .get(isAuthenticated, ViewController.getProductDetail);
 
 viewsRouter.route('/cart')
-    .get(ViewController.getCart);
+    .get(isAuthenticated, ViewController.getCart);
 
 viewsRouter.route('/chat')
-    .get(ViewController.getChat);
+    .get(isAuthenticated, ViewController.getChat);
 
 viewsRouter.route('/login')
     .get(restrictSessionRoutes, ViewController.getLogin);

@@ -46,6 +46,7 @@ const httpServer = app.listen(PORT, () => {
 
 /* MongoDB */
 
+mongoose.set('strictQuery', true);
 mongoose.connect(MONGODB_URL, (error) => {
     if (error) {
         console.log('[MONGODB] Cannot connect to database: ', error);

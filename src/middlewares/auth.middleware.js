@@ -9,7 +9,7 @@ const isAuthenticated = (req, res, next) => {
     if (req.session && req.session.user) { // User is authenticated
         return next();
     }
-    res.redirect('/login'); // User is not authenticated, redirect to login
+    return res.redirect('/login'); // User is not authenticated, redirect to login
 };
 
 const restrictSessionRoutes = (req, res, next) => {

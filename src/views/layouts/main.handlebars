@@ -25,6 +25,7 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/">Home</a>
                     </li>
+                    {{#if user}}
                     <li class="nav-item">
                         <a class="nav-link active" href="/products">Products</a>
                     </li>
@@ -34,6 +35,7 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/chat">LiveChat</a>
                     </li>
+                    {{/if}}
                     {{#if isAdmin}}
                     <li class="nav-item">
                         <div class="dropdown">
