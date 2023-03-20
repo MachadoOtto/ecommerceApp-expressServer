@@ -6,6 +6,7 @@
 /* Imports */
 
 import { Router } from 'express';
+import passport from 'passport';
 import SessionController from '../controllers/sessions.controller.js';
 import middlewares from '../middlewares/auth.middleware.js';
 
@@ -17,10 +18,14 @@ const restrictSessionRoutes = middlewares.restrictSessionRoutes;
 /* Routes */
 
 sessionRouter.route('/login')
-    .post(restrictSessionRoutes, SessionController.loginUser);
+    .post(restrictSessionRoutes, passport.authenticate('login', {
+        failureRedirect: '/login?error=1'}), SessionController.loginUser);
 
 sessionRouter.route('/register')
-    .post(restrictSessionRoutes, SessionController.registerUser);
+    .post(restrictSessionRoutes, passport.authenticate('register', {
+        successRedirect: '/login?success=1',
+        failureRedirect: '/register?error=1'
+        }));
 
 sessionRouter.route('/logout')
     .get(SessionController.logoutUser);

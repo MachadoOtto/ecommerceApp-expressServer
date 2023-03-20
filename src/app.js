@@ -6,7 +6,7 @@
 /* Imports */
 
 import path from 'path';
-import { fileURLToPath } from 'url';
+import __dirname from './utils.js';
 import express from 'express';
 import session from 'express-session';
 import handlebars from 'express-handlebars';
@@ -26,6 +26,9 @@ import viewsRouter from './routes/views.router.js';
 // Services
 import MessageService from './services/messages.services.js';
 import ProductService from './services/products.services.js';
+// Passport
+import passport from 'passport';
+import initializePassport from './config/passport.config.js';
 
 /* Main Server Logic */
 
@@ -37,8 +40,6 @@ const MONGODB_URL = process.env.MONGODB_URL;
 const MONGODB_SESSIONS_URL = process.env.MONGODB_SESSIONS_URL;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 const SESSION_TTL = process.env.SESSION_TTL || 150;
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 const httpServer = app.listen(PORT, () => {
     console.log(`[SERVER] Server running on port ${httpServer.address().port}`);
     console.log('[SERVER] Press Ctrl+C to stop the server.');
@@ -86,6 +87,11 @@ app.use(session({
 app.engine('handlebars', handlebars.engine());
 app.set('view engine', 'handlebars');
 app.set('views', path.join(__dirname, '/views'));
+
+// Passport
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Routes
 app.use('/', logger, viewsRouter);

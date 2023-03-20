@@ -24,6 +24,19 @@ class SessionService {
     };
 
     /**
+     * Get a user from the database using its ID.
+     * @param {String} id - User ID.
+     * @returns {Promise<UserModel>} - User object from the database.
+     */
+    static async getUserById(id) {
+        try {
+            return await UserModel.findById(id).lean();
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    /**
      * Get a user from the database using its email.
      * @param {String} email - User email.
      * @returns {Promise<UserModel>} - User object from the database.
