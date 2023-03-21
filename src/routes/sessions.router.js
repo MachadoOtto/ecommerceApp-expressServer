@@ -27,6 +27,12 @@ sessionRouter.route('/register')
         failureRedirect: '/register?error=1'
         }));
 
+sessionRouter.route('/github').
+    get(passport.authenticate('github', { scope: [ 'user:email' ] }), async (req, res) => { } );
+
+sessionRouter.route('/githubcallback').
+    get(passport.authenticate('github', { failureRedirect: '/login?error=1' }), SessionController.loginUser);
+
 sessionRouter.route('/logout')
     .get(SessionController.logoutUser);
 

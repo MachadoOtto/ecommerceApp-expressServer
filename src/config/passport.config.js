@@ -7,6 +7,7 @@
 
 import passport from 'passport';
 import local from 'passport-local';
+import GitHubStrategy from 'passport-github2';
 import dotenv from 'dotenv';
 import SessionService from '../services/sessions.services.js';
 import CartService from '../services/carts.services.js';
@@ -18,6 +19,7 @@ dotenv.config();
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const ADMIN_CART_ID = process.env.ADMIN_CART_ID;
+const SSO_PASS = process.env.SSO_PASS;
 
 const adminUser = {
     email: ADMIN_EMAIL,
@@ -88,6 +90,35 @@ const initializePassport = () => {
             }
     }));
 
+    passport.use('github', new GitHubStrategy({
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: process.env.GITHUB_CALLBACK_URL
+    }, async (accessToken, refreshToken, profile, done) => {
+        try {
+            let user = await SessionService.getUserByEmail(profile._json.email);
+            if (user) {
+                return done(null, user);
+            } else {
+                let cart = await CartService.createCart();
+                let newUser = {
+                    email: profile._json.email,
+                    password: await encryptPassword(SSO_PASS),
+                    first_name: profile._json.name,
+                    last_name: 'GitHub',
+                    age: 69,
+                    cart,
+                    role: 'User'
+                };
+                let result = await SessionService.addUser(newUser);
+                return done(null, result);
+            }
+        } catch (error) {
+            console.log(`[PASSPORT] Error: ${error}`)
+            return done(null, false);
+        }
+    }));
+
     passport.serializeUser((user, done) => {
         // Check for hardcoded admin user
         if (user.email === ADMIN_EMAIL) {
@@ -110,7 +141,7 @@ const initializePassport = () => {
                     done(null, false);
                 }
             } catch (error) {
-                console.log(error);
+                console.log(`[PASSPORT] Error: ${error}`);
                 done(error, false);
             }
         }
