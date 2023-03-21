@@ -19,7 +19,6 @@ dotenv.config();
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const ADMIN_CART_ID = process.env.ADMIN_CART_ID;
-const SSO_PASS = process.env.SSO_PASS;
 
 const adminUser = {
     email: ADMIN_EMAIL,
@@ -103,7 +102,7 @@ const initializePassport = () => {
                 let cart = await CartService.createCart();
                 let newUser = {
                     email: profile._json.email,
-                    password: await encryptPassword(SSO_PASS),
+                    password: '',
                     first_name: profile._json.name,
                     last_name: 'GitHub',
                     age: 69,

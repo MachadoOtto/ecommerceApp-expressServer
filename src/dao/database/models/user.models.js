@@ -17,27 +17,26 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
         lowercase: true,
-        trim: true,
+        trim: true
     },
     password: {
         type: String,
-        required: true,
-        trim: true,
+        trim: true
     },
     first_name: {
         type: String,
         required: true,
-        trim: true,
+        trim: true
     },
     last_name: {
         type: String,
         required: true,
-        trim: true,
+        trim: true
     },
     age: {
         type: Number,
         required: true,
-        trim: true,
+        trim: true
     },
     cart: {
         type: mongoose.Schema.Types.ObjectId,
