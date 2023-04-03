@@ -3,6 +3,10 @@
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
+/* Imports */
+
+import SessionService from '../services/sessions.services.js';
+
 /* Main Controller Logic */
 
 class SessionController {
