@@ -35,6 +35,22 @@ class SessionController {
             res.status(401).send('Unauthorized');
         }
     };
+
+    // Get the session user
+    static async getUserInSession(req, res) {
+        let session = req.session.user;
+        if (session) {
+            try {
+                let user = await SessionService.getUserByEmail(session.email);
+                delete user.password;
+                res.send(user);
+            } catch (error) {
+                res.status(500).send('Internal Server Error');
+            }
+        } else {
+            res.status(401).send('Unauthorized');
+        }
+    };
 };
 
 /* Exports */

@@ -14,6 +14,7 @@ import middlewares from '../middlewares/auth.middleware.js';
 
 const sessionRouter = Router();
 const restrictSessionRoutes = middlewares.restrictSessionRoutes;
+const isAuthenticated = middlewares.isAuthenticated;
 
 /* Routes */
 
@@ -34,10 +35,13 @@ sessionRouter.route('/githubcallback').
     get(passport.authenticate('github', { failureRedirect: '/login?error=1' }), SessionController.loginUser);
 
 sessionRouter.route('/logout')
-    .get(SessionController.logoutUser);
+    .get(isAuthenticated, SessionController.logoutUser);
 
 sessionRouter.route('/user/cart')
-    .get(SessionController.getUserCart);
+    .get(isAuthenticated, SessionController.getUserCart);
+
+sessionRouter.route('/current')
+    .get(isAuthenticated, SessionController.getUserInSession);
 
 /* Exports */
 
