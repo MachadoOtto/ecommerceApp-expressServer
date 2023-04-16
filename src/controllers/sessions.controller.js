@@ -5,7 +5,7 @@
 
 /* Imports */
 
-import SessionService from '../services/sessions.services.js';
+import SessionService from '../services/sessions.service.js';
 
 /* Main Controller Logic */
 

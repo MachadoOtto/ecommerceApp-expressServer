@@ -5,7 +5,7 @@
 
 /* Imports */
 
-import ProductModel from "../dao/database/models/product.models.js";
+import ProductModel from "../persistance/mongo/models/product.models.js";
 
 /* Services */
 

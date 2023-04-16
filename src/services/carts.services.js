@@ -5,8 +5,8 @@
 
 /* Imports */
 
-import CartModel from "../dao/database/models/cart.models.js";
-import ProductModel from "../dao/database/models/product.models.js";
+import CartModel from "../persistance/mongo/models/cart.models.js";
+import ProductModel from "../persistance/mongo/models/product.models.js";
 
 /* Services */
 

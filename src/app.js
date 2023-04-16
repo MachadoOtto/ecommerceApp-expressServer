@@ -12,9 +12,6 @@ import session from 'express-session';
 import handlebars from 'express-handlebars';
 import { Server } from 'socket.io';
 import favicon from 'serve-favicon';
-import mongoose from 'mongoose';
-import mongoStore from 'connect-mongo';
-import dotenv from 'dotenv';
 // Custom Middlewares
 import logger from './middlewares/logger.middleware.js';
 // Routes
