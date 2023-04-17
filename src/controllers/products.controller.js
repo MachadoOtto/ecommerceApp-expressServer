@@ -5,9 +5,11 @@
 
 /* Imports */
 
-import ProductService from '../services/products.services.js';
+import ProductService from '../services/products.service.js';
 
 /* Main Controller Logic */
+
+const productService = new ProductService();
 
 class ProductController {
     // Returns the product list. If the limit parameter is specified, it returns the first N products.
@@ -18,7 +20,7 @@ class ProductController {
         query = query ? JSON.parse(query) : {};
         sort = (sort === 'asc' || sort === 'desc') ? sort : '';
         try {
-            let products = await ProductService.getProducts(limit, page, query, sort);
+            let products = await productService.getProducts(limit, page, query, sort);
             let response = {
                 status: 'success',
                 payload: JSON.parse(JSON.stringify(products.docs)),
@@ -41,7 +43,7 @@ class ProductController {
     static async getProduct(req, res) {
         let { pid } = req.params;
         try {
-            let product = await ProductService.getProductById(pid);
+            let product = await productService.getProductById(pid);
             if (product === null) {
                 res.status(404).send( { status: 'error', message: "Not Found: The product with the specified ID does not exist." });
             } else {
@@ -56,7 +58,7 @@ class ProductController {
     static async addProduct(req, res) {
         let { title, description, code, price, status, stock, category, thumbnails } = req.body;
         try {
-            let product = await ProductService.addProduct({ title, description, code, price, status, stock, category, thumbnails });
+            let product = await productService.addProduct({ title, description, code, price, status, stock, category, thumbnails });
             res.send( { status: 'success', data: product } );
             res.app.get('io').emit('newProduct', product);
         } catch (err) {
@@ -74,13 +76,9 @@ class ProductController {
     static async updateProduct(req, res) {
         let { pid } = req.params;
         try {
-            let status = await ProductService.updateProduct(pid, req.body);
-            if (status.matchedCount === 0) {
-                res.status(404).send( { status: 'error', message: "Not Found: The product with the specified ID does not exist." } );
-            } else {
-                res.send( { status: 'success', message: "Product updated successfully." } );
-                res.app.get('io').emit('updateProduct', await ProductService.getProductById(pid));
-            }
+            let updatedProduct = await productService.updateProduct(pid, req.body);
+            res.send( { status: 'success', message: "Product updated successfully." } );
+            res.app.get('io').emit('updateProduct', updatedProduct);
         } catch (err) {
             if (err.code === 11000) {
                 res.status(409).send( { status: 'error', message: "Conflict: A product with the specified code already exists." } );
@@ -98,13 +96,9 @@ class ProductController {
     static async deleteProduct(req, res) {
         let { pid } = req.params;
         try {
-            let status = await ProductService.deleteProduct(pid);
+            const deletedProduct = await productService.deleteProduct(pid);
             res.app.get('io').emit('deleteProduct', pid);
-            if (status.deletedCount === 0) {
-                res.status(404).send( { status: 'error', message: "Not Found: The product with the specified ID does not exist." } );
-            } else {
-                res.send( { status: 'success', message: "Product deleted successfully." } );
-            }
+            res.send( { status: 'success', message: "Product deleted successfully." } );
         } catch (err) {
             res.status(500).send( { status: 'success', message: "Internal Server Error: An error ocurred while trying to delete the product." } );
         }

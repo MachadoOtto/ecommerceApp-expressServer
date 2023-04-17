@@ -1,12 +1,10 @@
 /* Ecommerce Server - Final Project */
-// Archive: utils.js
+// Archive: bcrypt.utils.js
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
 /* Imports */
 
-import path from 'path';
-import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 
 /* Main Logic */
@@ -30,8 +28,3 @@ export const encryptPassword = async (password) => {
 export const comparePassword = async (password, receivedPassword) => {
     return await bcrypt.compare(password, receivedPassword);
 };
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-export default __dirname;

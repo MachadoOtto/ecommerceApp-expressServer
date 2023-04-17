@@ -6,15 +6,11 @@
 /* Imports */
 
 import path from 'path';
-import __dirname from './utils.js';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import session from 'express-session';
 import handlebars from 'express-handlebars';
-import { Server } from 'socket.io';
 import favicon from 'serve-favicon';
-import mongoose from 'mongoose';
-import mongoStore from 'connect-mongo';
-import dotenv from 'dotenv';
 // Custom Middlewares
 import logger from './middlewares/logger.middleware.js';
 // Routes
@@ -23,53 +19,38 @@ import messagesRouter from './routes/messages.router.js';
 import productsRouter from './routes/products.router.js';
 import sessionRouter from './routes/sessions.router.js';
 import viewsRouter from './routes/views.router.js';
-// Services
-import MessageService from './services/messages.services.js';
-import ProductService from './services/products.services.js';
+// SocketIO
+import SocketIO from './config/socketIO.config.js';
 // Passport
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
+import Config from './config/config.js';
+import Mongo from './persistance/mongo/config/mongo.config.js';
 
 /* Main Server Logic */
 
-dotenv.config(); // Read .env file
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 console.log('[SERVER] Starting server...');
 const app = express();
-const PORT = process.env.PORT || 8080;
-const MONGODB_URL = process.env.MONGODB_URL;
-const MONGODB_SESSIONS_URL = process.env.MONGODB_SESSIONS_URL;
-const SESSION_SECRET = process.env.SESSION_SECRET;
-const SESSION_TTL = process.env.SESSION_TTL || 150;
-const httpServer = app.listen(PORT, () => {
+const httpServer = app.listen(Config.getPort(), () => {
     console.log(`[SERVER] Server running on port ${httpServer.address().port}`);
     console.log('[SERVER] Press Ctrl+C to stop the server.');
 });
 
 /* MongoDB */
 
-mongoose.set('strictQuery', true);
-mongoose.connect(MONGODB_URL, (error) => {
-    if (error) {
-        console.log('[MONGODB] Cannot connect to database: ', error);
-        process.exit(1);
-    }
-    console.log('[MONGODB] Connected to database.');
-});
-
-const MongoStore = mongoStore.create({
-    mongoUrl: MONGODB_SESSIONS_URL,
-    mongoOptions: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    },
-    ttl: SESSION_TTL
-});
+Mongo.connect(Config.getMongoDBUrl());
+const MongoStore = Mongo.getSessionStore(Config.getMongoDBSessionsUrl(), Config.getSessionTTL());
 
 /* Socket.io */
 
-const socketServer = new Server(httpServer);
+const socketIO = new SocketIO(httpServer);
+app.set('io', socketIO.io);
 
 /* Middlewares */
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, '../public')));
@@ -78,7 +59,7 @@ app.use(favicon(path.join(__dirname, '../public/images/favicon.ico')));
 // Sessions
 app.use(session({
     store: MongoStore,
-    secret: SESSION_SECRET,
+    secret: Config.getSessionSecret(),
     resave: false,
     saveUninitialized: false
 }));
@@ -109,16 +90,6 @@ app.use(function (req, res) {
 });
 
 app.disable('x-powered-by');
-
-/* Socket.io */
-
-socketServer.on('connection', async (socket) => {
-    console.log('[SOCKET] New connection: ', socket.id);
-    socket.emit('products', await ProductService.getAllProducts());
-    socket.emit('messages', await MessageService.getMessages());
-});
-
-app.set('io', socketServer);
 
 /* Error Handling */
 
