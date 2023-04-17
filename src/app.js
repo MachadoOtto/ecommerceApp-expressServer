@@ -10,7 +10,6 @@ import { fileURLToPath } from 'url';
 import express from 'express';
 import session from 'express-session';
 import handlebars from 'express-handlebars';
-import { Server } from 'socket.io';
 import favicon from 'serve-favicon';
 // Custom Middlewares
 import logger from './middlewares/logger.middleware.js';
@@ -20,9 +19,8 @@ import messagesRouter from './routes/messages.router.js';
 import productsRouter from './routes/products.router.js';
 import sessionRouter from './routes/sessions.router.js';
 import viewsRouter from './routes/views.router.js';
-// Services
-import MessageService from './services/messages.service.js';
-import ProductService from './services/products.service.js';
+// SocketIO
+import SocketIO from './config/socketIO.config.js';
 // Passport
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
@@ -44,14 +42,15 @@ const httpServer = app.listen(Config.getPort(), () => {
 /* MongoDB */
 
 Mongo.connect(Config.getMongoDBUrl());
-
 const MongoStore = Mongo.getSessionStore(Config.getMongoDBSessionsUrl(), Config.getSessionTTL());
 
 /* Socket.io */
 
-const socketServer = new Server(httpServer);
+const socketIO = new SocketIO(httpServer);
+app.set('io', socketIO.io);
 
 /* Middlewares */
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, '../public')));
@@ -91,16 +90,6 @@ app.use(function (req, res) {
 });
 
 app.disable('x-powered-by');
-
-/* Socket.io */
-
-socketServer.on('connection', async (socket) => {
-    console.log('[SOCKET] New connection: ', socket.id);
-    socket.emit('products', await ProductService.getAllProducts());
-    socket.emit('messages', await MessageService.getMessages());
-});
-
-app.set('io', socketServer);
 
 /* Error Handling */
 

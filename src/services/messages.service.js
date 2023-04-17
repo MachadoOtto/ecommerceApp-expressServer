@@ -1,26 +1,32 @@
 /* Ecommerce Server - Final Project */
-// Archive: messages.models.js
+// Archive: messages.service.js
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
 /* Imports */
 
-import messageModel from "../persistance/mongo/models/message.model.js";
+import MessageRepository from "../repositories/message.repository.js";
+import Message from "../entities/message.js";
 
 /* Services */
 
 class MessageService {
+    constructor() {
+        this.messageRepository = new MessageRepository();
+    };
+
     /**
      * Returns all messages from database, limited by the limit parameter.
      * @param {Number} limit - Maximum number of messages to return.
-     * @returns {Promise<MessageModel[]>} - Object with all messages.
-     * @throws {Error} - Database error.
+     * @returns {Promise<Message[]>} - Object with all messages.
      */
-    static async getMessages(limit) {
+    async getMessages(limit) {
         try {
-            return await messageModel.find().limit(limit).lean();
+            const messages = await this.messageRepository.getMessages(limit);
+            return messages;
         } catch (error) {
-            throw error;
+            console.log(`[DEBUG][MessageService] Error getting messages: ${error}`);
+            throw new Error("Error getting messages");
         }
     }
 
@@ -28,16 +34,17 @@ class MessageService {
      * Adds a new message to the database.
      * @param {String} user - User name.
      * @param {String} message - Message text.
-     * @returns {Promise<MessageModel>} - Message object added to the database.
-     * @throws {Error} - Database error.
+     * @returns {Promise<Message>} - Message.
      */
-    static async addMessage(user, message) {
+    async addMessage(user, message) {
         try {
-            return await messageModel.create({ user, message });
+            const newMessage = await this.messageRepository.create({ user, message });
+            return newMessage;
         } catch (error) {
-            throw error;
+            console.log(`[DEBUG][MessageService] Error adding message: ${error}`);
+            throw new Error("Error adding message");
         }
-    }
+    };
 };
 
 /* Exports */

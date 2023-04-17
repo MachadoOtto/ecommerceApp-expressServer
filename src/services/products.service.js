@@ -1,5 +1,5 @@
 /* Ecommerce Server - Final Project */
-// Archive: products.services.js
+// Archive: products.service.js
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
