@@ -3,6 +3,8 @@
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
+/* Entity Class */
+
 class Message {
     constructor( {_id, user, message, date} ) {
         this._id = _id;

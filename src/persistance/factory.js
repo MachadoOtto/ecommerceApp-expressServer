@@ -8,6 +8,7 @@
 import MongoDBUserDAO from "./mongo/daos/user.dao.js";
 import MongoDBCartDAO from "./mongo/daos/cart.dao.js";
 import MongoDBMessageDAO from "./mongo/daos/message.dao.js";
+import MongoDBProductDAO from "./mongo/daos/product.dao.js";
 
 /* Main Factory Logic */
 
@@ -48,6 +49,19 @@ class FactoryDAO {
         //messageDAO.set('filesystem', FileSystemMessageDAO);
         messageDAO.set('mongodb', MongoDBMessageDAO);
         const DAO = messageDAO.get(key);
+        return new DAO;
+    };
+
+    /**
+     * Returns a Product DAO object based on the key.
+     * @param {String} key - Key to select the DAO.
+     * @returns {Object} - DAO object.
+     */
+    static getProductDAO(key) {
+        const productDAO = new Map();
+        //productDAO.set('filesystem', FileSystemProductDAO);
+        productDAO.set('mongodb', MongoDBProductDAO);
+        const DAO = productDAO.get(key);
         return new DAO;
     };
 };

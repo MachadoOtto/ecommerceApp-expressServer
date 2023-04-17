@@ -11,6 +11,7 @@ import ProductService from "../services/products.service.js";
 /* Main Controller Logic */
 
 const cartService = new CartService();
+const productService = new ProductService();
 
 class CartController {
     // Creates a new cart instance.
@@ -59,7 +60,7 @@ class CartController {
     static async addProductToCart(req, res) {
         let { cid, pid } = req.params;
         try {
-            let product = await ProductService.getProductById(pid);
+            let product = await productService.getProductById(pid);
             if (product === null) {
                 res.status(404).send( { status: 'error', message: 'Not Found: The product with the specified ID does not exist.' } );
             } else {
@@ -130,7 +131,7 @@ class CartController {
     static async removeProductFromCart(req, res) {
         let { cid, pid } = req.params;
         try {
-            let product = await ProductService.getProductById(pid);
+            let product = await productService.getProductById(pid);
             if (product === null) {
                 res.status(404).send( { status: 'error', message: 'Not Found: The product with the specified ID does not exist.' } );
             } else {

@@ -3,6 +3,8 @@
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
+/* Entity Class */
+
 class User {
     constructor( {_id, email, first_name, last_name, age, cart, role} ) {
         this._id = _id;

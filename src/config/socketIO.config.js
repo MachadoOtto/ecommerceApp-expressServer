@@ -12,13 +12,14 @@ import ProductService from '../services/products.service.js';
 /* Main Logic */
 
 const messageService = new MessageService();
+const productService = new ProductService();
 
 class SocketIO {
     constructor(httpServer) {
         this.io = new Server(httpServer);
         this.io.on('connection', async (socket) => {
             console.log('[SOCKET] New connection: ', socket.id);
-            socket.emit('products', await ProductService.getAllProducts());
+            socket.emit('products', await productService.getAllProducts());
             socket.emit('messages', await messageService.getMessages());
         });
     };

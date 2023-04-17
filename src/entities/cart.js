@@ -3,6 +3,8 @@
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
+/* Entity Class */
+
 class Cart {
     constructor( {_id, products} ) {
         this._id = _id;

@@ -19,7 +19,9 @@ class MongoDBMessageDAO {
      */
     async create( {user, message} ) {
         try {
-            return await MessageModel.create({ user, message });
+            const message = await MessageModel.create({ user, message });
+            const messageDTO = new MessageDTO(message);
+            return messageDTO;
         } catch (error) {
             console.log(`[DEBUG][MongoDBMessageDAO] Error creating message: ${error}`);
             throw new Error("Error creating message");
@@ -33,7 +35,9 @@ class MongoDBMessageDAO {
      */
     async getMessages(limit) {
         try {
-            return await MessageModel.find().limit(limit).lean();
+            const messages = await MessageModel.find().limit(limit).lean();
+            const messagesDTO = messages.map( message => new MessageDTO(message) );
+            return messagesDTO;
         } catch (error) {
             console.log(`[DEBUG][MongoDBMessageDAO] Error getting messages: ${error}`);
             throw new Error("Error getting messages");

@@ -11,6 +11,7 @@ import CartService from '../services/carts.service.js';
 /* Main Controller Logic */
 
 const cartService = new CartService();
+const productService = new ProductService();
 
 class ViewController {
     // Home Page. Displays all products contained in the database.
@@ -43,17 +44,17 @@ class ViewController {
             isAdmin = (user.role === 'Admin')
         }
         page = (parseInt(page) > 0) ? parseInt(page) : 1;
-        let dbRes = await ProductService.getProducts(10, page);
-        let products = JSON.parse(JSON.stringify(dbRes.docs));
+        let productsList = await productService.getProducts(10, page);
+        let products = productsList.products;
         let info = {
-            totalPages: dbRes.totalPages,
-            prevPage: dbRes.prevPage,
-            nextPage: dbRes.nextPage,
-            page: dbRes.page,
-            hasPrevPage: dbRes.hasPrevPage,
-            hasNextPage: dbRes.hasNextPage,
-            prevLink: (dbRes.hasPrevPage) ? `/api/products?page=${dbRes.prevPage}` : null,
-            nextLink: (dbRes.hasNextPage) ? `/api/products?page=${dbRes.nextPage}` : null
+            totalPages: productsList.totalPages,
+            prevPage: productsList.prevPage,
+            nextPage: productsList.nextPage,
+            page: productsList.page,
+            hasPrevPage: productsList.hasPrevPage,
+            hasNextPage: productsList.hasNextPage,
+            prevLink: (productsList.hasPrevPage) ? `/api/products?page=${productsList.prevPage}` : null,
+            nextLink: (productsList.hasNextPage) ? `/api/products?page=${productsList.nextPage}` : null
         };
         res.render('products', { products, info, user, isAdmin });
     };
@@ -67,7 +68,7 @@ class ViewController {
             isAdmin = (user.role === 'Admin')
         }
         try {
-            let product = await ProductService.getProductById(pid);
+            let product = await productService.getProductById(pid);
             if (product === null) {
                 res.render('error', { code: 404, message: "Not Found: The product with the specified ID does not exist.", user, isAdmin });
             } else {
