@@ -5,7 +5,7 @@
 
 /* Imports */
 
-import MessageService from '../services/messages.services.js';
+import MessageService from '../services/messages.service.js';
 
 /* Main Controller Logic */
 

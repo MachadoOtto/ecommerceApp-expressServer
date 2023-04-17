@@ -33,7 +33,7 @@ class MongoDBUserDAO {
      */
     async getById(id) {
         try {
-            const user = await UserModel.findById(id)
+            const user = await UserModel.findById(id).lean()
             const userDTO = new UserDTO(user);
             return userDTO;
         } catch (error) {
@@ -48,7 +48,7 @@ class MongoDBUserDAO {
      */
     async getByEmail(email) {
         try {
-            const user = await UserModel.findOne({ email });
+            const user = await UserModel.findOne({ email }).lean();
             const userDTO = new UserDTO(user);
             return userDTO;
         } catch (error) {

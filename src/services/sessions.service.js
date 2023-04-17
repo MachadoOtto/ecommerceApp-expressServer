@@ -1,15 +1,15 @@
 /* Ecommerce Server - Final Project */
-// Archive: sessions.services.js
+// Archive: sessions.service.js
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
 /* Imports */
 
 import Config from "../config/config.js";
-import CartService from './carts.services.js';
+import CartService from './carts.service.js';
 import UserRepository from "../repositories/user.repository.js";
 import User from "../entities/user.js";
-import { encryptPassword, comparePassword } from '../utils.js';
+import { encryptPassword } from '../utils/bcrypt.utils.js';
 
 /* Main Service Logic */
 const admin = new User({
@@ -27,20 +27,21 @@ const admin = new User({
 class SessionService {
     constructor() {
         this.userRepository = new UserRepository();
+        this.cartService = new CartService();
     };
 
     /**
      * Register a new user.
      * @param {Object} user - User object.
      * @param {String} role - User role.
-     * @returns {Promise<UserModel>} - User object added to the database.
+     * @returns {Promise<User>} - User object added to the database.
      */
     async registerUser(user, role) {
         if (!user.email || !user.password || !user.first_name || !user.last_name || !user.age || (user.email.trim().toLowerCase() === Config.getAdminEmail())) {
             throw new Error("Invalid user data");
         }
         try {
-            const newCart = await CartService.createCart();
+            const newCart = await this.cartService.createCart();
             const newUser = {
                 email: user.email.trim().toLowerCase(),
                 password: await encryptPassword(user.password),
@@ -65,7 +66,7 @@ class SessionService {
      * Login a user using its email and password.
      * @param {String} email - User email.
      * @param {String} password - User password.
-     * @returns {Promise<UserModel>} - User object from the database.
+     * @returns {Promise<User>} - User object from the database.
      */
     async loginUser(email, password) {
         try {
@@ -88,7 +89,7 @@ class SessionService {
     /**
      * Github Single Sign On.
      * @param {Object} gitUser - Github user object.
-     * @returns {Promise<UserModel>} - User object from the database.
+     * @returns {Promise<User>} - User object from the database.
      */
     async githubSSO(gitUser) {
         try {
@@ -96,7 +97,7 @@ class SessionService {
             if (user) {
                 return user;
             } else {
-                const newCart = await CartService.createCart();
+                const newCart = await this.cartService.createCart();
                 const newUser = {
                     email: gitUser.email,
                     password: gitUser.password,
@@ -121,7 +122,7 @@ class SessionService {
     /**
      * Get a user from the database using its ID.
      * @param {String} id - User ID.
-     * @returns {Promise<UserModel>} - User object from the database.
+     * @returns {Promise<User>} - User object from the database.
      */
     async getUserById(id) {
         if (id === 0) {
@@ -137,6 +138,27 @@ class SessionService {
                 console.log(`[DEBUG][SessionsService] Error getting user: ${error.message}`);
                 throw new Error("Error getting user");
             }
+        }
+    };
+
+    /**
+     * Get a user from the database using its email.
+     * @param {String} email - User email.
+     * @returns {Promise<User>} - User object from the database.
+     */
+    async getUserByEmail(email) {
+        if (email === Config.getAdminEmail()) {
+            return admin;
+        }
+        try {
+            const user = await this.userRepository.getByEmail(email);
+            if (!user) {
+                throw new Error("User not found");
+            }
+            return user;
+        } catch (error) {
+            console.log(`[DEBUG][SessionsService] Error getting user: ${error.message}`);
+            throw new Error("Error getting user");
         }
     };
 };

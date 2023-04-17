@@ -5,7 +5,7 @@
 
 /* Imports */
 
-import ProductService from '../services/products.services.js';
+import ProductService from '../services/products.service.js';
 
 /* Main Controller Logic */
 

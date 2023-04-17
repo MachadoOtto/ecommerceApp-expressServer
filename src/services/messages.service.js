@@ -5,7 +5,7 @@
 
 /* Imports */
 
-import messageModel from "../persistance/mongo/models/message.models.js";
+import messageModel from "../persistance/mongo/models/message.model.js";
 
 /* Services */
 

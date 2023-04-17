@@ -6,7 +6,7 @@
 /* Imports */
 
 import path from 'path';
-import __dirname from './utils.js';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import session from 'express-session';
 import handlebars from 'express-handlebars';
@@ -21,8 +21,8 @@ import productsRouter from './routes/products.router.js';
 import sessionRouter from './routes/sessions.router.js';
 import viewsRouter from './routes/views.router.js';
 // Services
-import MessageService from './services/messages.services.js';
-import ProductService from './services/products.services.js';
+import MessageService from './services/messages.service.js';
+import ProductService from './services/products.service.js';
 // Passport
 import passport from 'passport';
 import initializePassport from './config/passport.config.js';
@@ -30,6 +30,9 @@ import Config from './config/config.js';
 import Mongo from './persistance/mongo/config/mongo.config.js';
 
 /* Main Server Logic */
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 console.log('[SERVER] Starting server...');
 const app = express();

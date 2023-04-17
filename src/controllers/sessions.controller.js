@@ -9,6 +9,8 @@ import SessionService from '../services/sessions.service.js';
 
 /* Main Controller Logic */
 
+const sessionService = new SessionService();
+
 class SessionController {
     // Login a user
     static async loginUser(req, res) {
@@ -27,6 +29,7 @@ class SessionController {
             res.redirect('/login');
         } catch (error) {
             res.redirect('/');
+            console.log(`[DEBUG][SessionController] Error in logoutUser: ${error.message}`);
         }
     };
 
@@ -45,11 +48,12 @@ class SessionController {
         let session = req.session.user;
         if (session) {
             try {
-                let user = await SessionService.getUserByEmail(session.email);
+                let user = await sessionService.getUserByEmail(session.email);
                 delete user.password;
                 res.send(user);
             } catch (error) {
                 res.status(500).send('Internal Server Error');
+                console.log(`[DEBUG][SessionController] Error in getUserInSession: ${error.message}`)
             }
         } else {
             res.status(401).send('Unauthorized');

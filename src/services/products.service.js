@@ -5,7 +5,7 @@
 
 /* Imports */
 
-import ProductModel from "../persistance/mongo/models/product.models.js";
+import ProductModel from "../persistance/mongo/models/product.model.js";
 
 /* Services */
 

@@ -5,10 +5,12 @@
 
 /* Imports */
 
-import ProductService from '../services/products.services.js';
-import CartService from '../services/carts.services.js';
+import ProductService from '../services/products.service.js';
+import CartService from '../services/carts.service.js';
 
 /* Main Controller Logic */
+
+const cartService = new CartService();
 
 class ViewController {
     // Home Page. Displays all products contained in the database.
@@ -84,7 +86,7 @@ class ViewController {
             isAdmin = (user.role === 'Admin')
         }
         try {
-            let cart = await CartService.getCart(user.cart);
+            let cart = await cartService.getCart(user.cart);
             if (cart === null) {
                 res.render('error', { code: 404, message: "Not Found: The cart with the specified ID does not exist.", user, isAdmin });
             } else {
