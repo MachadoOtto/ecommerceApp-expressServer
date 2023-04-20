@@ -19,8 +19,8 @@ class MongoDBMessageDAO {
      */
     async create( {user, message} ) {
         try {
-            const message = await MessageModel.create({ user, message });
-            const messageDTO = new MessageDTO(message);
+            const new_message = await MessageModel.create({ user, message });
+            const messageDTO = new MessageDTO(new_message);
             return messageDTO;
         } catch (error) {
             console.log(`[DEBUG][MongoDBMessageDAO] Error creating message: ${error}`);
