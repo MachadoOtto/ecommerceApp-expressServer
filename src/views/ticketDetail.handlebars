@@ -1,7 +1,9 @@
 <div class="alert alert-dark m-2" role="alert">
-    <strong>Cart ID: {{cart._id}}</strong><br>
+    <strong>Ticket Code: {{ticket.code}}</strong><br>
+    Date: {{ticket.purchase_datetime}}<br>
+    Amount: <code>${{ticket.amount}}</code><br>
 </div>
-{{#each cart.products}}
+{{#each ticket.purchased_products}}
 <div class="accordion m-2" id="accordionPanelsStayOpen{{product._id}}">
     <div class="accordion-item">
         <h2 class="accordion-header" id="panelsStayOpen-h{{product._id}}">
@@ -26,25 +28,3 @@
     </div>
 </div>
 {{/each}}
-{{#if user}}
-<div class="m-2">
-    <button type="submit" id="purchaseCart" class="btn btn-outline-success mb-2">
-        <script>
-            document.getElementById("purchaseCart").addEventListener("click", function () {
-                purchaseCart();
-            });
-        </script>
-        <img src="/images/cart-box.png" alt="eStorage Products" width="30" height="24">
-        Purchase Products
-    </button>
-</div>
-<!-- Toast -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="toastPurchaseCartFail" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-body">
-            Cart purchase cannot be completed!
-        </div>
-    </div>
-</div>
-<script src="/js/cartManagement.js"></script>
-{{/if}}

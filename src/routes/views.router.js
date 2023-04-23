@@ -44,6 +44,12 @@ viewsRouter.route('/register')
 viewsRouter.route('/profile')
     .get(isAuthenticated, ViewController.getProfile);
 
+viewsRouter.route('/tickets')
+    .get(isAuthenticated, ViewController.getTickets);
+
+viewsRouter.route('/tickets/:code')
+    .get(isAuthenticated, ViewController.getTicketDetail);
+
 /* Exports */
 
 export default viewsRouter;

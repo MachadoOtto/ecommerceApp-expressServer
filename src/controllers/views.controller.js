@@ -7,11 +7,13 @@
 
 import ProductService from '../services/products.service.js';
 import CartService from '../services/carts.service.js';
+import TicketService from '../services/tickets.service.js';
 
 /* Main Controller Logic */
 
 const cartService = new CartService();
 const productService = new ProductService();
+const ticketService = new TicketService();
 
 class ViewController {
     // Home Page. Displays all products contained in the database.
@@ -138,6 +140,41 @@ class ViewController {
             res.render('profile', { user, isAdmin });
         } else {
             res.render('error', { code: 404, message: "Not Found: User profile not found.", user, isAdmin });
+        }
+    };
+
+    // Tickets dashboard.
+    static async getTickets(req, res) {
+        let user = req.session.user;
+        let isAdmin = false;
+        if (user) {
+            isAdmin = (user.role === 'Admin');
+        }
+        try {
+            let tickets = await ticketService.getTicketsByPurchaserId(user._id);
+            res.render('tickets', { tickets, user, isAdmin });
+        } catch (err) {
+            res.render('error', { code: 404, message: "Not Found: User tickets not found.", user, isAdmin });
+        }
+    };
+    
+    // Ticket detail page.
+    static async getTicketDetail(req, res) {
+        let { code } = req.params;
+        let user = req.session.user;
+        let isAdmin = false;
+        if (user) {
+            isAdmin = (user.role === 'Admin');
+        }
+        try {
+            let ticket = await ticketService.getTicketByCode(code);
+            if (ticket === null) {
+                res.render('error', { code: 404, message: "Not Found: The ticket with the specified code does not exist.", user, isAdmin });
+            } else {
+                res.render('ticketDetail', { ticket, user, isAdmin });
+            }
+        } catch (err) {
+            res.render('error', { code: 404, message: "Not Found: The ticket with the specified code does not exist.", user, isAdmin });
         }
     };
 };

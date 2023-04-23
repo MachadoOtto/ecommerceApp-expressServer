@@ -1,6 +1,5 @@
 const toastAddToCart = document.getElementById('toastAddToCart');
 const toastAddToCartFail = document.getElementById('toastAddToCartFail');
-const toastPurchaseCart = document.getElementById('toastPurchaseCart');
 const toastPurchaseCartFail = document.getElementById('toastPurchaseCartFail');
 
 function addToCart(productId) {
@@ -50,11 +49,10 @@ function purchaseCart() {
                 let xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState === 4) {
-                        if (xhr.status === 200) {
-                            toastPurchaseCart.classList.add('show');
-                            setTimeout(() => {
-                                toastPurchaseCart.classList.remove('show');
-                            }, 10000);
+                        if (xhr.status === 201) {
+                            console.log(xhr.responseText);
+                            let ticketCode = JSON.parse(xhr.responseText).ticket.code;
+                            window.location.href = `../tickets/${ticketCode}`;
                         } else {
                             toastPurchaseCartFail.classList.add('show');
                             setTimeout(() => {
