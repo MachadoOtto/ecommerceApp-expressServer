@@ -17,8 +17,8 @@ class CartRepository {
     };
 
     /**
-     * Creates a new cart
-     * @returns {Cart} The new cart
+     * Creates a new cart.
+     * @returns {Cart} The new cart.
      */
     async create() {
         try {
@@ -31,8 +31,8 @@ class CartRepository {
     };
 
     /**
-     * Returns all carts in the database
-     * @returns {Cart[]} An array of carts
+     * Returns all carts in the database.
+     * @returns {Cart[]} An array of carts.
      */
     async getAll() {
         try {
@@ -46,9 +46,9 @@ class CartRepository {
     };
 
     /**
-     * Returns a cart by id
+     * Returns a cart by id.
      * @param {String} id
-     * @returns {Cart} The cart with the given id
+     * @returns {Cart} The cart with the given id.
      */
     async getById(id) {
         try {
@@ -61,10 +61,10 @@ class CartRepository {
     };
 
     /**
-     * Adds a product to a cart
+     * Adds a product to a cart.
      * @param {String} id
      * @param {String} productId
-     * @returns {Cart} The cart with the given id
+     * @returns {Cart} The cart with the given id.
      */
     async addProduct(id, productId) {
         try {
@@ -77,10 +77,10 @@ class CartRepository {
     };
 
     /**
-     * Modifies the products of a cart
+     * Modifies the products of a cart.
      * @param {String} id
      * @param {String[]} newProducts
-     * @returns {Cart} The cart with the given id
+     * @returns {Cart} The cart with the given id.
      */
     async modifyProducts(id, newProducts) {
         try {
@@ -93,11 +93,11 @@ class CartRepository {
     };
 
     /**
-     * Modifies the quantity of a product in a cart
+     * Modifies the quantity of a product in a cart.
      * @param {String} id 
      * @param {String} productId 
      * @param {Number} quantity
-     * @returns {Cart} The cart with the given id
+     * @returns {Cart} The cart with the given id.
      */
     async modifyProductQuantity(id, productId, quantity) {
         try {
@@ -110,10 +110,10 @@ class CartRepository {
     };
 
     /**
-     * Removes a product from a cart
+     * Removes a product from a cart.
      * @param {String} id 
      * @param {String} productId
-     * @returns {Cart} The cart with the given id 
+     * @returns {Cart} The cart with the given id.
      */
     async removeProduct(id, productId) {
         try {
@@ -126,9 +126,9 @@ class CartRepository {
     };
 
     /**
-     * Removes all products from a cart
+     * Removes all products from a cart.
      * @param {String} id 
-     * @returns {Cart} The cart with the given id
+     * @returns {Cart} The cart with the given id.
      */
     async removeAllProducts(id) {
         try {

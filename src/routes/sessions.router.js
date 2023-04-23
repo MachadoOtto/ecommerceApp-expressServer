@@ -40,6 +40,9 @@ sessionRouter.route('/logout')
 sessionRouter.route('/user/cart')
     .get(isAuthenticated, SessionController.getUserCart);
 
+sessionRouter.route('/user/tickets')
+    .get(isAuthenticated, SessionController.getUserTickets);
+
 sessionRouter.route('/current')
     .get(isAuthenticated, SessionController.getUserInSession);
 

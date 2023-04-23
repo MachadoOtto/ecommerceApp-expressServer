@@ -140,7 +140,7 @@ class ViewController {
             res.render('error', { code: 404, message: "Not Found: User profile not found.", user, isAdmin });
         }
     };
-}
+};
 
 /* Exports */
 

@@ -7,11 +7,13 @@
 
 import CartService from "../services/carts.service.js";
 import ProductService from "../services/products.service.js";
+import TicketService from "../services/tickets.service.js";
 
 /* Main Controller Logic */
 
 const cartService = new CartService();
 const productService = new ProductService();
+const ticketService = new TicketService();
 
 class CartController {
     // Creates a new cart instance.
@@ -170,8 +172,37 @@ class CartController {
             }
             console.log(`[DEBUG][CartController] Error in removeAllProductsFromCart: ${err.message}`);
         }
-    };    
-}
+    };
+
+    // Finalizes the process of buying the products in the cart with the specified ID. If the cart doesn't exist, it returns an error.
+    // Generates a new ticket and adds it to the user's tickets.
+    // Removes all products purchased from the cart.
+    static async purchaseCart(req, res) {
+        let { cid } = req.params;
+        let user = req.session.user;
+        if (!user) {
+            res.status(401).send( { status: 'error', message: 'Unauthorized: You must be logged in to purchase products.' } );
+        } else {
+            try {
+                let cart = await cartService.getCart(cid);
+                if (cart === null) {
+                    res.status(404).send( { status: 'error', message: 'Not Found: The cart with the specified ID does not exist.' } );
+                } else {
+                    let purchaser = user._id;
+                    let ticket = await ticketService.createTicket( { purchaser, cart } );
+                    res.status(201).send( { status: 'success', message: 'Products purchased successfully.', ticket } );              
+                }
+            } catch (err) {
+                if (err.name === 'CastError') {
+                    res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
+                } else {
+                    res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to purchase the products.' } );
+                }
+                console.log(`[DEBUG][CartController] Error in purchaseProducts: ${err.message}`);
+            }
+        }
+    };
+};
 
 /* Exports */
 
