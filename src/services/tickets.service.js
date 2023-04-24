@@ -40,7 +40,7 @@ class TicketService {
                     return false;
                 }
             });
-            const amount = purchased_products.reduce( (acc, p) => acc + p.product.price, 0 );
+            const amount = purchased_products.reduce( (acc, p) => acc + p.product.price * p.quantity, 0 );
             const ticketEntity = this.ticketRepository.create( { code, purchase_datetime, amount, purchaser, purchased_products } );
             return ticketEntity;
         } catch (error) {

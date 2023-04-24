@@ -23,13 +23,17 @@ class NodemailerTransporter{
         });
     };
 
-    async sendEmailTicket() {
-        this.transporter.sendMail({
-            from: Config.getNodemailerEmail(),
-            to: '@gmail.com',
-            subject: `eStorage Products - Ticket #{ticket.code}`,
-            html: ticketTemplate()
-        });
+    async sendEmailTicket(ticket) {
+        try {
+            this.transporter.sendMail({
+                from: Config.getNodemailerEmail(),
+                to: ticket.purchaser.email,
+                subject: `eStorage Products - Ticket #${ticket.code}`,
+                html: ticketTemplate(ticket)
+            });
+        } catch (error) {
+            console.log(`[DEBUG][NodemailerTransporter] Error sending email: ${error}`);
+        };
     };        
 };
 

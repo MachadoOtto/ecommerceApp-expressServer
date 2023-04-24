@@ -3,6 +3,10 @@
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
+/* Imports */
+import User from "./user.js";
+import Product from "./product.js";
+
 /* Entity Class */
 
 class Ticket {
@@ -11,8 +15,13 @@ class Ticket {
         this.code = code;
         this.purchase_datetime = purchase_datetime;
         this.amount = amount;
-        this.purchaser = purchaser;
-        this.purchased_products = purchased_products;
+        this.purchaser = new User(purchaser);
+        this.purchased_products = purchased_products.map((p) => {
+            return {
+                product: new Product(p.product),
+                quantity: p.quantity
+            };
+        });
     };
 };
 

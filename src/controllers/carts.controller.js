@@ -8,12 +8,14 @@
 import CartService from "../services/carts.service.js";
 import ProductService from "../services/products.service.js";
 import TicketService from "../services/tickets.service.js";
+import NodemailerTransporter from "../config/nodemailer.config.js";
 
 /* Main Controller Logic */
 
 const cartService = new CartService();
 const productService = new ProductService();
 const ticketService = new TicketService();
+const nodemailerTransporter = new NodemailerTransporter();
 
 class CartController {
     // Creates a new cart instance.
@@ -190,6 +192,8 @@ class CartController {
                 } else {
                     let purchaser = user._id;
                     let ticket = await ticketService.createTicket( { purchaser, cart } );
+                    ticket = await ticketService.getTicket(ticket._id);
+                    await nodemailerTransporter.sendEmailTicket(ticket);
                     res.status(201).send( { status: 'success', message: 'Products purchased successfully.', ticket } );              
                 }
             } catch (err) {
