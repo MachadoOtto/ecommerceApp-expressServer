@@ -59,6 +59,14 @@ class Config {
     static getGithubCallbackUrl() {
         return process.env.GITHUB_CALLBACK_URL;
     };
+
+    static getNodemailerEmail() {
+        return process.env.NODEMAILER_EMAIL;
+    };
+
+    static getNodemailerPassword() {
+        return process.env.NODEMAILER_PASSWORD;
+    };
 };
 
 /* Exports */

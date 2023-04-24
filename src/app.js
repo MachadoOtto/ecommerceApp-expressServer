@@ -27,6 +27,10 @@ import passport from 'passport';
 import initializePassport from './config/passport.config.js';
 import Config from './config/config.js';
 import Mongo from './persistance/mongo/config/mongo.config.js';
+import NodemailerTransporter from './config/nodemailer.config.js';
+
+const nodemailerTransporter = new NodemailerTransporter();
+nodemailerTransporter.sendEmailTicket();
 
 /* Main Server Logic */
 
