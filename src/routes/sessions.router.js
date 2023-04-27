@@ -8,13 +8,14 @@
 import { Router } from 'express';
 import passport from 'passport';
 import SessionController from '../controllers/sessions.controller.js';
-import middlewares from '../middlewares/auth.middleware.js';
+import AuthMiddleware from '../middlewares/auth.middleware.js';
 
 /* Main Router Logic */
 
 const sessionRouter = Router();
-const restrictSessionRoutes = middlewares.restrictSessionRoutes;
-const isAuthenticated = middlewares.isAuthenticated;
+const restrictSessionRoutes = AuthMiddleware.restrictSessionRoutes;
+const isAuthenticated = AuthMiddleware.isAuthenticated;
+const isUser = AuthMiddleware.isUser;
 
 /* Routes */
 
@@ -38,7 +39,10 @@ sessionRouter.route('/logout')
     .get(isAuthenticated, SessionController.logoutUser);
 
 sessionRouter.route('/user/cart')
-    .get(isAuthenticated, SessionController.getUserCart);
+    .get(isAuthenticated, isUser, SessionController.getUserCart);
+
+sessionRouter.route('/user/tickets')
+    .get(isAuthenticated, isUser, SessionController.getUserTickets);
 
 sessionRouter.route('/current')
     .get(isAuthenticated, SessionController.getUserInSession);

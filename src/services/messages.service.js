@@ -28,7 +28,7 @@ class MessageService {
             console.log(`[DEBUG][MessageService] Error getting messages: ${error}`);
             throw new Error("Error getting messages");
         }
-    }
+    };
 
     /**
      * Adds a new message to the database.

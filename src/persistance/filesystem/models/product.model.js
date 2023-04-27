@@ -1,11 +1,11 @@
 /* Ecommerce Server - Final Project */
-// Archive: Product.js
+// Archive: product.model.js
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
-/* Class Product */
+/* Class ProductModel */
 
-class Product {
+class ProductModel {
     constructor(id, title, description, price, code, status, stock, category, thumbnails) {
         this.id = id; // unique id
         this.title = title;
@@ -43,8 +43,8 @@ class Product {
         Category: ${this.category}
         thumbnails: ${this.thumbnails}`;
     }
-}
+};
 
 /* Exports */
 
-export default Product;
+export default ProductModel;

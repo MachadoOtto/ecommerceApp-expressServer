@@ -18,6 +18,7 @@ import cartsRouter from './routes/carts.router.js';
 import messagesRouter from './routes/messages.router.js';
 import productsRouter from './routes/products.router.js';
 import sessionRouter from './routes/sessions.router.js';
+import ticketsRouter from './routes/tickets.router.js';
 import viewsRouter from './routes/views.router.js';
 // SocketIO
 import SocketIO from './config/socketIO.config.js';
@@ -34,8 +35,10 @@ const __dirname = path.dirname(__filename);
 
 console.log('[SERVER] Starting server...');
 const app = express();
+
 const httpServer = app.listen(Config.getPort(), () => {
     console.log(`[SERVER] Server running on port ${httpServer.address().port}`);
+    console.log(`[SERVER] Server mode: ${Config.getDao()}`);
     console.log('[SERVER] Press Ctrl+C to stop the server.');
 });
 
@@ -80,6 +83,7 @@ app.use('/api/carts', cartsRouter);
 app.use('/api/messages', messagesRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/sessions', sessionRouter);
+app.use('/api/tickets', ticketsRouter)
 app.use(function (req, res) {
     let user = req.session.user;
     let isAdmin = false;

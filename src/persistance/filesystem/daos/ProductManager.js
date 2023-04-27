@@ -6,7 +6,8 @@
 /* Imports */
 
 import fs from 'fs';
-import Product from '../models/Product.js';
+import Product from '../models/product.model.js';
+import ProductDTO from '../../../dtos/product.dto.js';
 
 /* Auxiliar functions */
 
@@ -50,7 +51,7 @@ const checkField = (field, fieldName) => {
         default:
             throw new Error(`The field ${fieldName} is not valid`);
     }
-}
+};
 
 /**
  * Generates a JSON string with the lastId and the products array.
@@ -60,7 +61,7 @@ const checkField = (field, fieldName) => {
  */
 const generateProductJSON = (lastId, products) => {
     return JSON.stringify({ lastId: lastId, products: products }, null, '\t');
-}
+};
 
 /* Class ProductManager */
 
@@ -79,7 +80,7 @@ class ProductManager {
             let prodMngrObj = JSON.parse(fs.readFileSync(this.#path, 'utf-8'));
             this.#lastId = prodMngrObj.lastId;
         }
-    }
+    };
     
     /**
      * Validates that the product object has all the required fields and that they are valid.
@@ -90,7 +91,7 @@ class ProductManager {
         let res = true;
         Object.keys(product).forEach(key => res = res && checkField(product[key], key));
         return res;
-    }
+    };
 
     /**
      * Validates that the product code does not exist in the `products` array.
@@ -101,7 +102,7 @@ class ProductManager {
     validateCode(code, products) {
         let res = products.find(p => p.code === code);
         return (res === undefined);
-    }
+    };
 
     /**
      * Adds a new `Product` to the `products` array and saves it to the file.
@@ -121,12 +122,13 @@ class ProductManager {
             }
             products.push(product);
             await fs.promises.writeFile(this.#path, generateProductJSON(this.#lastId, products));
-            return product;
+            const productDTO = new ProductDTO(product);
+            return productDTO;
         } catch (error) {
             --this.#lastId;
             throw new Error(`The product could not be added: ${error.message}`);
         }
-    }
+    };
 
     /**
      * Returns the `Product` object from the `products` array that matches the provided id.
@@ -141,12 +143,13 @@ class ProductManager {
             if (product === undefined) {
                 throw new Error(`Not found: The product with id ${id} does not exist`);
             } else {
-                return product;
+                const productDTO = new ProductDTO(product);
+                return productDTO;
             }
         } catch (error) {
             throw new Error(`An error occurred while searching for the product with id ${id}: ` + error.message);
         }
-    }
+    };
 
     /**
      * Returns an array with all the `Product` objects contained in the `products` array of the ProductManager file.
@@ -160,14 +163,32 @@ class ProductManager {
                 limit = 0;
             }
             let file = await fs.promises.readFile(this.#path, 'utf-8');
+            let products;
             if (limit > 0) {
-                return JSON.parse(file).products.slice(0, limit);
+                products = JSON.parse(file).products.slice(0, limit);
+            } else {
+                products = JSON.parse(file).products;
             }
-            return JSON.parse(file).products;
+            let productsDTO = products.map(p => new ProductDTO(p));
+            return productsDTO;
         } catch (error) {
             throw new Error(`An error occurred while reading the products: ` + error.message);
         }
-    }
+    };
+
+    /**
+     * Returns all products from database.
+     * @returns {Promise<ProductDTO[]>} - Object with all products.
+     */
+    async getAllProducts() {
+        try {
+            const products = JSON.parse(await fs.promises.readFile(this.#path, 'utf-8')).products;
+            const productsDTO = products.map(p => new ProductDTO(p));
+            return productsDTO;
+        } catch (error) {
+            throw new Error(`An error occurred while reading the products: ` + error.message);
+        }
+    };
 
     /**
      * Returns the quantity of `Product` objects contained in the `products` array of the ProductManager file.
@@ -176,7 +197,7 @@ class ProductManager {
     async getProductsQuantity() {
         let products = await this.getProducts();
         return products.length;
-    }
+    };
 
     /**
      * Updates the data of a `Product` by entering the id and an object with the data to be updated.
@@ -211,12 +232,13 @@ class ProductManager {
                     }
                 });
                 await fs.promises.writeFile(this.#path, generateProductJSON(this.#lastId, products));
-                return errorFields.length > 0 ? {product, errorFields} : product;
+                const productDTO = new ProductDTO(product);
+                return productDTO;
             }
         } catch (error) {
             throw new Error(`An error occurred while updating the product with id ${id}: ` + error.message);
         }
-    }
+    };
 
     /**
      * Deletes a `Product` from the `products` array that matches the provided id.
@@ -233,12 +255,13 @@ class ProductManager {
             } else {
                 products = products.filter(p => p.id !== id);
                 await fs.promises.writeFile(this.#path, generateProductJSON(this.#lastId, products));
-                return product;
+                const productDTO = new ProductDTO(product);
+                return productDTO;
             }
         } catch (error) {
             throw new Error(`An error occurred while deleting the product with id ${id}: ` + error.message);
         }
-    }
+    };
 
     /**
      * Deletes all the `Product` objects contained in the `products` array of the ProductManager file.
@@ -251,8 +274,8 @@ class ProductManager {
         } catch (error) {
             throw new Error(`An error occurred while deleting all the products: ` + error.message);
         }
-    }
-}
+    };
+};
 
 /* Exports */
 

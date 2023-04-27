@@ -98,7 +98,7 @@ class ProductService {
             throw new Error("Update fields are required");
         }
         try {
-            const response = await this.productRepository.update(id, updateFields);
+            const response = await this.productRepository.updateProduct(id, updateFields);
             if (response.matchedCount === 0) {
                 throw new Error("Product not found");
             }
@@ -129,6 +129,36 @@ class ProductService {
         } catch (error) {
             console.log(`[DEBUG][ProductService] Error deleting product: ${error}`);
             throw new Error("Error deleting product");
+        }
+    };
+
+    /**
+     * Reduces an amount of stock from a product. If the amount is greater than the stock, throws an error.
+     * @param {Number} id - Product id.
+     * @param {Number} amount - Amount to reduce.
+     * @returns {Number} - Amount reduced.
+     */
+    async reduceStock(id, amount) {
+        if (!id) {
+            throw new Error("Product id is required");
+        }
+        if (!amount) {
+            throw new Error("Amount is required");
+        }
+        try {
+            const product = await this.productRepository.getProductById(id);
+            if (product.stock < amount) {
+                throw new Error("Not enough stock");
+            }
+            const newStock = product.stock - amount;
+            const response = await this.productRepository.updateProduct(id, { stock: newStock } );
+            if (response.matchedCount === 0) {
+                throw new Error("Product not found");
+            }
+            return amount;
+        } catch (error) {
+            console.log(`[DEBUG][ProductService] Error reducing stock: ${error}`);
+            throw new Error("Error reducing stock");
         }
     };
 };

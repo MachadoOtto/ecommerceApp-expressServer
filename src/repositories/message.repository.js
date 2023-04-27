@@ -17,9 +17,9 @@ class MessageRepository {
     };
 
     /**
-     * Creates a new message
+     * Creates a new message.
      * @param {*} data 
-     * @returns {Message} The new message
+     * @returns {Message} The new message.
      */
     async create(data) {
         try {
@@ -32,7 +32,7 @@ class MessageRepository {
     };
 
     /**
-     * Returns all messages limited by the given limit
+     * Returns all messages limited by the given limit.
      * @param {Number} limit 
      * @returns {Message[]} 
      */

@@ -1,11 +1,11 @@
 /* Ecommerce Server - Final Project */
-// Archive: Cart.js
+// Archive: cart.model.js
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
-/* Class Cart */
+/* Class CartModel */
 
-class Cart {
+class CartModel {
     constructor(id) {
         this.id = id; // unique id
         this.products = []; // array of products
@@ -28,8 +28,8 @@ class Cart {
         return `ID: ${this.id} =>
         Products: ${this.products}`;
     }
-}
+};
 
 /* Exports */
 
-export default Cart;
+export default CartModel;

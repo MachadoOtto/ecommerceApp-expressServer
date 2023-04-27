@@ -18,9 +18,9 @@ class UserRepository {
     };
 
     /**
-     * Creates a new user
+     * Creates a new user.
      * @param {*} data 
-     * @returns {User} The new user
+     * @returns {User} The new user.
      */
     async create(data) {
         try {
@@ -33,9 +33,9 @@ class UserRepository {
     };
 
     /**
-     * Returns a user by id
+     * Returns a user by id.
      * @param {String} id 
-     * @returns {User} The user with the given id
+     * @returns {User} The user with the given id.
      */
     async getById(id) {
         try {
@@ -48,9 +48,9 @@ class UserRepository {
     };
 
     /**
-     * Returns a user by email
+     * Returns a user by email.
      * @param {String} email
-     * @returns {User} The user with the given email
+     * @returns {User} The user with the given email.
      */
     async getByEmail(email) {
         try {
@@ -63,10 +63,10 @@ class UserRepository {
     };
 
     /**
-     * Returns a user by email and password (for login)
+     * Returns a user by email and password (for login).
      * @param {String} email 
      * @param {String} password
-     * @returns {User} The user with the given email and password
+     * @returns {User} The user with the given email and password.
      */
     async getByEmailAndPassword(email, password) {
         try {

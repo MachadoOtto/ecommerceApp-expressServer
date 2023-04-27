@@ -21,7 +21,7 @@ class MessageController {
         } catch (error) {
             res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to get the messages list.' } );
         }
-    }
+    };
 
     // Adds a new message to the database.
     static async newMessage(req, res) {
@@ -33,8 +33,8 @@ class MessageController {
         } catch (error) {
             res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to add the message.' } );
         }
-    }
-}
+    };
+};
 
 /* Exports */
 
