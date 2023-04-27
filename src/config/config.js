@@ -67,6 +67,26 @@ class Config {
     static getNodemailerPassword() {
         return process.env.NODEMAILER_PASSWORD;
     };
+
+    static getFilesystemUsersPath() {
+        return process.env.FILESYSTEM_USERS_PATH;
+    };
+
+    static getFilesystemCartsPath() {
+        return process.env.FILESYSTEM_CARTS_PATH;
+    };
+
+    static getFilesystemMessagesPath() {
+        return process.env.FILESYSTEM_MESSAGES_PATH;
+    };
+
+    static getFilesystemProductsPath() {
+        return process.env.FILESYSTEM_PRODUCTS_PATH;
+    };
+
+    static getFilesystemTicketsPath() {
+        return process.env.FILESYSTEM_TICKETS_PATH;
+    };
 };
 
 /* Exports */

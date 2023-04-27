@@ -35,8 +35,10 @@ const __dirname = path.dirname(__filename);
 
 console.log('[SERVER] Starting server...');
 const app = express();
+
 const httpServer = app.listen(Config.getPort(), () => {
     console.log(`[SERVER] Server running on port ${httpServer.address().port}`);
+    console.log(`[SERVER] Server mode: ${Config.getDao()}`);
     console.log('[SERVER] Press Ctrl+C to stop the server.');
 });
 

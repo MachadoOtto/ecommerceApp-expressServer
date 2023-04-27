@@ -57,53 +57,11 @@ class MessageManager {
     async getMessages(limit) {
         try {
             const messages = await JSON.parse(fs.readFileSync(this.#path, 'utf-8')).messages;
-            
-            // const messages = await MessageModel.find().limit(limit).lean();
-            // const messagesDTO = messages.map( message => new MessageDTO(message) );
+            const messagesDTO = messages.slice(-limit).map( message => new MessageDTO(message) );
             return messagesDTO;
         } catch (error) {
-            console.log(`[DEBUG][MessageDTO] Error getting messages: ${error}`);
+            console.log(`[DEBUG][MessageManager] Error getting messages: ${error}`);
             throw new Error("Error getting messages");
-        }
-    };
-
-    /**
-     * Get a user from the database using its ID.
-     * @param {String} id - User ID.
-     * @returns {Promise<UserDTO>} - User DTO.
-     */
-    async getById(id) {
-        try {
-            const users = await JSON.parse(fs.readFileSync(this.#path, 'utf-8')).users;
-            const user = users.find(user => user.id === id);
-            if (user === undefined) {
-                throw new Error(`Not found: User with ID ${id} does not exist`);
-            }
-            const userDTO = new UserDTO(user);
-            return userDTO;
-        } catch (error) {
-            console.log(`[DEBUG][UserManager] Error getting user by id: ${error}`);
-            throw new Error(`Error getting user by id: ${error}`);
-        }
-    };
-
-    /**
-     * Get a user from the database using its email.
-     * @param {String} email - User email.
-     * @returns {Promise<UserDTO>} - User DTO.
-     */
-    async getByEmail(email) {
-        try {
-            const users = await JSON.parse(fs.readFileSync(this.#path, 'utf-8')).users;
-            const user = users.find(user => user.email === email);
-            if (user === undefined) {
-                throw new Error(`Not found: User with email ${email} does not exist`);
-            }
-            const userDTO = new UserDTO(user);
-            return userDTO;
-        } catch (error) {
-            console.log(`[DEBUG][UserManager] Error getting user by email: ${error}`);
-            throw new Error(`Error getting user by email: ${error}`);
         }
     };
 };
