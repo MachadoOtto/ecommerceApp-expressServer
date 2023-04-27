@@ -154,7 +154,8 @@ class ViewController {
             let tickets = await ticketService.getTicketsByPurchaserId(user._id);
             res.render('tickets', { tickets, user, isAdmin });
         } catch (err) {
-            res.render('error', { code: 404, message: "Not Found: User tickets not found.", user, isAdmin });
+            let tickets = [];
+            res.render('tickets', { tickets, user, isAdmin });
         }
     };
     

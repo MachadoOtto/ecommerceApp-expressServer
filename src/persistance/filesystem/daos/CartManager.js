@@ -6,7 +6,7 @@
 /* Imports */
 
 import fs from 'fs';
-import Cart from '../models/Cart.js';
+import Cart from '../models/cart.model.js';
 import ProductManager from './ProductManager.js';
 
 /* Class CartManager */

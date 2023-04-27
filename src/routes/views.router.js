@@ -13,6 +13,7 @@ import middlewares from '../middlewares/auth.middleware.js';
 
 const viewsRouter = Router();
 const isAuthenticated = middlewares.isAuthenticated;
+const isUser = middlewares.isUser;
 const restrictSessionRoutes = middlewares.restrictSessionRoutes;
 
 /* Routes */
@@ -30,7 +31,7 @@ viewsRouter.route('/products/:pid')
     .get(isAuthenticated, ViewController.getProductDetail);
 
 viewsRouter.route('/cart')
-    .get(isAuthenticated, ViewController.getCart);
+    .get(isUser, ViewController.getCart);
 
 viewsRouter.route('/chat')
     .get(isAuthenticated, ViewController.getChat);
@@ -45,10 +46,10 @@ viewsRouter.route('/profile')
     .get(isAuthenticated, ViewController.getProfile);
 
 viewsRouter.route('/tickets')
-    .get(isAuthenticated, ViewController.getTickets);
+    .get(isUser, ViewController.getTickets);
 
 viewsRouter.route('/tickets/:code')
-    .get(isAuthenticated, ViewController.getTicketDetail);
+    .get(isUser, ViewController.getTicketDetail);
 
 /* Exports */
 

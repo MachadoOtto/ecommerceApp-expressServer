@@ -7,18 +7,21 @@
 
 import { Router } from 'express';
 import TicketController from '../controllers/tickets.controller.js';
+import AuthMiddleware from '../middlewares/auth.middleware.js';
 
 /* Main Router Logic */
 
 const ticketsRouter = Router();
+const isAdmin = AuthMiddleware.isAdmin;
+const isAuthenticated = AuthMiddleware.isAuthenticated;
 
 /* Routes */
 
 ticketsRouter.route('/')
-    .get(TicketController.getTickets);
+    .get(isAdmin, TicketController.getTickets);
 
 ticketsRouter.route('/:code')
-    .get(TicketController.getTicketByCode);
+    .get(isAuthenticated, TicketController.getTicketByCode);
 
 /* Exports */
 

@@ -7,29 +7,32 @@
 
 import { Router } from 'express';
 import CartController from '../controllers/carts.controller.js';
+import AuthMiddleware from '../middlewares/auth.middleware.js';
 
 /* Main Router Logic */
 
 const cartsRouter = Router();
+const isAdmin = AuthMiddleware.isAdmin;
+const isUser = AuthMiddleware.isUser;
 
 /* Routes */
 
 cartsRouter.route('/')
-    .get(CartController.getCarts)
-    .post(CartController.newCart);
+    .get(isAdmin, CartController.getCarts)
+    .post(isUser, CartController.newCart);
 
 cartsRouter.route('/:id')
-    .get(CartController.getCart)
-    .put(CartController.updateCart)
-    .delete(CartController.removeAllProductsFromCart);
+    .get(isUser, CartController.getCart)
+    .put(isUser, CartController.updateCart)
+    .delete(isUser, CartController.removeAllProductsFromCart);
 
 cartsRouter.route('/:cid/product/:pid')
-    .post(CartController.addProductToCart)
-    .put(CartController.modifyProductQuantityCart)
-    .delete(CartController.removeProductFromCart)
+    .post(isUser, CartController.addProductToCart)
+    .put(isUser, CartController.modifyProductQuantityCart)
+    .delete(isUser, CartController.removeProductFromCart)
 
 cartsRouter.route('/:cid/purchase')
-    .post(CartController.purchaseCart);
+    .post(isUser, CartController.purchaseCart);
 
 /* Exports */
 
