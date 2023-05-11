@@ -10,6 +10,7 @@ import Ticket from "../entities/ticket.js";
 import ProductService from "./products.service.js";
 import CartService from "./carts.service.js";
 import { generateUUID } from "../utils/uuid.utils.js";
+import ErrorUtils from "./errors/utils.error.js";
 
 /* Services */
 
@@ -26,7 +27,12 @@ class TicketService {
      */
     async createTicket( { purchaser, cart } ) {
         if (!purchaser || !cart) {
-            throw new Error("Purchaser and cart are required");
+            let cause = `Purchaser received: ${purchaser}, Cart received: ${cart}`;
+            if (!purchaser) {
+                ErrorUtils.userIdRequiredError(cause);
+            } else {
+                ErrorUtils.cartIdRequiredError(cause);
+            }
         }
         try {
             const code = generateUUID();
@@ -45,7 +51,8 @@ class TicketService {
             return ticketEntity;
         } catch (error) {
             console.log(`[DEBUG][TicketService] Error creating ticket: ${error}`);
-            throw new Error("Error creating ticket");
+            let cause = `Purchaser received: ${purchaser}, Cart received: ${cart}`;
+            ErrorUtils.ticketCreateError(cause);
         }
     };
 
@@ -59,7 +66,7 @@ class TicketService {
             return tickets;
         } catch (error) {
             console.log(`[DEBUG][TicketService] Error getting all tickets: ${error}`);
-            throw new Error("Error getting all tickets");
+            ErrorUtils.ticketNotFound(error);
         }
     };
 
@@ -70,14 +77,16 @@ class TicketService {
      */
     async getTicket(id) {
         if (!id) {
-            throw new Error("Ticket ID is required");
+            let cause = `Ticket ID received: ${id}`;
+            ErrorUtils.ticketIdRequiredError(cause);
         }
         try {
             const ticket = this.ticketRepository.getById(id);
             return ticket;
         } catch (error) {
             console.log(`[DEBUG][TicketService] Error getting ticket by id: ${error}`);
-            throw new Error("Error getting ticket by id");
+            let cause = `Ticket ID received: ${id}`;
+            ErrorUtils.ticketNotFound(cause);
         }
     };
 
@@ -88,14 +97,16 @@ class TicketService {
      */
     async getTicketByCode(code) {
         if (!code) {
-            throw new Error("Ticket code is required");
+            let cause = `Ticket Code received: ${code}`;
+            ErrorUtils.ticketCodeRequiredError(cause);
         }
         try {
             const ticket = this.ticketRepository.getByCode(code);
             return ticket;
         } catch (error) {
             console.log(`[DEBUG][TicketService] Error getting ticket by code: ${error}`);
-            throw new Error("Error getting ticket by code");
+            let cause = `Ticket Code received: ${code}`;
+            ErrorUtils.ticketNotFound(cause);
         }
     };
 
@@ -106,14 +117,16 @@ class TicketService {
      */
     async getTicketsByPurchaserId(purchaserId) {
         if (!purchaserId) {
-            throw new Error("Purchaser ID is required");
+            let cause = `Purchaser ID received: ${purchaserId}`;
+            ErrorUtils.userIdRequiredError(cause);
         }
         try {
             const tickets = this.ticketRepository.getByPurchaserId(purchaserId);
             return tickets;
         } catch (error) {
             console.log(`[DEBUG][TicketService] Error getting tickets by purchaserId: ${error}`);
-            throw new Error("Error getting tickets by purchaserId");
+            let cause = `Purchaser ID received: ${purchaserId}`;
+            ErrorUtils.ticketNotFound(cause);
         }
     };
 };

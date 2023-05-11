@@ -30,8 +30,8 @@ class SessionController {
             req.session.destroy();
             res.redirect('/login');
         } catch (error) {
+            console.log(`[ERR][SessionController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.redirect('/');
-            console.log(`[DEBUG][SessionController] Error in logoutUser: ${error.message}`);
         }
     };
 
@@ -54,8 +54,8 @@ class SessionController {
                 delete user.password;
                 res.send(user);
             } catch (error) {
+                console.log(`[ERR][SessionController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
                 res.status(500).send('Internal Server Error');
-                console.log(`[DEBUG][SessionController] Error in getUserInSession: ${error.message}`)
             }
         } else {
             res.status(401).send('Unauthorized');
@@ -70,8 +70,8 @@ class SessionController {
                 let tickets = await ticketService.getTicketsByPurchaserId(session._id);
                 res.send( { status: 'success', data: tickets } );
             } catch (err) {
+                console.log(`[ERR][SessionController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
                 res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to retrieve the tickets.' } );
-                console.log(`[DEBUG][TicketController] Error in getUserTickets: ${err.message}`);
             }
         } else {
             res.status(401).send( { status: 'error', message: 'Unauthorized: You must be logged in to access this resource.' } );

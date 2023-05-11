@@ -7,6 +7,7 @@
 
 import CartRepository from "../repositories/cart.repository.js";
 import Cart from "../entities/cart.js";
+import ErrorUtils from "./errors/utils.error.js";
 
 /* Services */
 
@@ -25,7 +26,7 @@ class CartService {
             return cartEntity;
         } catch (error) {
             console.log(`[DEBUG][CartService] Error creating cart: ${error}`);
-            throw new Error("Error creating cart");
+            ErrorUtils.cartCreateError(error);
         }
     };
 
@@ -39,7 +40,7 @@ class CartService {
             return carts;
         } catch (error) {
             console.log(`[DEBUG][CartService] Error getting all carts: ${error}`);
-            throw new Error("Error getting all carts");
+            ErrorUtils.cartNotFoundError(error);
         }
     };
 
@@ -50,14 +51,14 @@ class CartService {
      */
     async getCart(id) {
         if (!id) {
-            throw new Error("Cart ID is required");
+            ErrorUtils.cartIdRequiredError(`ID received: ${id}`);
         }
         try {
             const cart = this.cartRepository.getById(id);
             return cart;
         } catch (error) {
             console.log(`[DEBUG][CartService] Error getting cart by id: ${error}`);
-            throw new Error("Error getting cart by id");
+            ErrorUtils.cartNotFoundError(`ID received: ${id}`);
         }
     };
 
@@ -69,14 +70,19 @@ class CartService {
      */
     async addProduct(id, productId) {
         if (!id || !productId) {
-            throw new Error("Cart ID and product ID are required");
+            let cause = `Cart ID received: ${id}, Product ID received: ${productId}`;
+            if (!id) {
+                ErrorUtils.cartIdRequiredError(cause);
+            } else {
+                ErrorUtils.productIdRequiredError(cause);
+            }
         }
         try {
             const cart = this.cartRepository.addProduct(id, productId);
             return cart;
         } catch (error) {
             console.log(`[DEBUG][CartService] Error adding product to cart: ${error}`);
-            throw new Error("Error adding product to cart");
+            ErrorUtils.cartModifyError(`Cart ID received: ${id}`);
         }
     };
 
@@ -88,7 +94,12 @@ class CartService {
      */
     async modifyProducts(id, newProducts) {
         if (!id || !newProducts) {
-            throw new Error("Cart ID and products array are required");
+            let cause = `Cart ID received: ${id}, Products IDs received: ${newProducts}`;
+            if (!id) {
+                ErrorUtils.cartIdRequiredError(cause);
+            } else {
+                ErrorUtils.productIdRequiredError(cause);
+            }
         }
         try {
             // Find all the products in the new array that exist in the "products" collection.
@@ -100,7 +111,7 @@ class CartService {
             return cart;
         } catch (error) {
             console.log(`[DEBUG][CartService] Error modifying products of cart: ${error}`);
-            throw new Error("Error modifying products of cart");
+            ErrorUtils.cartModifyError(`Cart ID received: ${id}`);
         }
     };
 
@@ -113,14 +124,21 @@ class CartService {
      */
     async modifyProductQuantity(id, productId, quantity) {
         if (!id || !productId || !quantity) {
-            throw new Error("Cart ID, product ID and quantity are required");
+            let cause = `Cart ID received: ${id}, Product ID received: ${productId}, Quantity received: ${quantity}`;
+            if (!id) {
+                ErrorUtils.cartIdRequiredError(cause);
+            } else if (!productId) {
+                ErrorUtils.productIdRequiredError(cause);
+            } else {
+                ErrorUtils.cartProductQuantityRequiredError(cause);
+            }
         }
         try {
             const cart = this.cartRepository.modifyProductQuantity(id, productId, quantity);
             return cart;
         } catch (error) {
             console.log(`[DEBUG][CartService] Error modifying product quantity of cart: ${error}`);
-            throw new Error("Error modifying product quantity of cart");
+            ErrorUtils.cartModifyError(`Cart ID received: ${id}`);
         }
     };
 
@@ -132,14 +150,19 @@ class CartService {
      */
     async removeProduct(id, productId) {
         if (!id || !productId) {
-            throw new Error("Cart ID and product ID are required");
+            let cause = `Cart ID received: ${id}\nProducts IDs received: ${productId}`;
+            if (!id) {
+                ErrorUtils.cartIdRequiredError(cause);
+            } else {
+                ErrorUtils.productIdRequiredError(cause);
+            }
         }
         try {
             const cart = this.cartRepository.removeProduct(id, productId);
             return cart;
         } catch (error) {
             console.log(`[DEBUG][CartService] Error removing product from cart: ${error}`);
-            throw new Error("Error removing product from cart");
+            ErrorUtils.cartModifyError(`Cart ID received: ${id}`);
         }
     };
 
@@ -150,14 +173,14 @@ class CartService {
      */
     async removeAllProducts(id) {
         if (!id) {
-            throw new Error("Cart ID is required");
+            ErrorUtils.cartIdRequiredError(`Cart ID received: ${id}`);
         }
         try {
             const cart = this.cartRepository.removeAllProducts(id);
             return cart;
         } catch (error) {
             console.log(`[DEBUG][CartService] Error removing all products from cart: ${error}`);
-            throw new Error("Error removing all products from cart");
+            ErrorUtils.cartModifyError(`Cart ID received: ${id}`);
         }
     };
 };

@@ -7,6 +7,7 @@
 
 import MessageRepository from "../repositories/message.repository.js";
 import Message from "../entities/message.js";
+import ErrorUtils from "./errors/utils.error.js";
 
 /* Services */
 
@@ -26,7 +27,7 @@ class MessageService {
             return messages;
         } catch (error) {
             console.log(`[DEBUG][MessageService] Error getting messages: ${error}`);
-            throw new Error("Error getting messages");
+            ErrorUtils.messageNotFoundError(error);
         }
     };
 
@@ -42,7 +43,8 @@ class MessageService {
             return newMessage;
         } catch (error) {
             console.log(`[DEBUG][MessageService] Error adding message: ${error}`);
-            throw new Error("Error adding message");
+            let cause = `User received: ${user}, Message received: ${message}`
+            ErrorUtils.messageCreateError(cause);
         }
     };
 };

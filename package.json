@@ -11,6 +11,7 @@
   "author": "Jorge Machado Ottonelli",
   "license": "ISC",
   "dependencies": {
+    "@faker-js/faker": "^7.6.0",
     "bcrypt": "^5.1.0",
     "connect-mongo": "^5.0.0",
     "dotenv": "^16.0.3",

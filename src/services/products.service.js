@@ -7,6 +7,7 @@
 
 import ProductRepository from "../repositories/product.repository.js";
 import Product from "../entities/product.js";
+import ErrorUtils from "./errors/utils.error.js";
 
 /* Services */
 
@@ -29,8 +30,9 @@ class ProductService {
             const products = await this.productRepository.getProducts(limit, page, query, sort);
             return products;
         } catch (error) {
+            let cause = `Limit received: ${limit}, Page received: ${page}, Query received: ${query}, Sort received: ${sort}`;
             console.log(`[DEBUG][ProductService] Error getting products: ${error}`);
-            throw new Error("Error getting products");
+            ErrorUtils.productNotFound(cause);
         }
     };
 
@@ -44,7 +46,7 @@ class ProductService {
             return products;
         } catch (error) {
             console.log(`[DEBUG][ProductService] Error getting all products: ${error}`);
-            throw new Error("Error getting all products");
+            ErrorUtils.productNotFound(error);
         }
     };
 
@@ -55,14 +57,16 @@ class ProductService {
      */
     async getProductById(id) {
         if (!id) {
-            throw new Error("Product id is required");
+            let cause = `Product ID received: ${id}`;
+            ErrorUtils.productIdRequiredError(cause);
         }
         try {
             const product = await this.productRepository.getProductById(id);
             return product;
         } catch (error) {
             console.log(`[DEBUG][ProductService] Error getting product by id: ${error}`);
-            throw new Error("Error getting product by id");
+            let cause = `Product ID received: ${id}`;
+            ErrorUtils.productNotFound(cause);
         }
     };
 
@@ -73,14 +77,16 @@ class ProductService {
      */
     async addProduct(product) {
         if (!product) {
-            throw new Error("Product is required");
+            let cause = `Product received: ${product}`;
+            ErrorUtils.productCreateError(cause);
         }
         try {
             const newProduct = await this.productRepository.create(product);
             return newProduct;
         } catch (error) {
             console.log(`[DEBUG][ProductService] Error adding product: ${error}`);
-            throw new Error("Error adding product");
+            let cause = `Product received: ${product}`;
+            ErrorUtils.productCreateError(cause);
         }
     };
 
@@ -92,10 +98,12 @@ class ProductService {
      */
     async updateProduct(id, updateFields) {
         if (!id) {
-            throw new Error("Product id is required");
+            let cause = `Product ID received: ${id}, Update fields received: ${updateFields}`;
+            ErrorUtils.productIdRequiredError(cause);
         }
         if (!updateFields) {
-            throw new Error("Update fields are required");
+            let cause = `Product ID received: ${id}, Update fields received: ${updateFields}`;
+            ErrorUtils.productUpdateFieldsError(cause);
         }
         try {
             const response = await this.productRepository.updateProduct(id, updateFields);
@@ -106,7 +114,8 @@ class ProductService {
             return updatedProduct;
         } catch (error) {
             console.log(`[DEBUG][ProductService] Error updating product: ${error}`);
-            throw new Error("Error updating product");
+            let cause = `Product ID received: ${id}, Update fields received: ${updateFields}`
+            ErrorUtils.productModifyError(cause);
         }
     };
 
@@ -117,7 +126,8 @@ class ProductService {
      */
     async deleteProduct(id) {
         if (!id) {
-            throw new Error("Product id is required");
+            let cause = `Product ID received: ${id}`;
+            ErrorUtils.productIdRequiredError(cause);
         }
         try {
             const response = await this.productRepository.delete(id);
@@ -128,7 +138,8 @@ class ProductService {
             return deletedProduct;
         } catch (error) {
             console.log(`[DEBUG][ProductService] Error deleting product: ${error}`);
-            throw new Error("Error deleting product");
+            let cause = `Product ID received: ${id}`;
+            ErrorUtils.productDeleteError(cause);
         }
     };
 
@@ -140,10 +151,12 @@ class ProductService {
      */
     async reduceStock(id, amount) {
         if (!id) {
-            throw new Error("Product id is required");
+            let cause = `Product ID received: ${id}, Amount received: ${amount}`;
+            ErrorUtils.productIdRequiredError(cause);
         }
         if (!amount) {
-            throw new Error("Amount is required");
+            let cause = `Product ID received: ${id}, Amount received: ${amount}`;
+            ErrorUtils.productAmountRequiredError(cause);
         }
         try {
             const product = await this.productRepository.getProductById(id);
@@ -158,7 +171,8 @@ class ProductService {
             return amount;
         } catch (error) {
             console.log(`[DEBUG][ProductService] Error reducing stock: ${error}`);
-            throw new Error("Error reducing stock");
+            let cause = `Product ID received: ${id}, Amount received: ${amount}`;
+            ErrorUtils.productModifyError(cause);
         }
     };
 };

@@ -15,6 +15,7 @@ import favicon from 'serve-favicon';
 import logger from './middlewares/logger.middleware.js';
 // Routes
 import cartsRouter from './routes/carts.router.js';
+import mockingsRouter from './routes/mockings.router.js';
 import messagesRouter from './routes/messages.router.js';
 import productsRouter from './routes/products.router.js';
 import sessionRouter from './routes/sessions.router.js';
@@ -83,7 +84,8 @@ app.use('/api/carts', cartsRouter);
 app.use('/api/messages', messagesRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/sessions', sessionRouter);
-app.use('/api/tickets', ticketsRouter)
+app.use('/api/tickets', ticketsRouter);
+app.use('/mockingproducts', mockingsRouter);
 app.use(function (req, res) {
     let user = req.session.user;
     let isAdmin = false;

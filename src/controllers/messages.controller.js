@@ -19,6 +19,7 @@ class MessageController {
             const messages = await messageService.getMessages(limit);
             res.send( { status: 'success', data: messages } );
         } catch (error) {
+            console.log(`[ERR][MessageController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to get the messages list.' } );
         }
     };
@@ -31,6 +32,7 @@ class MessageController {
             res.send( { status: 'success', data: newMessage } );
             res.app.get('io').emit('newMessage', newMessage);
         } catch (error) {
+            console.log(`[ERR][MessageController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to add the message.' } );
         }
     };

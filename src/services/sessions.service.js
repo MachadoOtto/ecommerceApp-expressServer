@@ -10,6 +10,7 @@ import CartService from './carts.service.js';
 import UserRepository from "../repositories/user.repository.js";
 import User from "../entities/user.js";
 import { encryptPassword } from '../utils/bcrypt.utils.js';
+import ErrorUtils from "./errors/utils.error.js";
 
 /* Main Service Logic */
 const admin = new User({
@@ -38,7 +39,8 @@ class SessionService {
      */
     async registerUser(user, role) {
         if (!user.email || !user.password || !user.first_name || !user.last_name || !user.age || (user.email.trim().toLowerCase() === Config.getAdminEmail())) {
-            throw new Error("Invalid user data");
+            let cause = `User Data received: ${user}, Role received: ${role}`;
+            ErrorUtils.userDataError(cause);
         }
         try {
             const newCart = await this.cartService.createCart();
@@ -58,7 +60,8 @@ class SessionService {
             return userEntity;
         } catch (error) {
             console.log(`[DEBUG][SessionsService] Error registering user: ${error.message}`)
-            throw new Error("Error registering user");
+            let cause = `User Data received: ${user}, Role received: ${role}`;
+            ErrorUtils.userCreateError(cause);
         }    
     };
 
@@ -125,6 +128,10 @@ class SessionService {
      * @returns {Promise<User>} - User object from the database.
      */
     async getUserById(id) {
+        if (!id) {
+            let cause = `User ID received: ${id}`;
+            ErrorUtils.userIdRequiredError(cause);
+        }
         if (id === 0) {
             return admin;
         } else {
@@ -136,7 +143,8 @@ class SessionService {
                 return user;
             } catch (error) {
                 console.log(`[DEBUG][SessionsService] Error getting user: ${error.message}`);
-                throw new Error("Error getting user");
+                let cause = `User ID received: ${id}`;
+                ErrorUtils.userNotFound(cause);
             }
         }
     };
@@ -147,6 +155,10 @@ class SessionService {
      * @returns {Promise<User>} - User object from the database.
      */
     async getUserByEmail(email) {
+        if (!email) {
+            let cause = `User Email received: ${email}`;
+            ErrorUtils.userEmailRequiredError(cause);
+        }
         if (email === Config.getAdminEmail()) {
             return admin;
         }
@@ -158,7 +170,8 @@ class SessionService {
             return user;
         } catch (error) {
             console.log(`[DEBUG][SessionsService] Error getting user: ${error.message}`);
-            throw new Error("Error getting user");
+            let cause = `User Email received: ${email}`;
+            ErrorUtils.userNotFound(cause);
         }
     };
 };

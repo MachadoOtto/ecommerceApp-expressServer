@@ -24,8 +24,8 @@ class CartController {
             let cart = await cartService.createCart();
             res.status(201).send( { status: 'success', message: `Cart created successfully. ID: ${cart._id}` } );
         } catch (err) {
+            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'error', message: 'Internal Server Error: The cart could not be created.' } );
-            console.log(`[DEBUG][CartController] Error in newCart: ${err.message}`);
         }
     };
 
@@ -35,8 +35,8 @@ class CartController {
             let carts = await cartService.getCarts();
             res.send( { status: 'success', data: carts });
         } catch (err) {
+            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to retrieve the carts.' } );
-            console.log(`[DEBUG][CartController] Error in getCarts: ${err.message} + ${err.stack}`);
         }
     };
 
@@ -51,12 +51,12 @@ class CartController {
                 res.send( { status: 'success', data: cart } );
             }
         } catch (err) {
+            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
                 res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to retrieve the cart.' } );
             }
-            console.log(`[DEBUG][CartController] Error in getCart: ${err.message}`);
         }
     };
 
@@ -76,12 +76,12 @@ class CartController {
                 }
             }
         } catch (err) {
+            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
                 res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to add the product to the cart.' } );
             }
-            console.log(`[DEBUG][CartController] Error in addProductToCart: ${err.message}`);
         }
     };
 
@@ -97,12 +97,12 @@ class CartController {
                 res.send( { status: 'success', message: 'Products modified successfully.' } );
             }
         } catch (err) {
+            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
                 res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to modify the products.' } );
             }
-            console.log(`[DEBUG][CartController] Error in updateCart: ${err.message}`);
         }
     };
 
@@ -122,12 +122,12 @@ class CartController {
                 }
             }
         } catch (err) {
+            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid or the quantity is not a number.' } );
             } else {
                 res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to modify the product quantity.' } );
             }
-            console.log(`[DEBUG][CartController] Error in modifyProductQuantityCart: ${err.message}`);
         }
     };
 
@@ -147,12 +147,12 @@ class CartController {
                 }
             }
         } catch (err) {
+            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
                 res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to remove the product from the cart.' } );
             }
-            console.log(`[DEBUG][CartController] Error in removeProductFromCart: ${err.message}`);
         }
     };
 
@@ -167,12 +167,12 @@ class CartController {
                 res.send( { status: 'success', message: 'All products removed from cart successfully.' } );
             }
         } catch (err) {
+            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
                 res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to remove all products from the cart.' } );
             }
-            console.log(`[DEBUG][CartController] Error in removeAllProductsFromCart: ${err.message}`);
         }
     };
 
@@ -197,12 +197,12 @@ class CartController {
                     res.status(201).send( { status: 'success', message: 'Products purchased successfully.', ticket } );              
                 }
             } catch (err) {
+                console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
                 if (err.name === 'CastError') {
                     res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
                 } else {
                     res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to purchase the products.' } );
                 }
-                console.log(`[DEBUG][CartController] Error in purchaseProducts: ${err.message}`);
             }
         }
     };
