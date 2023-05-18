@@ -35,7 +35,7 @@ class ProductController {
             };
             res.send(response);
         } catch (err) {
-            console.log(`[ERR][ProductController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[ProductController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'error', message: "Internal Server Error: An error ocurred while trying to get the product list." });
         }
     };
@@ -51,7 +51,7 @@ class ProductController {
                 res.send( { status: 'success', data: product } );
             }
         } catch (err) {
-            console.log(`[ERR][ProductController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[ProductController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(404).send( { status: 'error', message: "Not Found: The product with the specified ID does not exist."});
         }
     };
@@ -64,6 +64,7 @@ class ProductController {
             res.send( { status: 'success', data: product } );
             res.app.get('io').emit('newProduct', product);
         } catch (err) {
+            req.logger.warning(`[ProductController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.code === 11000) {
                 res.status(409).send( { status: 'error', message: "Conflict: A product with the specified code already exists." } );
             } else if (err.name === 'ValidationError') {
@@ -82,7 +83,7 @@ class ProductController {
             res.send( { status: 'success', message: "Product updated successfully." } );
             res.app.get('io').emit('updateProduct', updatedProduct);
         } catch (err) {
-            console.log(`[ERR][ProductController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[ProductController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.code === 11000) {
                 res.status(409).send( { status: 'error', message: "Conflict: A product with the specified code already exists." } );
             } else if (err.name === 'CastError') {
@@ -103,7 +104,7 @@ class ProductController {
             res.app.get('io').emit('deleteProduct', pid);
             res.send( { status: 'success', message: "Product deleted successfully." } );
         } catch (err) {
-            console.log(`[ERR][ProductController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[ProductController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'success', message: "Internal Server Error: An error ocurred while trying to delete the product." } );
         }
     };

@@ -9,9 +9,13 @@ import fs from 'fs';
 import Cart from '../models/cart.model.js';
 import CartDTO from '../../../dtos/cart.dto.js';
 import ProductManager from './ProductManager.js';
+import Logger from '../../../config/logger.config.js';
+
+/* Main Logic */
+
+const log = new Logger();
 
 /* Class CartManager */
-
 class CartManager {
     #lastId;
     #path;
@@ -98,7 +102,7 @@ class CartManager {
             return cartDTO;
         } catch (error) {
             --this.#lastId;
-            console.log(`[DEBUG][CartManager] Error creating cart: ${error}`);
+            log.logger.debug(`[CartManager] Error creating cart: ${error}`);
             throw new Error("Error creating cart");
         }
     };
@@ -113,7 +117,7 @@ class CartManager {
             const cartDTOs = carts.map(cart => new CartDTO(cart));
             return cartDTOs;
         } catch (error) {
-            console.log(`[DEBUG][CartManager] Error getting all carts: ${error}`);
+            log.logger.debug(`[CartManager] Error getting all carts: ${error}`);
             throw new Error("Error getting all carts");
         }
     };
@@ -130,7 +134,7 @@ class CartManager {
             const cartDTO = new CartDTO(cart);
             return cartDTO;
         } catch (error) {
-            console.log(`[DEBUG][CartManager] Error getting cart by id: ${error}`);
+            log.logger.debug(`[CartManager] Error getting cart by id: ${error}`);
             throw new Error("Error getting cart by id");
         }
     };
@@ -159,7 +163,7 @@ class CartManager {
                 return cartDTO;
             }
         } catch (err) {
-            console.log(`[DEBUG][CartManager] Error adding product to cart: ${error}`);
+            log.logger.debug(`[CartManager] Error adding product to cart: ${error}`);
             throw new Error(`An error occurred while adding the product with id ${productId} to the cart with id ${id}: ` + err.message);
         }
     };
@@ -184,7 +188,7 @@ class CartManager {
                 return cartDTO;
             }
         } catch (error) {
-            console.log(`[DEBUG][CartManager] Error modifying products of cart: ${error}`);
+            log.logger.debug(`[CartManager] Error modifying products of cart: ${error}`);
             throw new Error("Error modifying products of cart");
         }
     };
@@ -214,7 +218,7 @@ class CartManager {
                 }
             }
         } catch (error) {
-            console.log(`[DEBUG][CartManager] Error modifying product quantity: ${error}`);
+            log.logger.debug(`[CartManager] Error modifying product quantity: ${error}`);
             throw new Error("Error modifying product quantity");
         }
     };
@@ -243,7 +247,7 @@ class CartManager {
                 }
             }
         } catch (error) {
-            console.log(`[DEBUG][CartManager] Error removing product from cart: ${error}`);
+            log.logger.debug(`[CartManager] Error removing product from cart: ${error}`);
             throw new Error("Error removing product from cart");
         }
     };
@@ -266,7 +270,7 @@ class CartManager {
                 return cartDTO;
             }
         } catch (error) {
-            console.log(`[DEBUG][CartManager] Error removing all products from cart: ${error}`);
+            log.logger.debug(`[CartManager] Error removing all products from cart: ${error}`);
             throw new Error("Error removing all products from cart");
         }
     };

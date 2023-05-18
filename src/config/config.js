@@ -87,6 +87,10 @@ class Config {
     static getFilesystemTicketsPath() {
         return process.env.FILESYSTEM_TICKETS_PATH;
     };
+
+    static getEnvironment() {
+        return process.env.ENVIRONMENT || "development";
+    };
 };
 
 /* Exports */

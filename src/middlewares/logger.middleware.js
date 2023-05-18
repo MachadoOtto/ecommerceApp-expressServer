@@ -6,7 +6,7 @@
 /* Main Middleware Logic */
 
 const logger = (req, res, next) => {
-    console.log(`Request received: ${req.ip} -> [${req.method}] ${req.url}`);
+    req.logger.http(`Request received: ${req.ip} -> [${req.method}] ${req.url}`);
     next();
 };
 

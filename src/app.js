@@ -15,6 +15,7 @@ import favicon from 'serve-favicon';
 import logger from './middlewares/logger.middleware.js';
 // Routes
 import cartsRouter from './routes/carts.router.js';
+import loggersRouter from './routes/loggers.router.js';
 import mockingsRouter from './routes/mockings.router.js';
 import messagesRouter from './routes/messages.router.js';
 import productsRouter from './routes/products.router.js';
@@ -28,19 +29,24 @@ import passport from 'passport';
 import initializePassport from './config/passport.config.js';
 import Config from './config/config.js';
 import Mongo from './persistance/mongo/config/mongo.config.js';
+import Logger from './config/logger.config.js';
 
 /* Main Server Logic */
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const log = new Logger();
 
-console.log('[SERVER] Starting server...');
 const app = express();
 
+app.use(log.addLogger);
+
 const httpServer = app.listen(Config.getPort(), () => {
-    console.log(`[SERVER] Server running on port ${httpServer.address().port}`);
-    console.log(`[SERVER] Server mode: ${Config.getDao()}`);
-    console.log('[SERVER] Press Ctrl+C to stop the server.');
+    log.logger.info('[SERVER] Starting server...');
+    log.logger.info(`[SERVER] Server running on port ${httpServer.address().port}`);
+    log.logger.info(`[SERVER] Server environment: ${Config.getEnvironment()}`);
+    log.logger.info(`[SERVER] Server mode: ${Config.getDao()}`);
+    log.logger.info(`[SERVER] Press Ctrl+C to stop the server.`);
 });
 
 /* MongoDB */
@@ -86,6 +92,7 @@ app.use('/api/products', productsRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/api/tickets', ticketsRouter);
 app.use('/mockingproducts', mockingsRouter);
+app.use('/loggerTest', loggersRouter);
 app.use(function (req, res) {
     let user = req.session.user;
     let isAdmin = false;
@@ -100,5 +107,5 @@ app.disable('x-powered-by');
 /* Error Handling */
 
 app.on('error', (err) => {
-    console.error('[ERR] Error: ', err);
+    log.logger.fatal('[SERVER] Error: ', err);
 });

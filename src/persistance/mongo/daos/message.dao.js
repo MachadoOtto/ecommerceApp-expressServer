@@ -7,8 +7,11 @@
 
 import MessageModel from "../models/message.model.js";
 import MessageDTO from "../../../dtos/message.dto.js";
+import Logger from "../../../config/logger.config.js";
 
 /* Main DAO Logic */
+
+const log = new Logger();
 
 class MongoDBMessageDAO {
     /**
@@ -23,7 +26,7 @@ class MongoDBMessageDAO {
             const messageDTO = new MessageDTO(new_message);
             return messageDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBMessageDAO] Error creating message: ${error}`);
+            log.logger.debug(`[MongoDBMessageDAO] Error creating message: ${error}`);
             throw new Error("Error creating message");
         }
     };
@@ -39,7 +42,7 @@ class MongoDBMessageDAO {
             const messagesDTO = messages.map( message => new MessageDTO(message) );
             return messagesDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBMessageDAO] Error getting messages: ${error}`);
+            log.logger.debug(`[MongoDBMessageDAO] Error getting messages: ${error}`);
             throw new Error("Error getting messages");
         }
     };

@@ -8,8 +8,11 @@
 import CartModel from "../models/cart.model.js";
 import CartDTO from "../../../dtos/cart.dto.js";
 import ProductDTO from "../../../dtos/product.dto.js";
+import Logger from "../../../config/logger.config.js";
 
 /* Main DAO Logic */
+
+const log = new Logger();
 
 class MongoDBCartDAO {
     /**
@@ -22,7 +25,7 @@ class MongoDBCartDAO {
             const cartDTO = new CartDTO(newCart);
             return cartDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBCartDAO] Error creating cart: ${error}`);
+            log.logger.debug(`[MongoDBCartDAO] Error creating cart: ${error}`);
             throw new Error("Error creating cart");
         }
     };
@@ -37,7 +40,7 @@ class MongoDBCartDAO {
             const cartDTOs = carts.map(cart => new CartDTO(cart));
             return cartDTOs;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBCartDAO] Error getting all carts: ${error}`);
+            log.logger.debug(`[MongoDBCartDAO] Error getting all carts: ${error}`);
             throw new Error("Error getting all carts");
         }
     };
@@ -53,7 +56,7 @@ class MongoDBCartDAO {
             const cartDTO = new CartDTO(cart);
             return cartDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBCartDAO] Error getting cart by id: ${error}`);
+            log.logger.debug(`[MongoDBCartDAO] Error getting cart by id: ${error}`);
             throw new Error("Error getting cart by id");
         }
     };
@@ -79,7 +82,7 @@ class MongoDBCartDAO {
             const cartDTO = new CartDTO(cart);
             return cartDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBCartDAO] Error adding product to cart: ${error}`);
+            log.logger.debug(`[MongoDBCartDAO] Error adding product to cart: ${error}`);
             throw new Error("Error adding product to cart");
         }
     };
@@ -99,7 +102,7 @@ class MongoDBCartDAO {
             const cartDTO = new CartDTO(cart);
             return cartDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBCartDAO] Error modifying products of cart: ${error}`);
+            log.logger.debug(`[MongoDBCartDAO] Error modifying products of cart: ${error}`);
             throw new Error("Error modifying products of cart");
         }
     };
@@ -119,7 +122,7 @@ class MongoDBCartDAO {
             const cartDTO = new CartDTO(updatedCart);
             return cartDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBCartDAO] Error modifying product quantity: ${error}`);
+            log.logger.debug(`[MongoDBCartDAO] Error modifying product quantity: ${error}`);
             throw new Error("Error modifying product quantity");
         }
     };
@@ -138,7 +141,7 @@ class MongoDBCartDAO {
             const cartDTO = new CartDTO(cart);
             return cartDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBCartDAO] Error removing product from cart: ${error}`);
+            log.logger.debug(`[MongoDBCartDAO] Error removing product from cart: ${error}`);
             throw new Error("Error removing product from cart");
         }
     };
@@ -156,7 +159,7 @@ class MongoDBCartDAO {
             const cartDTO = new CartDTO(cart);
             return cartDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBCartDAO] Error removing all products from cart: ${error}`);
+            log.logger.debug(`[MongoDBCartDAO] Error removing all products from cart: ${error}`);
             throw new Error("Error removing all products from cart");
         }
     };

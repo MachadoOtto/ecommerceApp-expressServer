@@ -22,7 +22,7 @@ class MockingController {
             };
             res.send(response);
         } catch (err) {
-            console.log(`[ERR][MockingController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[MockingController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'error', message: "Internal Server Error: An error ocurred while trying to get the product list." });
         }
     };

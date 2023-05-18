@@ -18,7 +18,7 @@ class TicketController {
             let tickets = await ticketService.getTickets();
             res.send( { status: 'success', data: tickets });
         } catch (err) {
-            console.log(`[ERR][TicketController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[TicketController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to retrieve the tickets.' } );
         }
     };
@@ -34,7 +34,7 @@ class TicketController {
                 res.send( { status: 'success', data: ticket } );
             }
         } catch (err) {
-            console.log(`[ERR][TicketController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[TicketController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
@@ -54,7 +54,7 @@ class TicketController {
                 res.send( { status: 'success', data: ticket } );
             }
         } catch (err) {
-            console.log(`[ERR][TicketController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[TicketController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to retrieve the ticket.' } );
         }
     };

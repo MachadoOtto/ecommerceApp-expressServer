@@ -8,8 +8,11 @@
 import ProductModel from "../models/product.model.js";
 import ProductDTO from "../../../dtos/product.dto.js";
 import ProductListDTO from "../../../dtos/productList.dto.js";
+import Logger from "../../../config/logger.config.js";
 
 /* Main DAO Logic */
+
+const log = new Logger();
 
 class MongoDBProductDAO {
     /**
@@ -23,7 +26,7 @@ class MongoDBProductDAO {
             const productDTO = new ProductDTO(product);
             return productDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBProductDAO] Error creating product: ${error}`);
+            log.logger.debug(`[MongoDBProductDAO] Error creating product: ${error}`);
             throw new Error("Error creating product");
         }
     };
@@ -47,7 +50,7 @@ class MongoDBProductDAO {
             const productsDTO = new ProductListDTO(products);
             return productsDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBProductDAO] Error getting products: ${error}`);
+            log.logger.debug(`[MongoDBProductDAO] Error getting products: ${error}`);
             throw new Error("Error getting products");
         }
     };
@@ -62,7 +65,7 @@ class MongoDBProductDAO {
             const productsDTO = products.map( product => new ProductDTO(product) );
             return productsDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBProductDAO] Error getting all products: ${error}`);
+            log.logger.debug(`[MongoDBProductDAO] Error getting all products: ${error}`);
             throw new Error("Error getting all products");
         }
     };
@@ -78,7 +81,7 @@ class MongoDBProductDAO {
             const productDTO = new ProductDTO(product);
             return productDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBProductDAO] Error getting product by id: ${error}`);
+            log.logger.debug(`[MongoDBProductDAO] Error getting product by id: ${error}`);
             throw new Error("Error getting product by id");
         }
     };
@@ -93,7 +96,7 @@ class MongoDBProductDAO {
         try {
             return await ProductModel.updateOne( { _id: id }, { $set: updateFields } );
         } catch (error) {
-            console.log(`[DEBUG][MongoDBProductDAO] Error updating product: ${error}`);
+            log.logger.debug(`[MongoDBProductDAO] Error updating product: ${error}`);
             throw new Error("Error updating product");
         }
     };
@@ -107,7 +110,7 @@ class MongoDBProductDAO {
         try {
             return await ProductModel.deleteOne( { _id: id } );
         } catch (error) {
-            console.log(`[DEBUG][MongoDBProductDAO] Error deleting product: ${error}`);
+            log.logger.debug(`[MongoDBProductDAO] Error deleting product: ${error}`);
             throw new Error("Error deleting product");
         }
     };

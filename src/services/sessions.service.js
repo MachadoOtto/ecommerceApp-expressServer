@@ -11,6 +11,7 @@ import UserRepository from "../repositories/user.repository.js";
 import User from "../entities/user.js";
 import { encryptPassword } from '../utils/bcrypt.utils.js';
 import ErrorUtils from "./errors/utils.error.js";
+import Logger from "../config/logger.config.js";
 
 /* Main Service Logic */
 const admin = new User({
@@ -22,6 +23,8 @@ const admin = new User({
     cart: Config.getAdminCartId(),
     role: 'Admin'
 });
+
+const log = new Logger();
 
 /* Services */
 
@@ -59,7 +62,7 @@ class SessionService {
             }
             return userEntity;
         } catch (error) {
-            console.log(`[DEBUG][SessionsService] Error registering user: ${error.message}`)
+            log.logger.debug(`[SessionsService] Error registering user: ${error.message}`)
             let cause = `User Data received: ${user}, Role received: ${role}`;
             ErrorUtils.userCreateError(cause);
         }    
@@ -84,7 +87,7 @@ class SessionService {
                 throw new Error("Invalid email or password");
             }
         } catch (error) {
-            console.log(`[DEBUG][SessionsService] Error logging in user: ${error.message}`)
+            log.logger.debug(`[SessionsService] Error logging in user: ${error.message}`)
             throw new Error("Error logging in user");
         }
     };
@@ -117,7 +120,7 @@ class SessionService {
                 return user;
             }
         } catch (error) {
-            console.log(`[DEBUG][SessionsService] Error with GitHub SSO: ${error.message}`);
+            log.logger.debug(`[SessionsService] Error with GitHub SSO: ${error.message}`);
             throw new Error("Error registering user");
         }
     };
@@ -142,7 +145,7 @@ class SessionService {
                 }
                 return user;
             } catch (error) {
-                console.log(`[DEBUG][SessionsService] Error getting user: ${error.message}`);
+                log.logger.debug(`[SessionsService] Error getting user: ${error.message}`);
                 let cause = `User ID received: ${id}`;
                 ErrorUtils.userNotFound(cause);
             }
@@ -169,7 +172,7 @@ class SessionService {
             }
             return user;
         } catch (error) {
-            console.log(`[DEBUG][SessionsService] Error getting user: ${error.message}`);
+            log.logger.debug(`[SessionsService] Error getting user: ${error.message}`);
             let cause = `User Email received: ${email}`;
             ErrorUtils.userNotFound(cause);
         }

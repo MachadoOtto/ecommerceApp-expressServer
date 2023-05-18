@@ -8,6 +8,11 @@
 import { faker } from "@faker-js/faker";
 import Product from "../entities/product.js";
 import ErrorUtils from "./errors/utils.error.js";
+import Logger from "../config/logger.config.js";
+
+/* Main Service Logic */
+
+const log = new Logger();
 
 /* Services */
 
@@ -37,7 +42,7 @@ class MockingService {
             };
             return products;
         } catch (error) {
-            console.log(`[DEBUG][MockingService] Error generating products: ${error}`);
+            log.logger.debug(`[MockingService] Error generating products: ${error}`);
             ErrorUtils.mockingError(error);
         }
     };

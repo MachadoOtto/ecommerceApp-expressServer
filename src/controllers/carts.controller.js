@@ -24,7 +24,7 @@ class CartController {
             let cart = await cartService.createCart();
             res.status(201).send( { status: 'success', message: `Cart created successfully. ID: ${cart._id}` } );
         } catch (err) {
-            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'error', message: 'Internal Server Error: The cart could not be created.' } );
         }
     };
@@ -35,7 +35,7 @@ class CartController {
             let carts = await cartService.getCarts();
             res.send( { status: 'success', data: carts });
         } catch (err) {
-            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to retrieve the carts.' } );
         }
     };
@@ -51,7 +51,7 @@ class CartController {
                 res.send( { status: 'success', data: cart } );
             }
         } catch (err) {
-            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
@@ -76,7 +76,7 @@ class CartController {
                 }
             }
         } catch (err) {
-            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
@@ -97,7 +97,7 @@ class CartController {
                 res.send( { status: 'success', message: 'Products modified successfully.' } );
             }
         } catch (err) {
-            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
@@ -122,7 +122,7 @@ class CartController {
                 }
             }
         } catch (err) {
-            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid or the quantity is not a number.' } );
             } else {
@@ -147,7 +147,7 @@ class CartController {
                 }
             }
         } catch (err) {
-            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
@@ -167,7 +167,7 @@ class CartController {
                 res.send( { status: 'success', message: 'All products removed from cart successfully.' } );
             }
         } catch (err) {
-            console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            req.logger.warning(`[CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             if (err.name === 'CastError') {
                 res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
             } else {
@@ -197,7 +197,7 @@ class CartController {
                     res.status(201).send( { status: 'success', message: 'Products purchased successfully.', ticket } );              
                 }
             } catch (err) {
-                console.log(`[ERR][CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+                req.logger.warning(`[CartController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
                 if (err.name === 'CastError') {
                     res.status(400).send( { status: 'error', message: 'Bad Request: The specified ID is not valid.' } );
                 } else {

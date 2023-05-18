@@ -7,8 +7,11 @@
 
 import UserModel from "../models/user.model.js";
 import UserDTO from "../../../dtos/user.dto.js";
+import Logger from "../../../config/logger.config.js";
 
 /* Main DAO Logic */
+
+const log = new Logger();
 
 class MongoDBUserDAO {
     /**
@@ -22,7 +25,7 @@ class MongoDBUserDAO {
             const userDTO = new UserDTO(newUser);
             return userDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBUserDAO] Error creating user: ${error}`);
+            log.logger.debug(`[MongoDBUserDAO] Error creating user: ${error}`);
         }
     };
 
@@ -37,7 +40,7 @@ class MongoDBUserDAO {
             const userDTO = new UserDTO(user);
             return userDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBUserDAO] Error getting user by id: ${error}`);
+            log.logger.debug(`[MongoDBUserDAO] Error getting user by id: ${error}`);
         }
     };
 
@@ -52,7 +55,7 @@ class MongoDBUserDAO {
             const userDTO = new UserDTO(user);
             return userDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBUserDAO] Error getting user by email: ${error}`);
+            log.logger.debug(`[MongoDBUserDAO] Error getting user by email: ${error}`);
         }
     };
 };

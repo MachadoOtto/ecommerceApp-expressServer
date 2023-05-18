@@ -8,6 +8,11 @@
 import ProductRepository from "../repositories/product.repository.js";
 import Product from "../entities/product.js";
 import ErrorUtils from "./errors/utils.error.js";
+import Logger from "../config/logger.config.js";
+
+/* Main Service Logic */
+
+const log = new Logger();
 
 /* Services */
 
@@ -31,7 +36,7 @@ class ProductService {
             return products;
         } catch (error) {
             let cause = `Limit received: ${limit}, Page received: ${page}, Query received: ${query}, Sort received: ${sort}`;
-            console.log(`[DEBUG][ProductService] Error getting products: ${error}`);
+            log.logger.debug(`[ProductService] Error getting products: ${error}`);
             ErrorUtils.productNotFound(cause);
         }
     };
@@ -45,7 +50,7 @@ class ProductService {
             const products = await this.productRepository.getAllProducts();
             return products;
         } catch (error) {
-            console.log(`[DEBUG][ProductService] Error getting all products: ${error}`);
+            log.logger.debug(`[ProductService] Error getting all products: ${error}`);
             ErrorUtils.productNotFound(error);
         }
     };
@@ -64,7 +69,7 @@ class ProductService {
             const product = await this.productRepository.getProductById(id);
             return product;
         } catch (error) {
-            console.log(`[DEBUG][ProductService] Error getting product by id: ${error}`);
+            log.logger.debug(`[ProductService] Error getting product by id: ${error}`);
             let cause = `Product ID received: ${id}`;
             ErrorUtils.productNotFound(cause);
         }
@@ -84,7 +89,7 @@ class ProductService {
             const newProduct = await this.productRepository.create(product);
             return newProduct;
         } catch (error) {
-            console.log(`[DEBUG][ProductService] Error adding product: ${error}`);
+            log.logger.debug(`[ProductService] Error adding product: ${error}`);
             let cause = `Product received: ${product}`;
             ErrorUtils.productCreateError(cause);
         }
@@ -113,7 +118,7 @@ class ProductService {
             const updatedProduct = await this.productRepository.getProductById(id);
             return updatedProduct;
         } catch (error) {
-            console.log(`[DEBUG][ProductService] Error updating product: ${error}`);
+            log.logger.debug(`[ProductService] Error updating product: ${error}`);
             let cause = `Product ID received: ${id}, Update fields received: ${updateFields}`
             ErrorUtils.productModifyError(cause);
         }
@@ -137,7 +142,7 @@ class ProductService {
             const deletedProduct = await this.productRepository.getProductById(id);
             return deletedProduct;
         } catch (error) {
-            console.log(`[DEBUG][ProductService] Error deleting product: ${error}`);
+            log.logger.debug(`[ProductService] Error deleting product: ${error}`);
             let cause = `Product ID received: ${id}`;
             ErrorUtils.productDeleteError(cause);
         }
@@ -170,7 +175,7 @@ class ProductService {
             }
             return amount;
         } catch (error) {
-            console.log(`[DEBUG][ProductService] Error reducing stock: ${error}`);
+            log.logger.debug(`[ProductService] Error reducing stock: ${error}`);
             let cause = `Product ID received: ${id}, Amount received: ${amount}`;
             ErrorUtils.productModifyError(cause);
         }

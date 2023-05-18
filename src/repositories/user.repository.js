@@ -9,8 +9,11 @@ import Config from "../config/config.js";
 import FactoryDAO from "../persistance/factory.js";
 import User from "../entities/user.js";
 import { comparePassword } from "../utils/bcrypt.utils.js";
+import Logger from "../config/logger.config.js";
 
 /* Main Repository Logic */
+
+const log = new Logger();
 
 class UserRepository {
     constructor() {
@@ -27,7 +30,7 @@ class UserRepository {
             const userDTO = await this.dao.create(data);
             return new User(userDTO);
         } catch (error) {
-            console.log(`[DEBUG][UserRepository] Error creating user: ${error}`);
+            log.logger.debug(`[UserRepository] Error creating user: ${error}`);
             throw new Error("Error creating user");
         }
     };
@@ -42,7 +45,7 @@ class UserRepository {
             const userDTO = await this.dao.getById(id);
             return new User(userDTO);
         } catch (error) {
-            console.log(`[DEBUG][UserRepository] Error getting user by id: ${error}`);
+            log.logger.debug(`[UserRepository] Error getting user by id: ${error}`);
             throw new Error("Error getting user by id");
         }
     };
@@ -57,7 +60,7 @@ class UserRepository {
             const userDTO = await this.dao.getByEmail(email);
             return new User(userDTO);
         } catch (error) {
-            console.log(`[DEBUG][UserRepository] Error getting user by email: ${error}`);
+            log.logger.debug(`[UserRepository] Error getting user by email: ${error}`);
             throw new Error("Error getting user by email");
         }
     };
@@ -78,7 +81,7 @@ class UserRepository {
             }
             throw new Error("Invalid credentials");
         } catch (error) {
-            console.log(`[DEBUG][UserRepository] Error comparing password: ${error}`);
+            log.logger.debug(`[UserRepository] Error comparing password: ${error}`);
             throw new Error("Error comparing password");
         }
     };

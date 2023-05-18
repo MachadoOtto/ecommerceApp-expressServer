@@ -8,17 +8,19 @@
 import { Server } from 'socket.io';
 import MessageService from '../services/messages.service.js';
 import ProductService from '../services/products.service.js';
+import Logger from './logger.config.js';
 
 /* Main Logic */
 
 const messageService = new MessageService();
 const productService = new ProductService();
+const log = new Logger();
 
 class SocketIO {
     constructor(httpServer) {
         this.io = new Server(httpServer);
         this.io.on('connection', async (socket) => {
-            console.log('[SOCKET] New connection: ', socket.id);
+            log.logger.http('[SOCKET] New connection: ', socket.id);
             socket.emit('products', await productService.getAllProducts());
             socket.emit('messages', await messageService.getMessages());
         });

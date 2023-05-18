@@ -9,8 +9,11 @@ import Config from "../config/config.js";
 import FactoryDAO from "../persistance/factory.js";
 import Product from "../entities/product.js";
 import ProductList from "../entities/productList.js";
+import Logger from "../config/logger.config.js";
 
 /* Main Repository Logic */
+
+const log = new Logger();
 
 class ProductRepository {
     constructor() {
@@ -27,7 +30,7 @@ class ProductRepository {
             const productDTO = await this.dao.create(data);
             return new Product(productDTO);
         } catch (error) {
-            console.log(`[DEBUG][ProductRepository] Error creating product: ${error}`);
+            log.logger.debug(`[ProductRepository] Error creating product: ${error}`);
             throw new Error("Error creating product");
         }
     };
@@ -47,7 +50,7 @@ class ProductRepository {
             const products = new ProductList(productsDTO);
             return products;
         } catch (error) {
-            console.log(`[DEBUG][ProductRepository] Error getting products: ${error}`);
+            log.logger.debug(`[ProductRepository] Error getting products: ${error}`);
             throw new Error("Error getting products");
         }
     };
@@ -62,7 +65,7 @@ class ProductRepository {
             const products = productsDTO.map( product => new Product(product) );
             return products;
         } catch (error) {
-            console.log(`[DEBUG][ProductRepository] Error getting all products: ${error}`);
+            log.logger.debug(`[ProductRepository] Error getting all products: ${error}`);
             throw new Error("Error getting all products");
         }
     };
@@ -77,7 +80,7 @@ class ProductRepository {
             const productDTO = await this.dao.getProductById(id);
             return new Product(productDTO);
         } catch (error) {
-            console.log(`[DEBUG][ProductRepository] Error getting product by id: ${error}`);
+            log.logger.debug(`[ProductRepository] Error getting product by id: ${error}`);
             throw new Error("Error getting product by id");
         }
     };
@@ -92,7 +95,7 @@ class ProductRepository {
         try {
             return await this.dao.updateProduct(id, updateFields);
         } catch (error) {
-            console.log(`[DEBUG][ProductRepository] Error updating product: ${error}`);
+            log.logger.debug(`[ProductRepository] Error updating product: ${error}`);
             throw new Error("Error updating product");
         }
     };
@@ -106,7 +109,7 @@ class ProductRepository {
         try {
             return await this.dao.deleteProduct(id);
         } catch (error) {
-            console.log(`[DEBUG][ProductRepository] Error deleting product: ${error}`);
+            log.logger.debug(`[ProductRepository] Error deleting product: ${error}`);
             throw new Error("Error deleting product");
         }
     };

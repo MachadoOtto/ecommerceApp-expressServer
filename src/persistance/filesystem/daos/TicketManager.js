@@ -8,6 +8,11 @@
 import fs from 'fs';
 import Ticket from '../models/ticket.model.js';
 import TicketDTO from '../../../dtos/ticket.dto.js';
+import Logger from '../../../config/logger.config.js';
+
+/* Main Logic */
+
+const log = new Logger();
 
 /* Class TicketManager */
 
@@ -42,7 +47,7 @@ class TicketManager {
             return ticketDTO;
         } catch (error) {
             --this.#lastId;
-            console.log(`[DEBUG][TicketManager] Error creating ticket: ${error}`);
+            log.logger.debug(`[TicketManager] Error creating ticket: ${error}`);
             throw new Error("Error creating ticket");
         }
     };
@@ -57,7 +62,7 @@ class TicketManager {
             const ticketDTOs = tickets.map(ticket => new TicketDTO(ticket));
             return ticketDTOs;
         } catch (error) {
-            console.log(`[DEBUG][TicketManager] Error getting all tickets: ${error}`);
+            log.logger.debug(`[TicketManager] Error getting all tickets: ${error}`);
             throw new Error("Error getting all tickets");
         }
     };
@@ -74,7 +79,7 @@ class TicketManager {
             const ticketDTO = new TicketDTO(ticket);
             return ticketDTO;
         } catch (error) {
-            console.log(`[DEBUG][TicketManager] Error getting ticket by id: ${error}`);
+            log.logger.debug(`[TicketManager] Error getting ticket by id: ${error}`);
             throw new Error("Error getting ticket by id");
         }
     };
@@ -91,7 +96,7 @@ class TicketManager {
             const ticketDTO = new TicketDTO(ticket);
             return ticketDTO;
         } catch (error) {
-            console.log(`[DEBUG][TicketManager] Error getting ticket by code: ${error}`);
+            log.logger.debug(`[TicketManager] Error getting ticket by code: ${error}`);
             throw new Error("Error getting ticket by code");
         }
     };
@@ -108,7 +113,7 @@ class TicketManager {
             const ticketDTOs = purchaser_tickets.map(ticket => new TicketDTO(ticket));
             return ticketDTOs;
         } catch (error) {
-            console.log(`[DEBUG][TicketManager] Error getting tickets by purchaser id: ${error}`);
+            log.logger.debug(`[TicketManager] Error getting tickets by purchaser id: ${error}`);
             throw new Error("Error getting tickets by purchaser id");
         }
     };

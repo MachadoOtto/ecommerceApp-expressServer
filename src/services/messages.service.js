@@ -8,6 +8,11 @@
 import MessageRepository from "../repositories/message.repository.js";
 import Message from "../entities/message.js";
 import ErrorUtils from "./errors/utils.error.js";
+import Logger from "../config/logger.config.js";
+
+/* Main Service Logic */
+
+const log = new Logger();
 
 /* Services */
 
@@ -26,7 +31,7 @@ class MessageService {
             const messages = await this.messageRepository.getMessages(limit);
             return messages;
         } catch (error) {
-            console.log(`[DEBUG][MessageService] Error getting messages: ${error}`);
+            log.logger.debug(`[MessageService] Error getting messages: ${error}`);
             ErrorUtils.messageNotFoundError(error);
         }
     };
@@ -42,7 +47,7 @@ class MessageService {
             const newMessage = await this.messageRepository.create({ user, message });
             return newMessage;
         } catch (error) {
-            console.log(`[DEBUG][MessageService] Error adding message: ${error}`);
+            log.logger.debug(`[MessageService] Error adding message: ${error}`);
             let cause = `User received: ${user}, Message received: ${message}`
             ErrorUtils.messageCreateError(cause);
         }

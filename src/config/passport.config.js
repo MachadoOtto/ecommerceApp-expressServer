@@ -9,12 +9,15 @@ import passport from 'passport';
 import local from 'passport-local';
 import GitHubStrategy from 'passport-github2';
 import SessionService from '../services/sessions.service.js';
+import Logger from '../config/logger.config.js';
 
 /* Main Logic */
 
 const LocalStrategy = local.Strategy;
 
 const sessionService = new SessionService();
+
+const log = new Logger();
 
 const initializePassport = () => {
     passport.use('register', new LocalStrategy(
@@ -31,7 +34,7 @@ const initializePassport = () => {
                 const user = await sessionService.registerUser(payload, 'User');
                 return done(null, user);
             } catch (error) {
-                console.log(`[PASSPORT] Error: ${error}`)
+                log.logger.warning(`[PASSPORT] Error: ${error}`)
                 return done(null, false);
             }
     }));
@@ -45,7 +48,7 @@ const initializePassport = () => {
                 const user = await sessionService.loginUser(username, password);
                 return done(null, user);
             } catch (error) {
-                console.log(`[PASSPORT] Error: ${error}`)
+                log.logger.warning(`[PASSPORT] Error: ${error}`)
                 return done(null, false);
             }
     }));
@@ -67,7 +70,7 @@ const initializePassport = () => {
             const user = await sessionService.githubSSO(githubUser);
             return done(null, user);
         } catch (error) {
-            console.log(`[PASSPORT] Error: ${error}`)
+            log.logger.warning(`[PASSPORT] Error: ${error}`)
             return done(null, false);
         }
     }));
@@ -76,7 +79,7 @@ const initializePassport = () => {
         try {
             done(null, user._id);
         } catch (error) {
-            console.log(`[PASSPORT] Error: ${error}`)
+            log.logger.warning(`[PASSPORT] Error: ${error}`)
             done(error, false);
         }
     });
@@ -90,7 +93,7 @@ const initializePassport = () => {
                 done(null, false);
             }
         } catch (error) {
-            console.log(`[PASSPORT] Error: ${error}`);
+            log.logger.warning(`[PASSPORT] Error: ${error}`);
             done(error, false);
         }
     });

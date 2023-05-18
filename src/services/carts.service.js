@@ -8,6 +8,11 @@
 import CartRepository from "../repositories/cart.repository.js";
 import Cart from "../entities/cart.js";
 import ErrorUtils from "./errors/utils.error.js";
+import Logger from "../config/logger.config.js";
+
+/* Main Service Logic */
+
+const log = new Logger();
 
 /* Services */
 
@@ -25,7 +30,7 @@ class CartService {
             const cartEntity = this.cartRepository.create();
             return cartEntity;
         } catch (error) {
-            console.log(`[DEBUG][CartService] Error creating cart: ${error}`);
+            log.logger.debug(`[CartService] Error creating cart: ${error}`);
             ErrorUtils.cartCreateError(error);
         }
     };
@@ -39,7 +44,7 @@ class CartService {
             const carts = this.cartRepository.getAll();
             return carts;
         } catch (error) {
-            console.log(`[DEBUG][CartService] Error getting all carts: ${error}`);
+            log.logger.debug(`[CartService] Error getting all carts: ${error}`);
             ErrorUtils.cartNotFoundError(error);
         }
     };
@@ -57,7 +62,7 @@ class CartService {
             const cart = this.cartRepository.getById(id);
             return cart;
         } catch (error) {
-            console.log(`[DEBUG][CartService] Error getting cart by id: ${error}`);
+            log.logger.debug(`[CartService] Error getting cart by id: ${error}`);
             ErrorUtils.cartNotFoundError(`ID received: ${id}`);
         }
     };
@@ -81,7 +86,7 @@ class CartService {
             const cart = this.cartRepository.addProduct(id, productId);
             return cart;
         } catch (error) {
-            console.log(`[DEBUG][CartService] Error adding product to cart: ${error}`);
+            log.logger.debug(`[CartService] Error adding product to cart: ${error}`);
             ErrorUtils.cartModifyError(`Cart ID received: ${id}`);
         }
     };
@@ -110,7 +115,7 @@ class CartService {
             const cart = this.cartRepository.modifyProducts(id, validProducts);
             return cart;
         } catch (error) {
-            console.log(`[DEBUG][CartService] Error modifying products of cart: ${error}`);
+            log.logger.debug(`[CartService] Error modifying products of cart: ${error}`);
             ErrorUtils.cartModifyError(`Cart ID received: ${id}`);
         }
     };
@@ -137,7 +142,7 @@ class CartService {
             const cart = this.cartRepository.modifyProductQuantity(id, productId, quantity);
             return cart;
         } catch (error) {
-            console.log(`[DEBUG][CartService] Error modifying product quantity of cart: ${error}`);
+            log.logger.debug(`[CartService] Error modifying product quantity of cart: ${error}`);
             ErrorUtils.cartModifyError(`Cart ID received: ${id}`);
         }
     };
@@ -161,7 +166,7 @@ class CartService {
             const cart = this.cartRepository.removeProduct(id, productId);
             return cart;
         } catch (error) {
-            console.log(`[DEBUG][CartService] Error removing product from cart: ${error}`);
+            log.logger.debug(`[CartService] Error removing product from cart: ${error}`);
             ErrorUtils.cartModifyError(`Cart ID received: ${id}`);
         }
     };
@@ -179,7 +184,7 @@ class CartService {
             const cart = this.cartRepository.removeAllProducts(id);
             return cart;
         } catch (error) {
-            console.log(`[DEBUG][CartService] Error removing all products from cart: ${error}`);
+            log.logger.debug(`[CartService] Error removing all products from cart: ${error}`);
             ErrorUtils.cartModifyError(`Cart ID received: ${id}`);
         }
     };

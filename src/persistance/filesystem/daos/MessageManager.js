@@ -8,6 +8,11 @@
 import fs from 'fs';
 import Message from '../models/message.model.js';
 import MessageDTO from '../../../dtos/message.dto.js';
+import Logger from '../../../config/logger.config.js';
+
+/* Main Logic */
+
+const log = new Logger();
 
 /* Class MessageManager */
 
@@ -44,7 +49,7 @@ class MessageManager {
             return messageDTO;
         } catch (error) {
             --this.#lastId;
-            console.log(`[DEBUG][MessageManager] Error creating message: ${error}`);
+            log.logger.debug(`[MessageManager] Error creating message: ${error}`);
             throw new Error("Error creating message");
         }
     };
@@ -60,7 +65,7 @@ class MessageManager {
             const messagesDTO = messages.slice(-limit).map( message => new MessageDTO(message) );
             return messagesDTO;
         } catch (error) {
-            console.log(`[DEBUG][MessageManager] Error getting messages: ${error}`);
+            log.logger.debug(`[MessageManager] Error getting messages: ${error}`);
             throw new Error("Error getting messages");
         }
     };

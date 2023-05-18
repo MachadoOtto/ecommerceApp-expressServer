@@ -8,6 +8,11 @@
 import fs from 'fs';
 import User from '../models/user.model.js';
 import UserDTO from "../../../dtos/user.dto.js";
+import Logger from '../../../config/logger.config.js';
+
+/* Main Logic */
+
+const log = new Logger();
 
 /* Class UserManager */
 
@@ -47,7 +52,7 @@ class UserManager {
             return userDTO;
         } catch (error) {
             --this.#lastId;
-            console.log(`[DEBUG][UserManager] Error creating user: ${error}`);
+            log.logger.debug(`[UserManager] Error creating user: ${error}`);
             throw new Error(`Error creating user: ${error}`);
         }
     };
@@ -67,7 +72,7 @@ class UserManager {
             const userDTO = new UserDTO(user);
             return userDTO;
         } catch (error) {
-            console.log(`[DEBUG][UserManager] Error getting user by id: ${error}`);
+            log.logger.debug(`[UserManager] Error getting user by id: ${error}`);
             throw new Error(`Error getting user by id: ${error}`);
         }
     };
@@ -87,7 +92,7 @@ class UserManager {
             const userDTO = new UserDTO(user);
             return userDTO;
         } catch (error) {
-            console.log(`[DEBUG][UserManager] Error getting user by email: ${error}`);
+            log.logger.debug(`[UserManager] Error getting user by email: ${error}`);
             throw new Error(`Error getting user by email: ${error}`);
         }
     };

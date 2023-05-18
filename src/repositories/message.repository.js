@@ -8,8 +8,11 @@
 import Config from "../config/config.js";
 import FactoryDAO from "../persistance/factory.js";
 import Message from "../entities/message.js";
+import Logger from "../config/logger.config.js";
 
 /* Main Repository Logic */
+
+const log = new Logger();
 
 class MessageRepository {
     constructor() {
@@ -26,7 +29,7 @@ class MessageRepository {
             const messageDTO = await this.dao.create(data);
             return new Message(messageDTO);
         } catch (error) {
-            console.log(`[DEBUG][MessageRepository] Error creating message: ${error}`);
+            log.logger.debug(`[MessageRepository] Error creating message: ${error}`);
             throw new Error("Error creating message");
         }
     };
@@ -41,7 +44,7 @@ class MessageRepository {
             const messagesDTOs = await this.dao.getMessages(limit);
             return messagesDTOs.map( messageDTO => new Message(messageDTO) );
         } catch (error) {
-            console.log(`[DEBUG][MessageRepository] Error getting messages: ${error}`);
+            log.logger.debug(`[MessageRepository] Error getting messages: ${error}`);
             throw new Error("Error getting messages");
         }
     };

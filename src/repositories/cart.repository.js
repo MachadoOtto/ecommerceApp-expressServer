@@ -8,8 +8,11 @@
 import Config from "../config/config.js";
 import FactoryDAO from "../persistance/factory.js";
 import Cart from "../entities/cart.js";
+import Logger from "../config/logger.config.js";
 
 /* Main Repository Logic */
+
+const log = new Logger();
 
 class CartRepository {
     constructor() {
@@ -25,7 +28,7 @@ class CartRepository {
             const cartDTO = await this.dao.create();
             return new Cart(cartDTO);
         } catch (error) {
-            console.log(`[DEBUG][CartRepository] Error creating cart: ${error}`);
+            log.logger.debug(`[CartRepository] Error creating cart: ${error}`);
             throw new Error("Error creating cart");
         }
     };
@@ -40,7 +43,7 @@ class CartRepository {
             const carts = cartDTOs.map(cartDTO => new Cart(cartDTO));
             return carts;
         } catch (error) {
-            console.log(`[DEBUG][CartRepository] Error getting all carts: ${error}`);
+            log.logger.debug(`[CartRepository] Error getting all carts: ${error}`);
             throw new Error("Error getting all carts");
         }
     };
@@ -55,7 +58,7 @@ class CartRepository {
             const cartDTO = await this.dao.getById(id);
             return new Cart(cartDTO);
         } catch (error) {
-            console.log(`[DEBUG][CartRepository] Error getting cart by id: ${error}`);
+            log.logger.debug(`[CartRepository] Error getting cart by id: ${error}`);
             throw new Error("Error getting cart by id");
         }
     };
@@ -71,7 +74,7 @@ class CartRepository {
             const cartDTO = await this.dao.addProduct(id, productId);
             return new Cart(cartDTO);
         } catch (error) {
-            console.log(`[DEBUG][CartRepository] Error adding product to cart: ${error}`);
+            log.logger.debug(`[CartRepository] Error adding product to cart: ${error}`);
             throw new Error("Error adding product to cart");
         }
     };
@@ -87,7 +90,7 @@ class CartRepository {
             const cartDTO = await this.dao.modifyProducts(id, newProducts);
             return new Cart(cartDTO);
         } catch (error) {
-            console.log(`[DEBUG][CartRepository] Error modifying products of cart: ${error}`);
+            log.logger.debug(`[CartRepository] Error modifying products of cart: ${error}`);
             throw new Error("Error modifying products of cart");
         }
     };
@@ -104,7 +107,7 @@ class CartRepository {
             const cartDTO = await this.dao.modifyProductQuantity(id, productId, quantity);
             return new Cart(cartDTO);
         } catch (error) {
-            console.log(`[DEBUG][CartRepository] Error modifying product quantity of cart: ${error}`);
+            log.logger.debug(`[CartRepository] Error modifying product quantity of cart: ${error}`);
             throw new Error("Error modifying product quantity of cart");
         }
     };
@@ -120,7 +123,7 @@ class CartRepository {
             const cartDTO = await this.dao.removeProduct(id, productId);
             return new Cart(cartDTO);
         } catch (error) {
-            console.log(`[DEBUG][CartRepository] Error removing product from cart: ${error}`);
+            log.logger.debug(`[CartRepository] Error removing product from cart: ${error}`);
             throw new Error("Error removing product from cart");
         }
     };
@@ -135,7 +138,7 @@ class CartRepository {
             const cartDTO = await this.dao.removeAllProducts(id);
             return new Cart(cartDTO);
         } catch (error) {
-            console.log(`[DEBUG][CartRepository] Error removing all products from cart: ${error}`);
+            log.logger.debug(`[CartRepository] Error removing all products from cart: ${error}`);
             throw new Error("Error removing all products from cart");
         }
     };

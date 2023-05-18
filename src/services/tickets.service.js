@@ -11,6 +11,11 @@ import ProductService from "./products.service.js";
 import CartService from "./carts.service.js";
 import { generateUUID } from "../utils/uuid.utils.js";
 import ErrorUtils from "./errors/utils.error.js";
+import Logger from "../config/logger.config.js";
+
+/* Main Service Logic */
+
+const log = new Logger();
 
 /* Services */
 
@@ -50,7 +55,7 @@ class TicketService {
             const ticketEntity = this.ticketRepository.create( { code, purchase_datetime, amount, purchaser, purchased_products } );
             return ticketEntity;
         } catch (error) {
-            console.log(`[DEBUG][TicketService] Error creating ticket: ${error}`);
+            log.logger.debug(`[TicketService] Error creating ticket: ${error}`);
             let cause = `Purchaser received: ${purchaser}, Cart received: ${cart}`;
             ErrorUtils.ticketCreateError(cause);
         }
@@ -65,7 +70,7 @@ class TicketService {
             const tickets = this.ticketRepository.getAll();
             return tickets;
         } catch (error) {
-            console.log(`[DEBUG][TicketService] Error getting all tickets: ${error}`);
+            log.logger.debug(`[TicketService] Error getting all tickets: ${error}`);
             ErrorUtils.ticketNotFound(error);
         }
     };
@@ -84,7 +89,7 @@ class TicketService {
             const ticket = this.ticketRepository.getById(id);
             return ticket;
         } catch (error) {
-            console.log(`[DEBUG][TicketService] Error getting ticket by id: ${error}`);
+            log.logger.debug(`[TicketService] Error getting ticket by id: ${error}`);
             let cause = `Ticket ID received: ${id}`;
             ErrorUtils.ticketNotFound(cause);
         }
@@ -104,7 +109,7 @@ class TicketService {
             const ticket = this.ticketRepository.getByCode(code);
             return ticket;
         } catch (error) {
-            console.log(`[DEBUG][TicketService] Error getting ticket by code: ${error}`);
+            log.logger.debug(`[TicketService] Error getting ticket by code: ${error}`);
             let cause = `Ticket Code received: ${code}`;
             ErrorUtils.ticketNotFound(cause);
         }
@@ -124,7 +129,7 @@ class TicketService {
             const tickets = this.ticketRepository.getByPurchaserId(purchaserId);
             return tickets;
         } catch (error) {
-            console.log(`[DEBUG][TicketService] Error getting tickets by purchaserId: ${error}`);
+            log.logger.debug(`[TicketService] Error getting tickets by purchaserId: ${error}`);
             let cause = `Purchaser ID received: ${purchaserId}`;
             ErrorUtils.ticketNotFound(cause);
         }

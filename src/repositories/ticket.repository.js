@@ -8,8 +8,11 @@
 import Config from "../config/config.js";
 import FactoryDAO from "../persistance/factory.js";
 import Ticket from "../entities/ticket.js";
+import Logger from "../config/logger.config.js";
 
 /* Main Repository Logic */
+
+const log = new Logger();
 
 class TicketRepository {
     constructor() {
@@ -26,7 +29,7 @@ class TicketRepository {
             const ticketDTO = await this.dao.create(data);
             return new Ticket(ticketDTO);
         } catch (error) {
-            console.log(`[DEBUG][TicketRepository] Error creating ticket: ${error}`);
+            log.logger.debug(`[TicketRepository] Error creating ticket: ${error}`);
             throw new Error("Error creating ticket");
         }
     };
@@ -41,7 +44,7 @@ class TicketRepository {
             const tickets = ticketDTOs.map(ticketDTO => new Ticket(ticketDTO));
             return tickets;
         } catch (error) {
-            console.log(`[DEBUG][TicketRepository] Error getting all tickets: ${error}`);
+            log.logger.debug(`[TicketRepository] Error getting all tickets: ${error}`);
             throw new Error("Error getting all tickets");
         }
     };
@@ -56,7 +59,7 @@ class TicketRepository {
             const ticketDTO = await this.dao.getById(id);
             return new Ticket(ticketDTO);
         } catch (error) {
-            console.log(`[DEBUG][TicketRepository] Error getting ticket by id: ${error}`);
+            log.logger.debug(`[TicketRepository] Error getting ticket by id: ${error}`);
             throw new Error("Error getting ticket by id");
         }
     };
@@ -71,7 +74,7 @@ class TicketRepository {
             const ticketDTO = await this.dao.getByCode(code);
             return new Ticket(ticketDTO);
         } catch (error) {
-            console.log(`[DEBUG][TicketRepository] Error getting ticket by code: ${error}`);
+            log.logger.debug(`[TicketRepository] Error getting ticket by code: ${error}`);
             throw new Error("Error getting ticket by code");
         }
     };
@@ -87,7 +90,7 @@ class TicketRepository {
             const tickets = ticketDTOs.map(ticketDTO => new Ticket(ticketDTO));
             return tickets;
         } catch (error) {
-            console.log(`[DEBUG][TicketRepository] Error getting tickets by purchaser id: ${error}`);
+            log.logger.debug(`[TicketRepository] Error getting tickets by purchaser id: ${error}`);
             throw new Error("Error getting tickets by purchaser id");
         }
     };

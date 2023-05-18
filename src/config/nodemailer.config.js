@@ -8,8 +8,11 @@
 import nodemailer from 'nodemailer';
 import Config from './config.js';
 import { ticketTemplate } from '../utils/template.utils.js';
+import Logger from '../config/logger.config.js'
 
 /* Main Logic */
+
+const log = new Logger();
 
 class NodemailerTransporter{
     constructor() {
@@ -32,7 +35,7 @@ class NodemailerTransporter{
                 html: ticketTemplate(ticket)
             });
         } catch (error) {
-            console.log(`[DEBUG][NodemailerTransporter] Error sending email: ${error}`);
+            log.logger.error(`[NodemailerTransporter] Error sending email: ${error}`);
         };
     };        
 };

@@ -7,8 +7,11 @@
 
 import TicketModel from "../models/ticket.model.js";
 import TicketDTO from "../../../dtos/ticket.dto.js";
+import Logger from "../../../config/logger.config.js";
 
 /* Main DAO Logic */
+
+const log = new Logger();
 
 class MongoDBTicketDAO {
     /**
@@ -21,7 +24,7 @@ class MongoDBTicketDAO {
             const ticketDTO = new TicketDTO(newTicket);
             return ticketDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBTicketDAO] Error creating ticket: ${error}`);
+            log.logger.debug(`[MongoDBTicketDAO] Error creating ticket: ${error}`);
             throw new Error("Error creating ticket");
         }
     };
@@ -36,7 +39,7 @@ class MongoDBTicketDAO {
             const ticketDTOs = tickets.map(ticket => new TicketDTO(ticket));
             return ticketDTOs;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBTicketDAO] Error getting all tickets: ${error}`);
+            log.logger.debug(`[MongoDBTicketDAO] Error getting all tickets: ${error}`);
             throw new Error("Error getting all tickets");
         }
     };
@@ -52,7 +55,7 @@ class MongoDBTicketDAO {
             const ticketDTO = new TicketDTO(ticket);
             return ticketDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBTicketDAO] Error getting ticket by id: ${error}`);
+            log.logger.debug(`[MongoDBTicketDAO] Error getting ticket by id: ${error}`);
             throw new Error("Error getting ticket by id");
         }
     };
@@ -68,7 +71,7 @@ class MongoDBTicketDAO {
             const ticketDTO = new TicketDTO(ticket);
             return ticketDTO;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBTicketDAO] Error getting ticket by code: ${error}`);
+            log.logger.debug(`[MongoDBTicketDAO] Error getting ticket by code: ${error}`);
             throw new Error("Error getting ticket by code");
         }
     };
@@ -84,7 +87,7 @@ class MongoDBTicketDAO {
             const ticketDTOs = tickets.map(ticket => new TicketDTO(ticket));
             return ticketDTOs;
         } catch (error) {
-            console.log(`[DEBUG][MongoDBTicketDAO] Error getting tickets by purchaser id: ${error}`);
+            log.logger.debug(`[MongoDBTicketDAO] Error getting tickets by purchaser id: ${error}`);
             throw new Error("Error getting tickets by purchaser id");
         }
     };
