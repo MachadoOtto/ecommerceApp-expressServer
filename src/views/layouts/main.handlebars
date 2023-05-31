@@ -54,6 +54,16 @@
                 </ul>
                 <ul class="navbar-nav mb-2 mb-lg-0">                
                     {{#if user}}
+                    {{#if isPremium}}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/api/users/premium/{{user._id}}"><code>Downgrade to User</code></a>
+                    </li>
+                    {{/if}}
+                    {{#if isUser}}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/api/users/premium/{{user._id}}"><code>Become Premium</code></a>
+                    </li>
+                    {{/if}}
                     <li class="nav-item">
                         <a class="nav-link active" href="/profile">Profile ({{user.first_name}}_{{user.last_name}})</a>
                     </li>

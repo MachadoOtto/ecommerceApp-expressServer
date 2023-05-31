@@ -22,6 +22,7 @@ import productsRouter from './routes/products.router.js';
 import sessionRouter from './routes/sessions.router.js';
 import ticketsRouter from './routes/tickets.router.js';
 import viewsRouter from './routes/views.router.js';
+import usersRouter from './routes/users.router.js';
 // SocketIO
 import SocketIO from './config/socketIO.config.js';
 // Passport
@@ -91,6 +92,7 @@ app.use('/api/messages', messagesRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/sessions', sessionRouter);
 app.use('/api/tickets', ticketsRouter);
+app.use('/api/users', usersRouter);
 app.use('/mockingproducts', mockingsRouter);
 app.use('/loggerTest', loggersRouter);
 app.use(function (req, res) {

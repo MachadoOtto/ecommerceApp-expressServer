@@ -303,6 +303,37 @@ class SessionService {
             ErrorUtils.userUpdateError(cause);
         }
     };
+
+    /**
+     * Changes the user role.
+     * @param {String} userId - User ID.
+     * @returns {Promise<User>} - User object from the database.
+     */
+    async changeRole(userId) {
+        if (!userId) {
+            let cause = `User ID received: ${userId}`;
+            ErrorUtils.userIdRequiredError(cause);
+        }
+        try {
+            const user = await this.userRepository.getById(userId);
+            if (!user) {
+                let cause = `User ID received: ${userId}`;
+                ErrorUtils.userNotFound(cause);
+            } else {
+                user.role = user.role === "Premium" ? "User" : "Premium";
+                const updatedUser = await this.userRepository.update(userId, user);
+                if (!updatedUser) {
+                    let cause = `User ID received: ${userId}`;
+                    ErrorUtils.userUpdateError(cause);
+                }
+                return updatedUser;
+            }
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error updating user role: ${error.message}`);
+            let cause = `User ID received: ${userId}`;
+            ErrorUtils.userUpdateError(cause);
+        }
+    };
 };
 
 /* Exports */

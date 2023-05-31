@@ -55,7 +55,7 @@ class SessionController {
                 let user = await sessionService.getUserByEmail(session.email);
                 delete user.password;
                 res.send(user);
-            } catch (error) {
+            } catch (err) {
                 req.logger.warning(`[SessionController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
                 res.status(500).send('Internal Server Error');
             }
@@ -112,7 +112,19 @@ class SessionController {
             req.logger.warning(`[SessionController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.redirect('/login?changePasswordError=1');
         }
-    };  
+    };
+
+    // User change role between premium and user using the users id
+    static async changeUserRole(req, res) {
+        let id = req.params.id;
+        try {
+            const user = await sessionService.changeRole(id);
+            res.send( { status: 'success', data: user } );
+        } catch (err) {
+            req.logger.warning(`[SessionController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to change the user role.' } );
+        }
+    };
 };
 
 /* Exports */
