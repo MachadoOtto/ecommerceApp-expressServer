@@ -8,12 +8,14 @@
 import ProductService from '../services/products.service.js';
 import CartService from '../services/carts.service.js';
 import TicketService from '../services/tickets.service.js';
+import SessionService from '../services/sessions.service.js';
 
 /* Main Controller Logic */
 
 const cartService = new CartService();
 const productService = new ProductService();
 const ticketService = new TicketService();
+const sessionService = new SessionService();
 
 class ViewController {
     // Home Page. Displays all products contained in the database.
@@ -112,11 +114,15 @@ class ViewController {
 
     // Login Page. Displays a login form.
     static async getLogin(req, res) {
-        let { success, error } = req.query;
+        let { success, error, changePasswordSuccess, changePasswordError } = req.query;
         if (success === '1') {
             res.render('login', { success });
         } else if (error === '1') {
             res.render('login', { error });
+        } else if (changePasswordSuccess === '1') {
+            res.render('login', { changePasswordSuccess });
+        } else if (changePasswordError === '1') {
+            res.render('login', { changePasswordError });
         } else {
             res.render('login');
         }
@@ -176,6 +182,31 @@ class ViewController {
             }
         } catch (err) {
             res.render('error', { code: 404, message: "Not Found: The ticket with the specified code does not exist.", user, isAdmin });
+        }
+    };
+
+    // Password reset page.
+    static async getPasswordReset(req, res) {
+        let { success } = req.query;
+        if (success === '1') {
+            res.render('passwordReset', { success });
+        } else {
+            res.render('passwordReset');
+        }
+    };
+
+    // Password change page. Only accessible to tokens with a valid reset token.
+    static async getPasswordChange(req, res) {
+        try {
+            let { token } = req.params;
+            let passwordToken = await sessionService.getPasswordToken(token);
+            if (passwordToken === null) {
+                res.render('error', { code: 404, message: "Not Found: The password reset token is invalid or has expired." });
+            } else {
+                res.render('passwordChange', { token });
+            }
+        } catch (err) {
+            res.render('error', { code: 404, message: "Not Found: The requested page does not exist."});
         }
     };
 };

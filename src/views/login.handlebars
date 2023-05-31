@@ -15,6 +15,7 @@
                         <input type="password" class="form-control rounded-3" name="password" id="inputPassword"
                             placeholder="Password" autocomplete="off" required>
                         <label for="floatingPassword">Password</label>
+                        <small class="text-muted">Forgot Password? <a href="/passwordReset">Reset Password</a></small>
                     </div>
                     <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">Sign In</button>
                 </form>
@@ -32,6 +33,18 @@
                 <div class="alert alert-danger mb-3" role="alert">
                     <h4 class="alert-heading">Error!</h4>
                     <p>The email or password you entered is incorrect.</p>
+                </div>
+                {{/if}}
+                {{#if changePasswordSuccess}}
+                <div class="alert alert-success mb-3" role="alert">
+                    <h4 class="alert-heading">Success!</h4>
+                    <p>Your password has been changed.</p>
+                </div> 
+                {{/if}}
+                {{#if changePasswordError}}
+                <div class="alert alert-danger mb-3" role="alert">
+                    <h4 class="alert-heading">Error!</h4>
+                    <p>Your password could not be changed.</p>
                 </div>
                 {{/if}}
             </div>

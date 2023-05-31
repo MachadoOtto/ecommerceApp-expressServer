@@ -7,7 +7,7 @@
 
 import nodemailer from 'nodemailer';
 import Config from './config.js';
-import { ticketTemplate } from '../utils/template.utils.js';
+import { ticketTemplate, passwordResetTemplate } from '../utils/template.utils.js';
 import Logger from '../config/logger.config.js'
 
 /* Main Logic */
@@ -37,7 +37,20 @@ class NodemailerTransporter{
         } catch (error) {
             log.logger.error(`[NodemailerTransporter] Error sending email: ${error}`);
         };
-    };        
+    };
+    
+    async sendEmailPasswordToken(email, token) {
+        try {
+            this.transporter.sendMail({
+                from: Config.getNodemailerEmail(),
+                to: email,
+                subject: `eStorage Products - Password Reset Request`,
+                html: passwordResetTemplate(token)
+            });
+        } catch (error) {
+            log.logger.error(`[NodemailerTransporter] Error sending email: ${error}`);
+        };
+    };     
 };
 
 /* Exports */

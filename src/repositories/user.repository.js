@@ -85,6 +85,22 @@ class UserRepository {
             throw new Error("Error comparing password");
         }
     };
+
+    /**
+     * Updates a user.
+     * @param {String} id
+     * @param {*} data
+     * @returns {User} The updated user.
+     */
+    async update(id, data) {
+        try {
+            const userDTO = await this.dao.update(id, data);
+            return new User(userDTO);
+        } catch (error) {
+            log.logger.debug(`[UserRepository] Error updating user: ${error}`);
+            throw new Error("Error updating user");
+        }
+    };
 };
 
 /* Exports */

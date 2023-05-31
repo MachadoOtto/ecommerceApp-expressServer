@@ -96,6 +96,31 @@ class UserManager {
             throw new Error(`Error getting user by email: ${error}`);
         }
     };
+
+    /**
+     * Update a user in the database.
+     * @param {String} id - User ID.
+     * @param {User} user - User object.
+     * @returns {Promise<UserDTO>} - User DTO.
+     */
+    async update(id, user) {
+        try {
+            const updatedUser = new User(user);
+            const users = await JSON.parse(fs.readFileSync(this.#path, 'utf-8')).users;
+            if (users.find(u => u.id === id)) {
+                u = updatedUser
+            } else {
+                throw new Error(`Not found: User with ID ${id} does not exist`);
+            }
+            await fs.promises.writeFile(this.#path, JSON.stringify({ lastId: this.#lastId, users: users }, null, '\t'));
+            const userDTO = new UserDTO(updatedUser);
+            return userDTO;
+        } catch (error) {
+            --this.#lastId;
+            log.logger.debug(`[UserManager] Error updating user: ${error}`);
+            throw new Error(`Error updating user: ${error}`);
+        }
+    };
 };
 
 /* Exports */

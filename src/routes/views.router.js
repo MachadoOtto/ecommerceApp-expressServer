@@ -51,6 +51,12 @@ viewsRouter.route('/tickets')
 viewsRouter.route('/tickets/:code')
     .get(isUser, ViewController.getTicketDetail);
 
+viewsRouter.route('/passwordReset')
+    .get(restrictSessionRoutes, ViewController.getPasswordReset);
+
+viewsRouter.route('/passwordChange/:token')
+    .get(restrictSessionRoutes, ViewController.getPasswordChange);
+
 /* Exports */
 
 export default viewsRouter;

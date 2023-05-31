@@ -58,6 +58,22 @@ class MongoDBUserDAO {
             log.logger.debug(`[MongoDBUserDAO] Error getting user by email: ${error}`);
         }
     };
+
+    /**
+     * Update a user in the database.
+     * @param {String} id - User ID.
+     * @param {User} user - User object.
+     * @returns {Promise<UserDTO>} - User DTO.
+     */
+    async update(id, user) {
+        try {
+            const updatedUser = await UserModel.updateOne({ _id: id }, user);
+            const userDTO = new UserDTO(updatedUser);
+            return userDTO;
+        } catch (error) {
+            log.logger.debug(`[MongoDBUserDAO] Error updating user: ${error}`);
+        }
+    };
 };
 
 /* Exports */

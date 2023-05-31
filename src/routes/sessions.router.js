@@ -47,6 +47,12 @@ sessionRouter.route('/user/tickets')
 sessionRouter.route('/current')
     .get(isAuthenticated, SessionController.getUserInSession);
 
+sessionRouter.route('/password/reset')
+    .post(restrictSessionRoutes, SessionController.resetPasswordEmail);
+
+sessionRouter.route('/password/reset/:token')
+    .post(restrictSessionRoutes, SessionController.changePassword);
+
 /* Exports */
 
 export default sessionRouter;
