@@ -244,12 +244,12 @@ class ViewController {
             let { token } = req.params;
             let passwordToken = await sessionService.getPasswordToken(token);
             if (passwordToken === null) {
-                res.render('error', { code: 404, message: "Not Found: The password reset token is invalid or has expired." });
+                res.redirect('/passwordReset');
             } else {
                 res.render('passwordChange', { token });
             }
         } catch (err) {
-            res.render('error', { code: 404, message: "Not Found: The requested page does not exist."});
+            res.redirect('/passwordReset');
         }
     };
 };

@@ -19,6 +19,7 @@ socket.on('products', (products) => {
                         <div class="accordion-body">
                             <strong>ID: <a href="/products/${product._id}">${product._id}</a></strong><br>
                             <strong>Title: ${product.title}</strong><br>
+                            Owner: <code>${(product.owner.email) ? product.owner.email : 'Admin'}</code><br>
                             Description: ${product.description}<br>
                             Price: <code>$${product.price}</code><br>
                             Stock: <code>${product.stock}</code><br>
@@ -48,6 +49,7 @@ socket.on('newProduct', (product) => {
                     <div class="accordion-body">
                         <strong>ID: <a href="/products/${product._id}">${product._id}</a></strong><br>
                         <strong>Title: ${product.title}</strong><br>
+                        Owner: <code>${(product.owner.email) ? product.owner.email : 'Admin'}</code><br>
                         Description: ${product.description}<br>
                         Price: <code>$${product.price}</code><br>
                         Stock: <code>${product.stock}</code><br>
@@ -75,6 +77,7 @@ socket.on('updateProduct', (product) => {
                 <div class="accordion-body">
                     <strong>ID: <a href="/products/${product._id}">${product._id}</a></strong><br>
                     <strong>Title: ${product.title}</strong><br>
+                    Owner: <code>${(product.owner.email) ? product.owner.email : 'Admin'}</code><br>
                     Description: ${product.description}<br>
                     Price: <code>$${product.price}</code><br>
                     Stock: <code>${product.stock}</code><br>

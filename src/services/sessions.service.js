@@ -135,24 +135,23 @@ class SessionService {
      * @returns {Promise<User>} - User object from the database.
      */
     async getUserById(id) {
+        if (id === 0) {
+            return admin;
+        }
         if (!id) {
             let cause = `User ID received: ${id}`;
             ErrorUtils.userIdRequiredError(cause);
         }
-        if (id === 0) {
-            return admin;
-        } else {
-            try {
-                const user = await this.userRepository.getById(id);
-                if (!user) {
-                    throw new Error("User not found");
-                }
-                return user;
-            } catch (error) {
-                log.logger.debug(`[SessionsService] Error getting user: ${error.message}`);
-                let cause = `User ID received: ${id}`;
-                ErrorUtils.userNotFound(cause);
+        try {
+            const user = await this.userRepository.getById(id);
+            if (!user) {
+                throw new Error("User not found");
             }
+            return user;
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error getting user: ${error.message}`);
+            let cause = `User ID received: ${id}`;
+            ErrorUtils.userNotFound(cause);
         }
     };
 

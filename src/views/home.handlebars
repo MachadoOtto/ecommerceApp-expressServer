@@ -4,7 +4,7 @@
     <div class="col-lg-6 mx-auto">
         {{#if user}}
         <p class="lead mb-4">Welcome back, <code>{{user.first_name}} {{user.last_name}}</code>! We're glad to see you again.<br>
-            Your role is: <code>{{user.role}}</code>.
+            Your role is: <code>{{user.role}}</code> {{#if isPremium}}<img src="/images/premium.png" alt="Premium" width="20" height="20">{{/if}}.
         </p>
         <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
             <a href="/products">

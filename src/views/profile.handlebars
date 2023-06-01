@@ -9,8 +9,8 @@
                 <img src="/images/user-icon.png" alt="avatar"
                     class="rounded-circle img-fluid" style="width: 150px;">
                 {{/if}}
-                <h5 class="my-3">{{user.first_name}} {{user.last_name}}</h5>
-                <p class="text-muted mb-1">Role: {{user.role}}</p>
+                <h5 class="my-3">{{user.first_name}} {{user.last_name}} {{#if isPremium}}<img src="/images/premium.png" alt="Premium" width="20" height="20">{{/if}}</h5>
+                <p class="text-muted mb-1"><code>Role: {{user.role}}</code></p>
             </div>
         </div>
     </div>

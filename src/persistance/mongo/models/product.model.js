@@ -45,10 +45,23 @@ const productSchema = new mongoose.Schema({
     },
     thumbnails: [{
         type: String
-    }]
+    }],
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users',
+        default: null
+    }
 });
 
 productSchema.plugin(mongoosePaginate);
+
+productSchema.pre("find", function () {
+    this.populate("owner", "email");
+});
+
+productSchema.pre("findOne", function () {
+    this.populate("owner", "email");
+});
 
 const productModel = mongoose.model(productCollection, productSchema);
 

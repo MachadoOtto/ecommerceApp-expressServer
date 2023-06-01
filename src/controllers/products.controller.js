@@ -59,8 +59,9 @@ class ProductController {
     // Adds a new product to the list. If the product already exists, it returns an error.
     static async addProduct(req, res) {
         let { title, description, code, price, status, stock, category, thumbnails } = req.body;
+        let owner = (req.user.role === 'Admin') ? null : req.user._id;
         try {
-            let product = await productService.addProduct({ title, description, code, price, status, stock, category, thumbnails });
+            let product = await productService.addProduct({ title, description, code, price, status, stock, category, thumbnails, owner });
             res.send( { status: 'success', data: product } );
             res.app.get('io').emit('newProduct', product);
         } catch (err) {
@@ -78,8 +79,9 @@ class ProductController {
     // Updates the product with the specified ID. If the product doesn't exist, it returns an error.
     static async updateProduct(req, res) {
         let { pid } = req.params;
+        let owner = req.user._id;
         try {
-            let updatedProduct = await productService.updateProduct(pid, req.body);
+            let updatedProduct = await productService.updateProduct(pid, req.body, owner);
             res.send( { status: 'success', message: "Product updated successfully." } );
             res.app.get('io').emit('updateProduct', updatedProduct);
         } catch (err) {
@@ -99,8 +101,9 @@ class ProductController {
     // Deletes the product with the specified ID. If the product doesn't exist, it returns an error.
     static async deleteProduct(req, res) {
         let { pid } = req.params;
+        let owner = req.user._id;
         try {
-            const deletedProduct = await productService.deleteProduct(pid);
+            const deletedProduct = await productService.deleteProduct(pid, owner);
             res.app.get('io').emit('deleteProduct', pid);
             res.send( { status: 'success', message: "Product deleted successfully." } );
         } catch (err) {

@@ -6,6 +6,8 @@
 /* Imports */
 
 import CartRepository from "../repositories/cart.repository.js";
+import ProductRepository from "../repositories/product.repository.js";
+import UserRepository from "../repositories/user.repository.js";
 import Cart from "../entities/cart.js";
 import ErrorUtils from "./errors/utils.error.js";
 import Logger from "../config/logger.config.js";
@@ -19,6 +21,8 @@ const log = new Logger();
 class CartService {
     constructor() {
         this.cartRepository = new CartRepository();
+        this.productRepository = new ProductRepository();
+        this.userRepository = new UserRepository();
     };
 
     /**
@@ -27,7 +31,7 @@ class CartService {
      */
     async createCart() {
         try {
-            const cartEntity = this.cartRepository.create();
+            const cartEntity = await this.cartRepository.create();
             return cartEntity;
         } catch (error) {
             log.logger.debug(`[CartService] Error creating cart: ${error}`);
@@ -41,7 +45,7 @@ class CartService {
      */
     async getCarts() {
         try {
-            const carts = this.cartRepository.getAll();
+            const carts = await this.cartRepository.getAll();
             return carts;
         } catch (error) {
             log.logger.debug(`[CartService] Error getting all carts: ${error}`);
@@ -59,7 +63,7 @@ class CartService {
             ErrorUtils.cartIdRequiredError(`ID received: ${id}`);
         }
         try {
-            const cart = this.cartRepository.getById(id);
+            const cart = await this.cartRepository.getById(id);
             return cart;
         } catch (error) {
             log.logger.debug(`[CartService] Error getting cart by id: ${error}`);
@@ -71,23 +75,38 @@ class CartService {
      * Adds a product to the cart. If the product already exists, it will update the quantity.
      * @param {String} id The cart ID.
      * @param {Object} productId The ID of the product to add.
+     * @param {String} userId The ID of the user that owns the cart.
      * @returns {CartModel} - The updated cart.
      */
-    async addProduct(id, productId) {
-        if (!id || !productId) {
-            let cause = `Cart ID received: ${id}, Product ID received: ${productId}`;
+    async addProduct(id, productId, userId) {
+        if (!id || !productId || !userId) {
+            let cause = `Cart ID received: ${id}, Product ID received: ${productId}, User ID received: ${userId}`;
             if (!id) {
                 ErrorUtils.cartIdRequiredError(cause);
-            } else {
+            } else if (!productId) {
                 ErrorUtils.productIdRequiredError(cause);
+            } else {
+                ErrorUtils.userIdRequiredError(cause);
             }
         }
         try {
-            const cart = this.cartRepository.addProduct(id, productId);
+            // Check if the userId cart is the same as the cartId.
+            const user = await this.userRepository.getById(userId);
+            console.log(user.cart.toString())
+            console.log(id)
+            if (user.cart.toString() !== id) {
+                throw new Error(`The cart ID received does not match the user's cart ID.`);
+            }
+            // If user is the owner of the cart, the product is NOT added.
+            const product = await this.productRepository.getProductById(productId);
+            if (product.owner.email === user.email) {
+                throw new Error(`The user is the owner of the product, so it cannot be added to the cart.`);
+            }
+            const cart = await this.cartRepository.addProduct(id, productId);
             return cart;
         } catch (error) {
             log.logger.debug(`[CartService] Error adding product to cart: ${error}`);
-            ErrorUtils.cartModifyError(`Cart ID received: ${id}`);
+            ErrorUtils.cartModifyError(`Cart ID received: ${id}, Product ID received: ${productId}, User ID received: ${userId}`);
         }
     };
 
@@ -111,8 +130,8 @@ class CartService {
             let productsIds = await ProductModel.find(
                 { _id: { $in: newProducts.map(p => p.product) } }, '_id');
             // Filter the new array of products to only include the ones that exist in the "products" collection.
-            let validProducts = newProducts.filter(p => productsIds.some(id => id.equals(p.product)));
-            const cart = this.cartRepository.modifyProducts(id, validProducts);
+            let validProducts = await newProducts.filter(p => productsIds.some(id => id.equals(p.product)));
+            const cart = await this.cartRepository.modifyProducts(id, validProducts);
             return cart;
         } catch (error) {
             log.logger.debug(`[CartService] Error modifying products of cart: ${error}`);
@@ -139,7 +158,7 @@ class CartService {
             }
         }
         try {
-            const cart = this.cartRepository.modifyProductQuantity(id, productId, quantity);
+            const cart = await this.cartRepository.modifyProductQuantity(id, productId, quantity);
             return cart;
         } catch (error) {
             log.logger.debug(`[CartService] Error modifying product quantity of cart: ${error}`);
@@ -163,7 +182,7 @@ class CartService {
             }
         }
         try {
-            const cart = this.cartRepository.removeProduct(id, productId);
+            const cart = await this.cartRepository.removeProduct(id, productId);
             return cart;
         } catch (error) {
             log.logger.debug(`[CartService] Error removing product from cart: ${error}`);
@@ -181,7 +200,7 @@ class CartService {
             ErrorUtils.cartIdRequiredError(`Cart ID received: ${id}`);
         }
         try {
-            const cart = this.cartRepository.removeAllProducts(id);
+            const cart = await this.cartRepository.removeAllProducts(id);
             return cart;
         } catch (error) {
             log.logger.debug(`[CartService] Error removing all products from cart: ${error}`);

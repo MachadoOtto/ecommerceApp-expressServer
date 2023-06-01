@@ -34,7 +34,7 @@ viewsRouter.route('/cart')
     .get(notAdmin, ViewController.getCart);
 
 viewsRouter.route('/chat')
-    .get(isAuthenticated, ViewController.getChat);
+    .get(notAdmin, ViewController.getChat);
 
 viewsRouter.route('/login')
     .get(restrictSessionRoutes, ViewController.getLogin);
