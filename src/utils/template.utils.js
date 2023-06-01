@@ -3,6 +3,10 @@
 // Author: Jorge Machado Ottonelli
 // CoderHouse - Course: Backend Programming
 
+/* Imports */
+
+import Config from "../config/config.js";
+
 /* Main Logic */
 
 /**
@@ -13,7 +17,7 @@ export const ticketTemplate = (ticket) => {
         <div style="width: 100%; height: 100%; background-color: #f2f2f2; padding: 20px;">
             <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px;">
                 <div style="width: 100%; text-align: center;">
-                    <img src="https://raw.githubusercontent.com/MachadoOtto/ecommerceApp-expressServer/ticket-implementation/public/images/logo-black.png" alt="eStorage Products" style="width: 200px; height: 200px;">
+                    <img src="https://raw.githubusercontent.com/MachadoOtto/ecommerceApp-expressServer/main/public/images/logo-black.png" alt="eStorage Products" style="width: 200px; height: 200px;">
                 </div>
                 <div style="width: 100%; text-align: center;">
                     <h1 style="font-size: 2rem; font-weight: 600; color: #000;">eStorage Products</h1>
@@ -46,4 +50,34 @@ export const ticketTemplate = (ticket) => {
             </div>
         </div>`;
     return template;
+};
+
+/**
+ * Send an email using the password reset template.
+ */
+export const passwordResetTemplate = (token) => {
+    let templete = `
+        <div style="width: 100%; height: 100%; background-color: #f2f2f2; padding: 20px;">
+            <div style="width: 100%; max-width: 600px; margin: 0 auto; background-color: #fff; padding: 20px;">
+                <div style="width: 100%; text-align: center;">
+                    <img src="https://raw.githubusercontent.com/MachadoOtto/ecommerceApp-expressServer/main/public/images/logo-black.png" alt="eStorage Products" style="width: 200px; height: 200px;">
+                </div>
+                <div style="width: 100%; text-align: center;">
+                    <h1 style="font-size: 2rem; font-weight: 600; color: #000;">eStorage Products</h1>
+                </div>
+                <div style="width: 100%; text-align: center;">
+                    <h2 style="font-size: 1.5rem; font-weight: 600; color: #000;">Password Reset</h2>
+                </div>
+                <div style="width: 100%; text-align: center;">
+                    <h3 style="font-size: 1.2rem; font-weight: 600; color: #000;">Click on the button below to reset your password.</h3>
+                </div>
+                <div style="width: 100%; text-align: center;">
+                    <a href="http://localhost:${Config.getPort()}/passwordChange/${token}" style="display: inline-block; padding: 10px 20px; background-color: #000; color: #fff; text-decoration: none; font-size: 1.2rem; font-weight: 600;">Reset Password</a>
+                </div>
+                <div style="width: 100%; text-align: center;">
+                    <h3 style="font-size: 1.2rem; font-weight: 600; color: #000;">If you did not request a password reset, please ignore this email.</h3>
+                </div>
+            </div>
+        </div>`;
+    return templete;
 };

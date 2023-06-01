@@ -15,7 +15,7 @@ import AuthMiddleware from '../middlewares/auth.middleware.js';
 const sessionRouter = Router();
 const restrictSessionRoutes = AuthMiddleware.restrictSessionRoutes;
 const isAuthenticated = AuthMiddleware.isAuthenticated;
-const isUser = AuthMiddleware.isUser;
+const notAdmin = AuthMiddleware.notAdmin;
 
 /* Routes */
 
@@ -39,13 +39,19 @@ sessionRouter.route('/logout')
     .get(isAuthenticated, SessionController.logoutUser);
 
 sessionRouter.route('/user/cart')
-    .get(isAuthenticated, isUser, SessionController.getUserCart);
+    .get(isAuthenticated, notAdmin, SessionController.getUserCart);
 
 sessionRouter.route('/user/tickets')
-    .get(isAuthenticated, isUser, SessionController.getUserTickets);
+    .get(isAuthenticated, notAdmin, SessionController.getUserTickets);
 
 sessionRouter.route('/current')
     .get(isAuthenticated, SessionController.getUserInSession);
+
+sessionRouter.route('/password/reset')
+    .post(restrictSessionRoutes, SessionController.resetPasswordEmail);
+
+sessionRouter.route('/password/reset/:token')
+    .post(restrictSessionRoutes, SessionController.changePassword);
 
 /* Exports */
 

@@ -37,11 +37,17 @@
                 <div class="accordion-body">
                     <strong>ID: <a href="/products/{{_id}}">{{_id}}</a></strong><br>
                     <strong>Title: {{title}}</strong><br>
+                    {{#if owner.email}}
+                    Owner: <code>{{owner.email}}</code><br>
+                    {{else}}
+                    Owner: <code>Admin</code><br>
+                    {{/if}}
                     Description: {{description}}<br>
                     Price: <code>${{price}}</code><br>
                     Stock: <code>{{stock}}</code><br>
                     Category: {{category}}<br>
                     {{#if ../user}}
+                    {{#unless ../isAdmin}}
                     <div class="m-2">
                         <button type="submit" id="addToCart-{{_id}}" class="btn btn-outline-success mb-2">
                             <script>
@@ -53,6 +59,7 @@
                             Add to Cart
                         </button>
                     </div>
+                    {{/unless}}
                     {{/if}}
                 </div>
             </div>
@@ -60,6 +67,8 @@
     </div>
     {{/each}}
 </u1>
+{{#if user}}
+{{#unless isAdmin}}
 <!-- Toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="toastAddToCart" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -76,3 +85,5 @@
     </div>
 </div>
 <script src="/js/cartManagement.js"></script>
+{{/unless}}
+{{/if}}

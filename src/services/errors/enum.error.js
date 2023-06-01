@@ -25,10 +25,15 @@ const ErrorEnum = {
     "USER_ID_REQUIRED": { "name": "UserIdRequiredError", "message": "User ID is required", "code": 403 },
     "USER_DATA_INVALID": { "name": "UserDataInvalidError", "message": "User data is invalid", "code": 404 },
     "USER_EMAIL_REQUIRED": { "name": "UserEmailRequiredError", "message": "User email is required", "code": 405 },
+    "USER_UPDATE_ERROR": { "name": "UserUpdateError", "message": "Error updating User", "code": 406 },
+    "USER_DATA_REQUIRED": { "name": "UserDataRequiredError", "message": "User data is required", "code": 407 },
     "TICKET_ERROR": { "name": "TicketError", "message": "Error creating Ticket", "code": 501 },
     "TICKET_NOT_FOUND": { "name": "TicketNotFoundError", "message": "Ticket not found", "code": 502 },
     "TICKET_ID_REQUIRED": { "name": "TicketIdRequiredError", "message": "Ticket ID is required", "code": 503 },
-    "TICKET_CODE_REQUIRED": { "name": "TicketCodeRequiredError", "message": "Ticket Code is required", "code": 504 }
+    "TICKET_CODE_REQUIRED": { "name": "TicketCodeRequiredError", "message": "Ticket Code is required", "code": 504 },
+    "TOKEN_ERROR": { "name": "TokenError", "message": "Error creating Token", "code": 601 },
+    "TOKEN_NOT_FOUND": { "name": "TokenNotFoundError", "message": "Token not found", "code": 602 },
+    "TOKEN_REQUIRED": { "name": "TokenRequiredError", "message": "Token is required", "code": 603 }
 };
 
 /* Exports */

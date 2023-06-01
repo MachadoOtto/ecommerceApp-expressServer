@@ -131,6 +131,18 @@ class ErrorUtils {
         throw new CustomError(customError);
     };
 
+    static userUpdateError(cause) {
+        let customError = ErrorEnum.USER_UPDATE_ERROR;
+        customError.cause = cause;
+        throw new CustomError(customError);
+    };
+
+    static userDataRequiredError(cause) {
+        let customError = ErrorEnum.USER_DATA_REQUIRED;
+        customError.cause = cause;
+        throw new CustomError(customError);
+    };
+
     static ticketCreateError(cause) {
         let customError = ErrorEnum.TICKET_ERROR;
         customError.cause = cause;
@@ -151,6 +163,24 @@ class ErrorUtils {
 
     static ticketCodeRequiredError(cause) {
         let customError = ErrorEnum.TICKET_CODE_REQUIRED;
+        customError.cause = cause;
+        throw new CustomError(customError);
+    };
+
+    static tokenCreateError(cause) {
+        let customError = ErrorEnum.TOKEN_ERROR;
+        customError.cause = cause;
+        throw new CustomError(customError);
+    };
+
+    static tokenNotFoundError(cause) {
+        let customError = ErrorEnum.TOKEN_NOT_FOUND;
+        customError.cause = cause;
+        throw new CustomError(customError);
+    };
+
+    static tokenRequiredError(cause) {
+        let customError = ErrorEnum.TOKEN_REQUIRED;
         customError.cause = cause;
         throw new CustomError(customError);
     };

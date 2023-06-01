@@ -13,26 +13,26 @@ import AuthMiddleware from '../middlewares/auth.middleware.js';
 
 const cartsRouter = Router();
 const isAdmin = AuthMiddleware.isAdmin;
-const isUser = AuthMiddleware.isUser;
+const notAdmin = AuthMiddleware.notAdmin;
 
 /* Routes */
 
 cartsRouter.route('/')
     .get(isAdmin, CartController.getCarts)
-    .post(isUser, CartController.newCart);
+    .post(notAdmin, CartController.newCart);
 
 cartsRouter.route('/:id')
-    .get(isUser, CartController.getCart)
-    .put(isUser, CartController.updateCart)
-    .delete(isUser, CartController.removeAllProductsFromCart);
+    .get(notAdmin, CartController.getCart)
+    .put(notAdmin, CartController.updateCart)
+    .delete(notAdmin, CartController.removeAllProductsFromCart);
 
 cartsRouter.route('/:cid/product/:pid')
-    .post(isUser, CartController.addProductToCart)
-    .put(isUser, CartController.modifyProductQuantityCart)
-    .delete(isUser, CartController.removeProductFromCart)
+    .post(notAdmin, CartController.addProductToCart)
+    .put(notAdmin, CartController.modifyProductQuantityCart)
+    .delete(notAdmin, CartController.removeProductFromCart)
 
 cartsRouter.route('/:cid/purchase')
-    .post(isUser, CartController.purchaseCart);
+    .post(notAdmin, CartController.purchaseCart);
 
 /* Exports */
 

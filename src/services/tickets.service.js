@@ -42,7 +42,7 @@ class TicketService {
         try {
             const code = generateUUID();
             const purchase_datetime = new Date();
-            const purchased_products = cart.products.filter( p => {
+            const purchased_products = await cart.products.filter( p => {
                 try {
                     this.productService.reduceStock(p.product._id, p.quantity);
                     this.cartService.removeProduct(cart._id, p.product._id);
@@ -51,8 +51,8 @@ class TicketService {
                     return false;
                 }
             });
-            const amount = purchased_products.reduce( (acc, p) => acc + p.product.price * p.quantity, 0 );
-            const ticketEntity = this.ticketRepository.create( { code, purchase_datetime, amount, purchaser, purchased_products } );
+            const amount = await purchased_products.reduce( (acc, p) => acc + p.product.price * p.quantity, 0 );
+            const ticketEntity = await this.ticketRepository.create( { code, purchase_datetime, amount, purchaser, purchased_products } );
             return ticketEntity;
         } catch (error) {
             log.logger.debug(`[TicketService] Error creating ticket: ${error}`);
@@ -67,7 +67,7 @@ class TicketService {
      */
     async getTickets() {
         try {
-            const tickets = this.ticketRepository.getAll();
+            const tickets = await this.ticketRepository.getAll();
             return tickets;
         } catch (error) {
             log.logger.debug(`[TicketService] Error getting all tickets: ${error}`);
@@ -86,7 +86,7 @@ class TicketService {
             ErrorUtils.ticketIdRequiredError(cause);
         }
         try {
-            const ticket = this.ticketRepository.getById(id);
+            const ticket = await this.ticketRepository.getById(id);
             return ticket;
         } catch (error) {
             log.logger.debug(`[TicketService] Error getting ticket by id: ${error}`);
@@ -106,7 +106,7 @@ class TicketService {
             ErrorUtils.ticketCodeRequiredError(cause);
         }
         try {
-            const ticket = this.ticketRepository.getByCode(code);
+            const ticket = await this.ticketRepository.getByCode(code);
             return ticket;
         } catch (error) {
             log.logger.debug(`[TicketService] Error getting ticket by code: ${error}`);
@@ -126,7 +126,7 @@ class TicketService {
             ErrorUtils.userIdRequiredError(cause);
         }
         try {
-            const tickets = this.ticketRepository.getByPurchaserId(purchaserId);
+            const tickets = await this.ticketRepository.getByPurchaserId(purchaserId);
             return tickets;
         } catch (error) {
             log.logger.debug(`[TicketService] Error getting tickets by purchaserId: ${error}`);

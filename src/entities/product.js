@@ -6,7 +6,7 @@
 /* Entity Class */
 
 class Product {
-    constructor( {_id, title, description, price, code, status, stock, category, thumbnails} ) {
+    constructor( {_id, title, description, price, code, status, stock, category, thumbnails, owner = null} ) {
         this._id = _id;
         this.title = title;
         this.description = description;
@@ -16,6 +16,10 @@ class Product {
         this.stock = stock;
         this.category = category;
         this.thumbnails = thumbnails;
+        this.owner = this.owner = {
+            _id: (owner) ? owner._id : null,
+            email: (owner) ? owner.email : null
+        };
     };
 };
 

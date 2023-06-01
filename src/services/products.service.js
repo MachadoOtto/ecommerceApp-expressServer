@@ -6,6 +6,7 @@
 /* Imports */
 
 import ProductRepository from "../repositories/product.repository.js";
+import SessionService from "./sessions.service.js";
 import Product from "../entities/product.js";
 import ErrorUtils from "./errors/utils.error.js";
 import Logger from "../config/logger.config.js";
@@ -19,6 +20,7 @@ const log = new Logger();
 class ProductService {
     constructor() {
         this.productRepository = new ProductRepository();
+        this.sessionService = new SessionService();
     };
 
     /**
@@ -99,18 +101,33 @@ class ProductService {
      * Updates a product from the database.
      * @param {Number} id - Product id. 
      * @param {Object} updateFields - Object with the fields to update.
+     * @param {String} owner - User id.
      * @returns {Object} - Database response.
      */
-    async updateProduct(id, updateFields) {
+    async updateProduct(id, updateFields, owner) {
         if (!id) {
-            let cause = `Product ID received: ${id}, Update fields received: ${updateFields}`;
+            let cause = `Product ID received: ${id}, Update fields received: ${updateFields}, Owner received: ${owner}`;
             ErrorUtils.productIdRequiredError(cause);
         }
         if (!updateFields) {
-            let cause = `Product ID received: ${id}, Update fields received: ${updateFields}`;
+            let cause = `Product ID received: ${id}, Update fields received: ${updateFields}, Owner received: ${owner}`;
             ErrorUtils.productUpdateFieldsError(cause);
         }
+        if ((owner !== 0) && (!owner)) {
+            let cause = `Product ID received: ${id}, Update fields received: ${updateFields}, Owner received: ${owner}`;
+            ErrorUtils.productIdRequiredError(cause);
+        }
         try {
+            // An admin owner can update any product. A premium owner can update only his products.
+            // Check if is premium user
+            const user = await this.sessionService.getUserById(owner);
+            if (user.role === "Premium") {
+                // Check if the product is owned by the user
+                const product = await this.productRepository.getProductById(id);
+                if (product.owner.email !== user.email) {
+                    throw new Error("User is not the owner of the product");
+                }
+            }
             const response = await this.productRepository.updateProduct(id, updateFields);
             if (response.matchedCount === 0) {
                 throw new Error("Product not found");
@@ -119,7 +136,7 @@ class ProductService {
             return updatedProduct;
         } catch (error) {
             log.logger.debug(`[ProductService] Error updating product: ${error}`);
-            let cause = `Product ID received: ${id}, Update fields received: ${updateFields}`
+            let cause = `Product ID received: ${id}, Update fields received: ${updateFields}, Owner received: ${owner}`
             ErrorUtils.productModifyError(cause);
         }
     };
@@ -127,19 +144,34 @@ class ProductService {
     /**
      * Deletes a product from the database.
      * @param {Number} id - Product id.
+     * @param {String} owner - User id.
      * @returns {Object} - Database response.
      */
-    async deleteProduct(id) {
+    async deleteProduct(id, owner) {
         if (!id) {
             let cause = `Product ID received: ${id}`;
             ErrorUtils.productIdRequiredError(cause);
         }
+        if ((owner !== 0) && (!owner)) {
+            let cause = `Product ID received: ${id}, Owner received: ${owner}`;
+            ErrorUtils.productIdRequiredError(cause);
+        }
         try {
-            const response = await this.productRepository.delete(id);
+            // An admin owner can delete any product. A premium owner can delete only his products.
+            // Check if is premium user
+            const user = await this.sessionService.getUserById(owner);
+            if (user.role === "Premium") {
+                // Check if the product is owned by the user
+                const product = await this.productRepository.getProductById(id);
+                if (product.owner.email !== user.email) {
+                    throw new Error("User is not the owner of the product");
+                }
+            }
+            const deletedProduct = await this.productRepository.getProductById(id);
+            const response = await this.productRepository.deleteProduct(id);
             if (response.deletedCount === 0) {
                 throw new Error("Product not found");
             }
-            const deletedProduct = await this.productRepository.getProductById(id);
             return deletedProduct;
         } catch (error) {
             log.logger.debug(`[ProductService] Error deleting product: ${error}`);

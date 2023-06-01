@@ -11,11 +11,13 @@ import MongoDBCartDAO from "./mongo/daos/cart.dao.js";
 import MongoDBMessageDAO from "./mongo/daos/message.dao.js";
 import MongoDBProductDAO from "./mongo/daos/product.dao.js";
 import MongoDBTicketDAO from "./mongo/daos/ticket.dao.js";
+import MongoDBPasswordTokenDAO from "./mongo/daos/passwordToken.dao.js";
 import UserManager from "./filesystem/daos/UserManager.js";
 import CartManager from "./filesystem/daos/CartManager.js";
 import MessageManager from "./filesystem/daos/MessageManager.js";
 import ProductManager from "./filesystem/daos/ProductManager.js";
 import TicketManager from "./filesystem/daos/TicketManager.js";
+import PasswordTokenManager from "./filesystem/daos/PasswordTokenManager.js";
 
 /* Main Factory Logic */
 
@@ -24,6 +26,7 @@ const FileSystemCartDAO = new CartManager(Config.getFilesystemCartsPath());
 const FileSystemMessageDAO = new MessageManager(Config.getFilesystemMessagesPath());
 const FileSystemProductDAO = new ProductManager(Config.getFilesystemProductsPath());
 const FileSystemTicketDAO = new TicketManager(Config.getFilesystemTicketsPath());
+const FileSystemPasswordTokenDAO = new PasswordTokenManager(Config.getFilesystemPasswordTokensPath());
 
 class FactoryDAO {
     /**
@@ -88,6 +91,19 @@ class FactoryDAO {
         ticketDAO.set('filesystem', FileSystemTicketDAO);
         ticketDAO.set('mongodb', MongoDBTicketDAO);
         const DAO = ticketDAO.get(key);
+        return new DAO;
+    };
+
+    /**
+     * Returns a PasswordToken DAO object based on the key.
+     * @param {String} key - Key to select the DAO.
+     * @returns {Object} - DAO object.
+     */
+    static getPasswordTokenDAO(key) {
+        const passwordTokenDAO = new Map();
+        passwordTokenDAO.set('filesystem', FileSystemPasswordTokenDAO);
+        passwordTokenDAO.set('mongodb', MongoDBPasswordTokenDAO);
+        const DAO = passwordTokenDAO.get(key);
         return new DAO;
     };
 };

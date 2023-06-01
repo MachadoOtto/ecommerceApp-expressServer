@@ -1,6 +1,11 @@
 <div class="alert alert-dark m-2" role="alert">
     <strong>ID: {{product._id}}</strong><br>
     <strong>Title: {{product.title}}</strong><br>
+    {{#if product.owner.email}}
+    Owner: <code>{{product.owner.email}}</code><br>
+    {{else}}
+    Owner: <code>Admin</code><br>
+    {{/if}}
     Description: {{product.description}}<br>
     Price: <code>${{product.price}}</code><br>
     Code: <code>{{product.code}}</code><br>
@@ -10,6 +15,7 @@
     Thumbnails:{{#each product.thumbnails}} {{this}};{{/each}}<br>
 </div>
 {{#if user}}
+{{#unless isAdmin}}
 <div class="m-2">
     <button type="submit" id="addToCart-{{_id}}" class="btn btn-outline-success mb-2">
         <script>
@@ -21,7 +27,6 @@
         Add to Cart
     </button>
 </div>
-{{/if}}
 <!-- Toast -->
 <div class="toast-container position-fixed bottom-0 end-0 p-3">
     <div id="toastAddToCart" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
@@ -38,3 +43,5 @@
     </div>
 </div>
 <script src="/js/cartManagement.js"></script>
+{{/unless}}
+{{/if}}

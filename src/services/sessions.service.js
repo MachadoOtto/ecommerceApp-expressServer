@@ -12,6 +12,9 @@ import User from "../entities/user.js";
 import { encryptPassword } from '../utils/bcrypt.utils.js';
 import ErrorUtils from "./errors/utils.error.js";
 import Logger from "../config/logger.config.js";
+import PasswordToken from "../entities/passwordToken.js";
+import PasswordTokenRepository from "../repositories/passwordToken.repository.js";
+import { generateUUID } from "../utils/uuid.utils.js";
 
 /* Main Service Logic */
 const admin = new User({
@@ -32,6 +35,7 @@ class SessionService {
     constructor() {
         this.userRepository = new UserRepository();
         this.cartService = new CartService();
+        this.passwordTokenRepository = new PasswordTokenRepository();
     };
 
     /**
@@ -131,24 +135,23 @@ class SessionService {
      * @returns {Promise<User>} - User object from the database.
      */
     async getUserById(id) {
+        if (id === 0) {
+            return admin;
+        }
         if (!id) {
             let cause = `User ID received: ${id}`;
             ErrorUtils.userIdRequiredError(cause);
         }
-        if (id === 0) {
-            return admin;
-        } else {
-            try {
-                const user = await this.userRepository.getById(id);
-                if (!user) {
-                    throw new Error("User not found");
-                }
-                return user;
-            } catch (error) {
-                log.logger.debug(`[SessionsService] Error getting user: ${error.message}`);
-                let cause = `User ID received: ${id}`;
-                ErrorUtils.userNotFound(cause);
+        try {
+            const user = await this.userRepository.getById(id);
+            if (!user) {
+                throw new Error("User not found");
             }
+            return user;
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error getting user: ${error.message}`);
+            let cause = `User ID received: ${id}`;
+            ErrorUtils.userNotFound(cause);
         }
     };
 
@@ -175,6 +178,159 @@ class SessionService {
             log.logger.debug(`[SessionsService] Error getting user: ${error.message}`);
             let cause = `User Email received: ${email}`;
             ErrorUtils.userNotFound(cause);
+        }
+    };
+
+    /**
+     * Generates a password reset token to the user.
+     * @param {String} email - User email.
+     * @returns {Promise<PasswordToken>} - .
+     */
+    async generatePasswordToken(email) {
+        if (!email) {
+            let cause = `User Email received: ${email}`;
+            ErrorUtils.userEmailRequiredError(cause);
+        }
+        try {
+            const user = await this.userRepository.getByEmail(email);
+            if (!user) {
+                let cause = `User Email received: ${email}`;
+                ErrorUtils.userNotFound(cause);
+            }
+            // generate a random unique token
+            const token = generateUUID();
+            const passwordToken = await this.passwordTokenRepository.create({userId: user._id, token: token});
+            return passwordToken;
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error generating password reset token: ${error.message}`);
+            let cause = `User Email received: ${email}`;
+            ErrorUtils.tokenCreateError(cause);
+        }
+    };
+
+    /**
+     * Returns a password reset token from the database using its token. It also checks if the token is not expired.
+     * @param {String} token - Password reset token.
+     * @returns {Promise<PasswordToken>} - PasswordToken object from the database.
+     */
+    async getPasswordToken(token) {
+        if (!token) {
+            let cause = `Password Token received: ${token}`;
+            ErrorUtils.tokenRequiredError(cause);
+        }
+        try {
+            const passwordToken = await this.passwordTokenRepository.getPasswordToken(token);
+            if (!passwordToken) {
+                let cause = `Password Token received: ${token}`;
+                ErrorUtils.tokenNotFoundError(cause);
+            }
+            const tokenDate = new Date(passwordToken.createdAt);
+            const now = new Date();
+            const diff = now.getTime() - tokenDate.getTime();
+            const diffHours = Math.floor(diff / (1000 * 60 * 60));
+            if (diffHours > 1) {
+                let cause = `Password Token (expired) received: ${token}`;
+                ErrorUtils.tokenNotFoundError(cause);
+            }
+            return passwordToken;
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error getting password reset token: ${error.message}`);
+            let cause = `Password Token received: ${token}`;
+            ErrorUtils.tokenNotFoundError(cause);
+        }
+    };
+
+    /**
+     * Deletes a password reset token from the database.
+     * @param {String} token - Password reset token.
+     * @returns {Promise<PasswordToken>} - PasswordToken object from the database.
+     */
+    async deletePasswordToken(token) {
+        if (!token) {
+            let cause = `Password Token received: ${token}`;
+            ErrorUtils.tokenRequiredError(cause);
+        }
+        try {
+            const passwordToken = await this.passwordTokenRepository.delete(token);
+            if (!passwordToken) {
+                let cause = `Password Token received: ${token}`;
+                ErrorUtils.tokenNotFoundError(cause);
+            }
+            return passwordToken;
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error deleting password reset token: ${error.message}`);
+            let cause = `Password Token received: ${token}`;
+            ErrorUtils.tokenNotFoundError(cause);
+        }
+    };
+
+    /**
+     * Updates the user password.
+     * @param {String} userId - User ID.
+     * @param {String} password - User password.
+     * @returns {Promise<User>} - User object from the database.
+     */
+    async changePassword(userId, password) {
+        if (!userId) {
+            let cause = `User ID received: ${userId}, Password received: ${password}`;
+            ErrorUtils.userIdRequiredError(cause);
+        }
+        if (!password) {
+            let cause = `User ID received: ${userId}, Password received: ${password}`;
+            ErrorUtils.userDataRequiredError(cause);
+        }
+        try {
+            const user = await this.userRepository.getById(userId);
+            if (!user) {
+                let cause = `User ID received: ${userId}, Password received: ${password}`;
+                ErrorUtils.userNotFound(cause);
+            } else if (user.password === password) {
+                let cause = `User ID received: ${userId}, Password received: ${password}`;
+                ErrorUtils.userDataError(cause);
+            } else {
+                user.password = await encryptPassword(password);
+                const updatedUser = await this.userRepository.update(userId, user);
+                if (!updatedUser) {
+                    let cause = `User ID received: ${userId}, Password received: ${password}`;
+                    ErrorUtils.userUpdateError(cause);
+                }
+                return updatedUser;
+            }
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error updating user password: ${error.message}`);
+            let cause = `User ID received: ${userId}, Password received: ${password}`;
+            ErrorUtils.userUpdateError(cause);
+        }
+    };
+
+    /**
+     * Changes the user role.
+     * @param {String} userId - User ID.
+     * @returns {Promise<User>} - User object from the database.
+     */
+    async changeRole(userId) {
+        if (!userId) {
+            let cause = `User ID received: ${userId}`;
+            ErrorUtils.userIdRequiredError(cause);
+        }
+        try {
+            const user = await this.userRepository.getById(userId);
+            if (!user) {
+                let cause = `User ID received: ${userId}`;
+                ErrorUtils.userNotFound(cause);
+            } else {
+                user.role = user.role === "Premium" ? "User" : "Premium";
+                const updatedUser = await this.userRepository.update(userId, user);
+                if (!updatedUser) {
+                    let cause = `User ID received: ${userId}`;
+                    ErrorUtils.userUpdateError(cause);
+                }
+                return updatedUser;
+            }
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error updating user role: ${error.message}`);
+            let cause = `User ID received: ${userId}`;
+            ErrorUtils.userUpdateError(cause);
         }
     };
 };

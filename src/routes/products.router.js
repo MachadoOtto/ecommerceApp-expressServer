@@ -12,19 +12,19 @@ import AuthMiddleware from '../middlewares/auth.middleware.js';
 /* Main Router Logic */
 
 const productsRouter = Router();
-const isAdmin = AuthMiddleware.isAdmin;
 const isAuthenticated = AuthMiddleware.isAuthenticated;
+const productManagment = AuthMiddleware.productManagment;
 
 /* Routes */
 
 productsRouter.route('/')
     .get(isAuthenticated, ProductController.getProductList)
-    .post(isAdmin, ProductController.addProduct);
+    .post(productManagment, ProductController.addProduct);
 
 productsRouter.route('/:pid')
     .get(isAuthenticated, ProductController.getProduct)
-    .put(isAdmin, ProductController.updateProduct)
-    .delete(isAdmin, ProductController.deleteProduct);
+    .put(productManagment, ProductController.updateProduct)
+    .delete(productManagment, ProductController.deleteProduct);
 
 /* Exports */
 

@@ -26,6 +26,13 @@ const isAdmin = (req, res, next) => {
     return res.redirect(303, '/'); // User is not authenticated or is not admin, redirect to home
 };
 
+const notAdmin = (req, res, next) => {
+    if (req.session && req.session.user && req.session.user.role !== 'Admin') { // User is authenticated and is not admin
+        return next();
+    }
+    return res.redirect(303, '/'); // User is not authenticated or is not admin, redirect to home
+};
+
 const isUser = (req, res, next) => {
     if (req.session && req.session.user && req.session.user.role === 'User') { // User is authenticated and is user
         return next();
@@ -33,6 +40,13 @@ const isUser = (req, res, next) => {
     return res.redirect(303, '/'); // User is not authenticated or is not user, redirect to home
 };
 
+const productManagment = (req, res, next) => {
+    if (req.session && req.session.user && (req.session.user.role === 'Admin' || req.session.user.role === 'Premium')) { // User is authenticated and is admin or premium
+        return next();
+    }
+    return res.redirect(303, '/'); // User is not authenticated or is not admin nor premium, redirect to home
+};
+
 /* Exports */
 
-export default { isAuthenticated, restrictSessionRoutes, isAdmin, isUser };
+export default { isAuthenticated, restrictSessionRoutes, isAdmin, notAdmin, isUser, productManagment };

@@ -88,6 +88,10 @@ class Config {
         return process.env.FILESYSTEM_TICKETS_PATH;
     };
 
+    static getFilesystemPasswordTokensPath() {
+        return process.env.FILESYSTEM_PASSWORD_TOKENS_PATH;
+    };
+
     static getEnvironment() {
         return process.env.ENVIRONMENT || "development";
     };

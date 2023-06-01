@@ -63,12 +63,13 @@ class CartController {
     // Adds a product to the cart with the specified ID. If the cart or the product doesn't exist, it returns an error.
     static async addProductToCart(req, res) {
         let { cid, pid } = req.params;
+        let userId = req.user._id;
         try {
             let product = await productService.getProductById(pid);
             if (product === null) {
                 res.status(404).send( { status: 'error', message: 'Not Found: The product with the specified ID does not exist.' } );
             } else {
-                let cart = await cartService.addProduct(cid, product._id);
+                let cart = await cartService.addProduct(cid, product._id, userId);
                 if (cart === null) {
                     res.status(404).send( { status: 'error', message: 'Not Found: The cart with the specified ID does not exist.' } );
                 } else {
