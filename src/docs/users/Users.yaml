@@ -1,0 +1,83 @@
+paths:
+  /api/users/premium/{id}:
+    get:
+      summary: User change role between premium and user using the users id.
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The id of the user.
+      responses:
+        '200':
+          description: The user was successfully updated. Returns the updated user.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  data:
+                    $ref: '#/components/schemas/User'
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The ID of the user.
+        email:
+          type: string
+          description: The email of the user.
+        first_name:
+          type: string
+          description: The first name of the user.
+        last_name:
+          type: string
+          description: The last name of the user.
+        age:
+          type: integer
+          description: The age of the user.
+        cart:
+          $ref: '#/components/schemas/Cart'
+          description: The cart of the user.    
+        role:
+          type: string
+          description: The role of the user.
+      example:
+        _id: ObjectId("5f9b3b3b9b0b2c2c3c2b1a0a")
+        email: user@user.com
+        first_name: User
+        last_name: User
+        age: 20
+        cart: 
+          _id: ObjectId("5f9d4b0b9d3e9e2d0c8b4567")
+        role: User        
+
+security:
+  - cookieAuth: []

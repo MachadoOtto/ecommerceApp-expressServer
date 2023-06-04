@@ -1,0 +1,582 @@
+paths:
+  /api/carts/:
+    get:
+      summary: Get all carts.
+      tags:
+        - Carts
+      responses:
+        '200':
+          description: Returns all carts in the database.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Cart'
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+    post:
+      summary: Create a new cart.
+      tags:
+        - Carts
+      responses:
+        '201':
+          description: Returns the cart created.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: A message containing the ID of the created cart.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+  /api/carts/{id}:
+    get:
+      summary: Get a cart by its ID.
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the cart to retrieve.
+      responses:
+        '200':
+          description: Returns the cart with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  data:
+                    $ref: '#/components/schemas/Cart'
+        '400':
+          description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '404':
+          description: Cart not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+    put:
+      summary: Modify the contents of a cart.
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the cart to modify.
+        - in: body
+          name: body
+          description: The products to add to the cart.
+          required: true
+          schema:
+            type: object
+            properties:
+              products:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: The cart contents were modified successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: A message confirming the operation.
+        '400':
+          description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '404':
+          description: Cart not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+    delete:
+      summary: Removes all products from a cart.
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the cart to empty.
+      responses:
+        '200':
+          description: All products were removed from the cart successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: A message confirming the operation.
+        '400':
+          description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '404':
+          description: Cart not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+  /api/carts/{cid}/product/{pid}:
+    post:
+      summary: Adds a product to a cart. If the product is already in the cart, its quantity is increased by 1. The session user must be the owner of the cart. 
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          schema:
+            type: string
+          required: true
+          description: The ID of the cart to add the product.
+        - in: path
+          name: pid
+          schema:
+            type: string
+          required: true
+          description: The ID of the product to add.
+      responses:
+        '200':
+          description: The product was added to the cart.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: A message confirming the operation.
+        '400':
+          description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '404':
+          description: Cart or Product not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+    put:
+      summary: Modify the quantity of a product in a cart. The session user must be the owner of the cart. 
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          schema:
+            type: string
+          required: true
+          description: The ID of the cart to add the product.
+        - in: path
+          name: pid
+          schema:
+            type: string
+          required: true
+          description: The ID of the product to add.
+        - in: body
+          name: quantity
+          description: The quantity to set.
+          required: true
+          schema:
+            type: object
+            properties:
+              quantity:
+                type: integer
+                description: The quantity to set.
+      responses:
+        '200':
+          description: The product quantity was modified successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: A message confirming the operation.
+        '400':
+          description: Invalid ID supplied or invalid quantity.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '404':
+          description: Cart not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+    delete:
+      summary: Removes a product from a cart. The session user must be the owner of the cart.
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          schema:
+            type: string
+          required: true
+          description: The ID of the cart to add the product.
+        - in: path
+          name: pid
+          schema:
+            type: string
+          required: true
+          description: The ID of the product to add.
+      responses:
+        '200':
+          description: The product was removed from the cart successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: A message confirming the operation.
+        '400':
+          description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '404':
+          description: Cart or Product not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Finalizes the process of buying the products in the cart with the specified ID. The session user must be the owner of the cart.
+      tags:
+        - Carts
+      parameters:
+        - in: path
+          name: cid
+          schema:
+            type: string
+          required: true
+          description: The ID of the cart to add the product.
+      responses:
+        '201':
+          description: The cart was purchased successfully. Generates a new order with the products in the cart. The cart is emptied.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: A message confirming the operation.
+        '400':
+          description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '404':
+          description: Cart not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: The auto-generated ID of the cart.
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+      example:
+        _id: ObjectId("5ff0e5a6e4b9e9f9a6d7a6d7")
+        products:
+          - id: ObjectId("5ff0e5a6e4b9e9f9a6d7a6d7")
+            quantity: 1
+          - id: ObjectId("5ff0e5a6e4b9e9f9a6d7a6d7")
+            quantity: 2
+
+security:
+  - cookieAuth: []

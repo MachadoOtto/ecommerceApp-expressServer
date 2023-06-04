@@ -1,0 +1,419 @@
+paths:
+  /api/products/:
+    get:
+      summary: Get all products.
+      tags:
+        - Products
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: The maximum number of products to return.
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: The page number to return.
+        - in: query
+          name: query
+          schema:
+            type: string
+          required: false
+          description: The search query to filter the products by.
+        - in: query
+          name: sort
+          schema:
+            type: string
+          required: false
+          description: The field to sort the products by.
+      responses:
+        '200':
+          description: Returns the product list. If the limit parameter is specified, it returns the first N products.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  payload:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  totalPages:
+                    type: integer
+                    description: The total number of pages.
+                  prevPage:
+                    type: integer
+                    description: The previous page number.
+                  nextPage:
+                    type: integer
+                    description: The next page number.
+                  page:
+                    type: integer
+                    description: The current page number.
+                  hasPrevPage:
+                    type: boolean
+                    description: Whether there is a previous page.
+                  hasNextPage:
+                    type: boolean
+                    description: Whether there is a next page.
+                  prevLink:
+                    type: string
+                    description: The link to the previous page.
+                  nextLink:
+                    type: string
+                    description: The link to the next page.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+    post:
+      summary: Create a new product. Session user role must be premium or admin.
+      tags:
+        - Products
+      parameters:
+        - in: body
+          name: body
+          description: An object containing the fields and values to create the product.
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: The title of the product.
+              description:
+                type: string
+                description: The description of the product.
+              price:
+                type: number
+                description: The price of the product.
+              code:
+                type: string
+                description: The code of the product (unique).
+              status:
+                type: boolean
+                description: The status of the product (true = active, false = inactive).
+              stock:
+                type: integer
+                description: The stock of the product.
+              category:
+                type: string
+                description: The category of the product.
+              thumbnail:
+                type: Array
+                description: An array of images of the product.
+      responses:
+        '200':
+          description: The product was created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  data:
+                    $ref: '#/components/schemas/Product'
+                    description: The product created.
+        '400':
+          description: Invalid product data supplied.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '409':
+          description: Conflict, the code specified is already in use by another product.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+  /api/products/{pid}:
+    get:
+      summary: Get a product by its ID.
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          schema:
+            type: string
+          required: true
+          description: The ID of the product to retrieve.
+      responses:
+        '200':
+          description: Returns the product with the specified ID.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  data:
+                    $ref: '#/components/schemas/Product'
+        '404':
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+    put:
+      summary: Modify the contents of a product. Any field not specified will be left unchanged. Session user must be the owner of the product (or have admin privileges).
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: pid
+          schema:
+            type: string
+          required: true
+          description: The ID of the product to modify.
+        - in: body
+          name: body
+          description: An object containing the fields and values to modify in the product.
+          required: true
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: The title of the product.
+              description:
+                type: string
+                description: The description of the product.
+              price:
+                type: number
+                description: The price of the product.
+              code:
+                type: string
+                description: The code of the product (unique).
+              status:
+                type: boolean
+                description: The status of the product (true = active, false = inactive).
+              stock:
+                type: integer
+                description: The stock of the product.
+              category:
+                type: string
+                description: The category of the product.
+              thumbnail:
+                type: Array
+                description: An array of images of the product.
+      responses:
+        '200':
+          description: The product was modified successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: A message confirming the operation.
+        '400':
+          description: Invalid ID supplied.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '404':
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '409':
+          description: Conflict, the code specified is already in use by another product.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+    delete:
+      summary: Delete a product. Session user must be the owner of the product (or have admin privileges).
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: The ID of the product to delete.
+      responses:
+        '200':
+          description: The product was deleted successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: A message confirming the operation.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+  
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: ObjectId
+          description: The auto-generated id of the product.
+        title:
+          type: string
+          description: The title of the product.
+        description:
+          type: string
+          description: The description of the product.
+        price:
+          type: number
+          description: The price of the product.
+        code:
+          type: string
+          description: The code of the product (unique).
+        status:
+          type: boolean
+          description: The status of the product (true = active, false = inactive).
+        stock:
+          type: integer
+          description: The stock of the product.
+        category:
+          type: string
+          description: The category of the product.
+        thumbnail:
+          type: Array
+          description: An array of images of the product.
+        owner:
+          type: object
+          properties:
+            _id:
+              type: ObjectId
+              description: The auto-generated id of the owner.
+            email:
+              type: string
+              description: The email of the owner.
+      example:
+        _id: ObjectId("5f9d4a9b9d3f3e1b7c9d4a9b")
+        title: "Product 1"
+        description: "Description of product 1"
+        price: 100
+        code: "P1"
+        status: "active"
+        stock: 10
+        category: "Category 1"
+        thumbnail: ["/images/products/product1.jpg"]
+        owner: 
+          _id: ObjectId("5f9d4a9b9d3f3e1b7c9d4a9b")
+          email: "owner@owner.com"
+
+security:
+  - cookieAuth: []

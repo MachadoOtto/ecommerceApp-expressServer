@@ -1,0 +1,139 @@
+paths:
+  /api/tickets/:
+    get:
+      summary: Get all tickets.
+      tags:
+        - Tickets
+      responses:
+        '200':
+          description: Returns all tickets from database.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tickets'
+                    description: The tickets from database.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+  /api/tickets/{code}:
+    get:
+      summary: Get a ticket by code.
+      tags:
+        - Tickets
+      parameters:
+        - in: path
+          name: code
+          schema:
+            type: string
+          required: true
+          description: The code of the ticket.
+      responses:
+        '200':
+          description: Returns the ticket from database.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  data:
+                    $ref: '#/components/schemas/Tickets'
+                    description: The ticket from database.
+        '404':
+          description: Ticket not found.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid
+  schemas:
+    Tickets:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The ID of the ticket.
+        code:
+          type: string
+          description: The code of the ticket.
+        purchase_datetime:
+          type: date
+          description: The date and time when the ticket was purchased.
+        amount:
+          type: number
+          description: The amount of the ticket.
+        purchaser:
+          $ref: '#/components/schemas/User'
+          description: The user who purchased the ticket.
+        purchased_products:
+          type: array
+          items:
+            type: object
+            properties:
+              product:
+                $ref: '#/components/schemas/Product'
+                description: The purchased product.
+              quantity:
+                type: number
+                description: The quantity of the purchased product.
+          description: The purchased products.
+      example:
+        _id: ObjectId("5f9b3b3b9b0b2c2c3c2b1a0a")
+        code: 5f9b3b3b9b0b2c2c3c2b1a0a
+        purchase_datetime: 2023-01-01T15:00:00.000Z
+        amount: 100
+        purchaser:
+          _id: ObjectId("5f9b3b3b9b0b2c2c3c2b1a0a")
+        purchased_products:
+          - product:
+              _id: ObjectId("5f9b3b3b9b0b2c2c3c2b1a0a")
+            quantity: 1
+
+security:
+  - cookieAuth: []
