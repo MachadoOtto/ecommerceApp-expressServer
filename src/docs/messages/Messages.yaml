@@ -1,0 +1,117 @@
+paths:
+  /api/messages/:
+    get:
+      summary: Returns all messages.
+      tags:
+        - Messages
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+          required: false
+          description: The number of messages to return.
+      responses:
+        '200':
+          description: Returns all messages from database, limited by the limit parameter.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+                    description: The messages from database.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+    post:
+      summary: Creates a new message.
+      tags:
+        - Messages
+      parameters:
+        - in: body
+          name: message
+          schema:
+            type: string
+          required: true
+          description: The message content.
+        - in: body
+          name: user
+          schema:
+            type: string
+          required: true
+          description: The user who sent the message.
+      responses:
+        '200':
+          description: The message was successfully created. Returns the created message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  data:
+                    $ref: '#/components/schemas/Message'
+                    description: The created message.
+        '500':
+          description: Internal Server Error, something went wrong during the operation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    description: The status of the response.
+                  message:
+                    type: string
+                    description: The error message.
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid
+  schemas:
+    Message:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: The ID of the message.
+        user:
+          type: string
+          description: The user who sent the message.
+        message:
+          type: string
+          description: The message.
+        date:
+          type: string
+          description: The date of the message.
+      example:
+        _id: ObjectId("5f9b3b3b9b0b2c2c3c2b1a0a")
+        user: ObjectID("5f9b3b3b9b0b3c2d0c3b3b9b")
+        message: Hello World!
+        date: 2023-01-01T15:00:00.000Z
+
+security:
+  - cookieAuth: []

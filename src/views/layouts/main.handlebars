@@ -52,6 +52,17 @@
                         </div>
                     </li>
                     {{/unless}}
+                    {{#if isAdmin}}
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <a class="nav-link active" data-bs-toggle="dropdown" aria-expanded="false">Administration</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" onclick="openSwagger()">Swagger Interface</a></li>
+                                <script>function openSwagger() { window.open('/api-docs', '_blank'); }</script>
+                            </ul>
+                        </div>
+                    </li>
+                    {{/if}}
                     {{#unless isAdmin}}
                     <script>
                         function becomePremium() {

@@ -31,6 +31,8 @@ import initializePassport from './config/passport.config.js';
 import Config from './config/config.js';
 import Mongo from './persistance/mongo/config/mongo.config.js';
 import Logger from './config/logger.config.js';
+import swaggerUiExpress from 'swagger-ui-express';
+import swaggerDocs from './config/swagger.config.js';
 
 /* Main Server Logic */
 
@@ -95,6 +97,7 @@ app.use('/api/tickets', ticketsRouter);
 app.use('/api/users', usersRouter);
 app.use('/mockingproducts', mockingsRouter);
 app.use('/loggerTest', loggersRouter);
+app.use('/api-docs', swaggerUiExpress.serve, swaggerUiExpress.setup(swaggerDocs));
 app.use(function (req, res) {
     let user = req.session.user;
     let isAdmin = false;
