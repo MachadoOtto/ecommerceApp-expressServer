@@ -23,7 +23,7 @@ class ProductController {
             let products = await productService.getProducts(limit, page, query, sort);
             let response = {
                 status: 'success',
-                payload: JSON.parse(JSON.stringify(products.docs)),
+                payload: products.products,
                 totalPages: products.totalPages,
                 prevPage: products.prevPage,
                 nextPage: products.nextPage,

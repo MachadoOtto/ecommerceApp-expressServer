@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon --watch src src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test-sessions && npm run test-products && npm run test-carts",
+    "test-all": "npm run test-sessions && npm run test-products && npm run test-carts",
+    "test-carts": "mocha src/test/carts.test.js",
+    "test-products": "mocha src/test/products.test.js",
+    "test-sessions": "mocha src/test/sessions.test.js"
   },
   "author": "Jorge Machado Ottonelli",
   "license": "ISC",
@@ -39,5 +43,10 @@
     "url": "https://github.com/MachadoOtto/productManager-expressServer/issues"
   },
   "homepage": "https://github.com/MachadoOtto/productManager-expressServer#readme",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
+  }
 }
