@@ -58,7 +58,9 @@ class SessionService {
                 last_name: user.last_name.trim(),
                 age: user.age,
                 cart: newCart,
-                role: role
+                role: role,
+                documents: [],
+                last_connection: new Date()
             };
             const userEntity = await this.userRepository.create(newUser);
             if (!userEntity) {
@@ -86,6 +88,9 @@ class SessionService {
             } else {
                 const user = await this.userRepository.getByEmailAndPassword(email, password);
                 if (user) {
+                    // Change last connection
+                    user.last_connection = new Date();
+                    await this.userRepository.update(user._id, user);
                     return user;
                 }
                 throw new Error("Invalid email or password");
@@ -105,6 +110,9 @@ class SessionService {
         try {
             const user = await this.userRepository.getByEmail(gitUser.email);
             if (user) {
+                // Change last connection
+                user.last_connection = new Date();
+                await this.userRepository.update(user._id, user);
                 return user;
             } else {
                 const newCart = await this.cartService.createCart();
@@ -115,7 +123,9 @@ class SessionService {
                     last_name: gitUser.last_name,
                     age: gitUser.age,
                     cart: newCart,
-                    role: gitUser.role
+                    role: gitUser.role,
+                    documents: [],
+                    last_connection: new Date()
                 };
                 const user = await this.userRepository.create(newUser);
                 if (!user) {
@@ -329,6 +339,37 @@ class SessionService {
             }
         } catch (error) {
             log.logger.debug(`[SessionsService] Error updating user role: ${error.message}`);
+            let cause = `User ID received: ${userId}`;
+            ErrorUtils.userUpdateError(cause);
+        }
+    };
+
+    /**
+     * Change user last_connection field.
+     * @param {String} userId - User ID.
+     * @returns {Promise<User>} - User object from the database.
+     */
+    async changeLastConnection(userId) {
+        if (!userId) {
+            let cause = `User ID received: ${userId}`;
+            ErrorUtils.userIdRequiredError(cause);
+        }
+        try {
+            const user = await this.userRepository.getById(userId);
+            if (!user) {
+                let cause = `User ID received: ${userId}`;
+                ErrorUtils.userNotFound(cause);
+            } else {
+                user.last_connection = new Date();
+                const updatedUser = await this.userRepository.update(userId, user);
+                if (!updatedUser) {
+                    let cause = `User ID received: ${userId}`;
+                    ErrorUtils.userUpdateError(cause);
+                }
+                return updatedUser;
+            }
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error updating user last_connection: ${error.message}`);
             let cause = `User ID received: ${userId}`;
             ErrorUtils.userUpdateError(cause);
         }

@@ -6,7 +6,7 @@
 /* DTO Class */
 
 class UserDTO {
-    constructor( {_id, email, password, first_name, last_name, age, cart, role} ) {
+    constructor( {_id, email, password, first_name, last_name, age, cart, role, documents, last_connection} ) {
         this._id = _id;
         this.email = email;
         this.password = password;
@@ -15,6 +15,8 @@ class UserDTO {
         this.age = age;
         this.cart = cart;
         this.role = role;
+        this.documents = documents;
+        this.last_connection = last_connection;
     };
 };
 

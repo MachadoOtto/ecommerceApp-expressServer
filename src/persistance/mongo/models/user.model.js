@@ -47,6 +47,17 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true,
         default: "User"
+    },
+    documents: [{
+        name: {
+            type: String
+        },
+        reference: {
+            type: String
+        }
+    }],
+    last_connection: {
+        type: Date
     }
 });
 

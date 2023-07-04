@@ -29,6 +29,9 @@ class SessionController {
     // Logout a user
     static async logoutUser(req, res) {
         try {
+            // Change last connection
+            await sessionService.changeLastConnection(req.session.user._id);
+            // Destroy session
             req.session.destroy();
             res.redirect('/login');
         } catch (error) {
