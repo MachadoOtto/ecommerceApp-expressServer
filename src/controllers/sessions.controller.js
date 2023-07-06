@@ -20,6 +20,10 @@ class SessionController {
     static async loginUser(req, res) {
         if (req.user) {
             req.session.user = req.user;
+            // Change last connection if not admin
+            if (req.session.user.role !== 'Admin') {
+                await sessionService.changeLastConnection(req.session.user._id);
+            }
             res.redirect('/');
         } else {
             res.redirect('/login?error=1');
@@ -29,9 +33,14 @@ class SessionController {
     // Logout a user
     static async logoutUser(req, res) {
         try {
+            // Change last connection if not admin
+            if (req.session.user.role !== 'Admin') {
+                await sessionService.changeLastConnection(req.session.user._id);
+            }
+            // Destroy session
             req.session.destroy();
             res.redirect('/login');
-        } catch (error) {
+        } catch (err) {
             req.logger.warning(`[SessionController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.redirect('/');
         }
@@ -123,6 +132,20 @@ class SessionController {
         } catch (err) {
             req.logger.warning(`[SessionController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
             res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to change the user role.' } );
+        }
+    };
+
+    // Upload user documents
+    static async uploadDocuments(req, res) {
+        let { uid } = req.params;
+        let { reference } = req.body;
+        let { files } = req;
+        try {
+            const user = await sessionService.uploadFiles(uid, files, reference);
+            res.redirect('/uploads');
+        } catch (err) {
+            console.error(err);
+            res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to upload the documents.' } );
         }
     };
 };

@@ -1,0 +1,56 @@
+<div class="m-2">
+    <a class="dropdown-item" data-bs-target="#modalUploadsRequiredDocuments" data-bs-toggle="modal" href="#modalUploadsRequiredDocuments"><button class="btn btn-outline-success mb-2">Upload Required Documents</button></a>
+</div>
+<u1>
+    {{#each uploads}}
+    <div class="accordion m-2" id="accordionPanelsStayOpen{{name}}">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-h{{name}}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-{{name}}" aria-expanded="true"
+                    aria-controls="panelsStayOpen-{{name}}">
+                    <strong>Filename: {{name}}</strong>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-{{name}}" class="accordion-collapse collapse"
+                aria-labelledby="panelsStayOpen-h{{name}}">
+                <div class="accordion-body">
+                    <strong>URL: <a href="">{{name}}</a></strong><br>
+                    Reference: {{reference}}<br>
+                    Status: <code>{{status}}</code><br>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</u1>
+<!-- Modal Upload Required Documents -->
+<div class="modal fade" id="modalUploadsRequiredDocuments" tabindex="-1" aria-labelledby="modalUploadsRequiredDocumentsLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="modalUploadsRequiredDocumentsLabel">File Upload</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/api/users/{{user._id}}/documents" method="POST" enctype="multipart/form-data">
+                    <label for="file">Select a document file:</label>
+                    <input type="file" class="form-control" name="documents">
+                    <br>
+                    <input type="radio" id="reference1" name="reference" value="Identification">
+                    <label for="reference1">Identification</label><br>
+                    <input type="radio" id="reference2" name="reference" value="Proof of address">
+                    <label for="reference2">Proof of address</label><br>
+                    <input type="radio" id="reference3" name="reference" value="Proof of bank account">
+                    <label for="reference3">Proof of bank account</label><br>
+                    <br>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeAdd">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

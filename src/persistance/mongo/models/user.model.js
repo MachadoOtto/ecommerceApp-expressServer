@@ -47,6 +47,21 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true,
         default: "User"
+    },
+    documents: [{
+        name: {
+            type: String
+        },
+        reference: {
+            type: String
+        },
+        status: {
+            type: String,
+            default: "Pending"
+        }
+    }],
+    last_connection: {
+        type: Date
     }
 });
 

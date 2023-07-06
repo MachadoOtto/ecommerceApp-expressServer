@@ -52,6 +52,17 @@
                         <p class="text-muted mb-0">{{user.email}}</p>
                     </div>
                 </div>
+                {{#unless isAdmin}}
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <p class="mb-0">Last Connection</p>
+                    </div>
+                    <div class="col-sm-9">
+                        <p class="text-muted mb-0">{{user.last_connection}}</p>
+                    </div>
+                </div>
+                {{/unless}}
             </div>
         </div>
     </div>

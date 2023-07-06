@@ -6,7 +6,7 @@
 /* Entity Class */
 
 class User {
-    constructor( {_id, email, first_name, last_name, age, cart, role} ) {
+    constructor( {_id, email, first_name, last_name, age, cart, role, documents, last_connection} ) {
         this._id = _id;
         this.email = email;
         this.first_name = first_name;
@@ -14,6 +14,8 @@ class User {
         this.age = age;
         this.cart = cart;
         this.role = role;
+        this.documents = documents;
+        this.last_connection = last_connection;
     };
 };
 

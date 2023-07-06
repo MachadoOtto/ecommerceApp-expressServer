@@ -58,7 +58,9 @@ class SessionService {
                 last_name: user.last_name.trim(),
                 age: user.age,
                 cart: newCart,
-                role: role
+                role: role,
+                documents: [],
+                last_connection: new Date()
             };
             const userEntity = await this.userRepository.create(newUser);
             if (!userEntity) {
@@ -115,7 +117,9 @@ class SessionService {
                     last_name: gitUser.last_name,
                     age: gitUser.age,
                     cart: newCart,
-                    role: gitUser.role
+                    role: gitUser.role,
+                    documents: [],
+                    last_connection: new Date()
                 };
                 const user = await this.userRepository.create(newUser);
                 if (!user) {
@@ -319,7 +323,49 @@ class SessionService {
                 let cause = `User ID received: ${userId}`;
                 ErrorUtils.userNotFound(cause);
             } else {
-                user.role = user.role === "Premium" ? "User" : "Premium";
+                // check if user has uploaded all required documents
+                // Documents required: Identification, Proof of address, Proof of bank account
+                const requiredDocuments = ["Identification", "Proof of address", "Proof of bank account"];
+                const hasRequiredDocuments = requiredDocuments.every(document => {
+                    return user.documents.some(doc => doc.reference.includes(document) && doc.status === "Uploaded");
+                });
+                if (hasRequiredDocuments) {
+                    user.role = user.role === "Premium" ? "User" : "Premium";
+                    const updatedUser = await this.userRepository.update(userId, user);
+                    if (!updatedUser) {
+                        let cause = `User ID received: ${userId}`;
+                        ErrorUtils.userUpdateError(cause);
+                    }            
+                    return updatedUser;
+                } else {
+                    let cause = `User ID received: ${userId}`;
+                    ErrorUtils.userDataRequiredError(cause);
+                }
+            }
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error updating user role: ${error.message}`);
+            let cause = `User ID received: ${userId}`;
+            ErrorUtils.userUpdateError(cause);
+        }
+    };
+
+    /**
+     * Change user last_connection field.
+     * @param {String} userId - User ID.
+     * @returns {Promise<User>} - User object from the database.
+     */
+    async changeLastConnection(userId) {
+        if (!userId) {
+            let cause = `User ID received: ${userId}`;
+            ErrorUtils.userIdRequiredError(cause);
+        }
+        try {
+            const user = await this.userRepository.getById(userId);
+            if (!user) {
+                let cause = `User ID received: ${userId}`;
+                ErrorUtils.userNotFound(cause);
+            } else {
+                user.last_connection = new Date();
                 const updatedUser = await this.userRepository.update(userId, user);
                 if (!updatedUser) {
                     let cause = `User ID received: ${userId}`;
@@ -328,8 +374,49 @@ class SessionService {
                 return updatedUser;
             }
         } catch (error) {
-            log.logger.debug(`[SessionsService] Error updating user role: ${error.message}`);
+            log.logger.debug(`[SessionsService] Error updating user last_connection: ${error.message}`);
             let cause = `User ID received: ${userId}`;
+            ErrorUtils.userUpdateError(cause);
+        }
+    };
+
+    /** Uploads files from the user to the server. If the upload is successful, the user status is returned.
+     * @param {String} userId - User ID.
+     * @param {Object} files - Files to upload.
+     * @returns {Promise<User>} - User object from the database.
+     */
+    async uploadFiles(userId, files, reference) {
+        if (!userId) {
+            let cause = `User ID received: ${userId}, Files received: ${files}`;
+            ErrorUtils.userIdRequiredError(cause);
+        }
+        if (!files) {
+            let cause = `User ID received: ${userId}, Files received: ${files}`;
+            ErrorUtils.userDataRequiredError(cause);
+        }
+        try {
+            const user = await this.userRepository.getById(userId);
+            if (!user) {
+                let cause = `User ID received: ${userId}, Files received: ${files}`;
+                ErrorUtils.userNotFound(cause);
+            }
+            if (!user.documents) {
+                user.documents = [];
+            }
+            // Update the user with the uploaded files and set the status to "Uploaded"
+            files.forEach(file => {
+                user.documents.push({
+                name: file.filename,
+                reference: reference,
+                status: "Uploaded"
+                });
+            });
+            const updatedUser = await this.userRepository.update(userId, user);
+            log.logger.debug(`[SessionsService] Files uploaded successfully: User ID ${userId}`);
+            return updatedUser;
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error uploading files: ${error.message}`);
+            let cause = `User ID received: ${userId}, Files received: ${files}`;
             ErrorUtils.userUpdateError(cause);
         }
     };

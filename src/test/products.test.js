@@ -15,8 +15,8 @@ dotenv.config();
 
 const appURL = `http://localhost:${process.env.PORT}`;
 const credentials = {
-  email: process.env.TEST_EMAIL,
-  password: process.env.TEST_PASSWORD
+    email: process.env.TEST_EMAIL,
+    password: process.env.TEST_PASSWORD
 };
 
 const newProduct = {

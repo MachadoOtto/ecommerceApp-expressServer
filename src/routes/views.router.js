@@ -57,6 +57,9 @@ viewsRouter.route('/passwordReset')
 viewsRouter.route('/passwordChange/:token')
     .get(restrictSessionRoutes, ViewController.getPasswordChange);
 
+viewsRouter.route('/uploads')
+    .get(isAuthenticated, ViewController.getUploads);
+
 /* Exports */
 
 export default viewsRouter;
