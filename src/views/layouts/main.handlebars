@@ -36,6 +36,19 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="/chat">LiveChat</a>
                     </li>
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <a class="nav-link active" data-bs-toggle="dropdown" aria-expanded="false">Uploads</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" data-bs-target="#modalUploadsProfile" data-bs-toggle="modal"
+                                        href="#modalUploadsProfile">Upload profile picture</a></li>
+                                <li><a class="dropdown-item" data-bs-target="#modalUploadsProduct" data-bs-toggle="modal"
+                                        href="#modalUploadsProduct">Upload product picture</a></li>
+                                <li><a class="dropdown-item" data-bs-target="#modalUploadsDocuments" data-bs-toggle="modal"
+                                        href="#modalUploadsDocuments">Upload document</a></li>
+                            </ul>
+                        </div>
+                    </li>
                     {{/unless}}
                     {{#unless isUser}}
                     <li class="nav-item">
@@ -68,13 +81,24 @@
                         function becomePremium() {
                             fetch('/api/users/premium/{{user._id}}', {
                                 method: 'GET',
-                            }).then(res => res.json())
-                                .then(data => {
-                                    console.log(data);
-                                    window.location.reload();
-                                })
-                                .catch(err => console.log(err));
-                        }
+                            }).then(res => {
+                                if (res.ok) {
+                                    return res.json();
+                                } else {
+                                    throw new Error('Something went wrong');
+                                }
+                            }).then(data => {
+                                console.log(data);
+                                window.location.reload();
+                            }).catch(err => {
+                                console.log(err);
+                                let toastNotPremium = document.getElementById('toastNotPremium');
+                                toastNotPremium.classList.add('show');
+                                setTimeout(() => {
+                                    toastNotPremium.classList.remove('show');
+                                }, 10000);
+                            });
+                        }                        
                     </script>
                     {{/unless}}
                     {{/if}}
@@ -99,10 +123,13 @@
                     </li>
                     {{#unless isAdmin}}
                     <li class="nav-item">
+                        <a class="nav-link active" href="/cart">MyCart</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link active" href="/tickets">MyTickets</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/cart">MyCart</a>
+                        <a class="nav-link active" href="/uploads">MyUploads</a>
                     </li>
                     {{/unless}}
                     <li class="nav-item">
@@ -122,6 +149,90 @@
     </nav>
     {{{body}}}
     {{#if user}}
+    {{#unless isAdmin}}
+    <!-- Modal Upload Profile Picture -->
+    <div class="modal fade" id="modalUploadsProfile" tabindex="-1" aria-labelledby="modalUploadsProfileLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalUploadsProfileLabel">File Upload</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/api/users/{{user._id}}/documents" method="POST" enctype="multipart/form-data">
+                        <label for="file">Select a profile picture:</label>
+                        <input type="file" class="form-control" name="profiles" accept="image/*">
+                        <br>
+                        <input type="text" class="form-control" name="reference" placeholder="Reference">
+                        <br>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeAdd">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Upload Product Picture -->
+    <div class="modal fade" id="modalUploadsProduct" tabindex="-1" aria-labelledby="modalUploadsProductLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalUploadsProductLabel">File Upload</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/api/users/{{user._id}}/documents" method="POST" enctype="multipart/form-data">
+                        <label for="file">Select a product picture:</label>
+                        <input type="file" class="form-control" name="products" accept="image/*">
+                        <br>
+                        <input type="text" class="form-control" name="reference" placeholder="Reference">
+                        <br>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeAdd">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Upload Documents -->
+    <div class="modal fade" id="modalUploadsDocuments" tabindex="-1" aria-labelledby="modalUploadsDocumentsLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="modalUploadsDocumentsLabel">File Upload</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/api/users/{{user._id}}/documents" method="POST" enctype="multipart/form-data">
+                        <label for="file">Select a document file:</label>
+                        <input type="file" class="form-control" name="documents">
+                        <br>
+                        <input type="text" class="form-control" name="reference" placeholder="Reference">
+                        <br>
+                        <button type="submit" class="btn btn-primary">Upload</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeAdd">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toastNotPremium" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body">
+                User cannot become Premium! Please upload the documents required in the MyUploads section.
+            </div>
+        </div>
+    </div>
+    {{/unless}}
     {{#unless isUser}}
     <!-- Modal AddProduct -->
     <div class="modal fade" id="modalAddProduct" tabindex="-1" aria-labelledby="modalAddProductLabel"

@@ -54,6 +54,10 @@ const userSchema = new mongoose.Schema({
         },
         reference: {
             type: String
+        },
+        status: {
+            type: String,
+            default: "Pending"
         }
     }],
     last_connection: {
