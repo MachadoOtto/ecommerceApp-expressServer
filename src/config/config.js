@@ -95,6 +95,10 @@ class Config {
     static getEnvironment() {
         return process.env.ENVIRONMENT || "development";
     };
+
+    static getInactiveUsersDays() {
+        return process.env.INACTIVE_USERS_DAYS || 2;
+    };
 };
 
 /* Exports */

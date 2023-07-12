@@ -420,6 +420,42 @@ class SessionService {
             ErrorUtils.userUpdateError(cause);
         }
     };
+
+    /**
+     * Return all the users from the database.
+     * @returns {Promise<User[]>} - Array of users.
+     */
+    async getUsers() {
+        try {
+            const users = await this.userRepository.getAll();
+            if (!users) {
+                ErrorUtils.userNotFound();
+            }
+            return users;
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error getting users: ${error.message}`);
+            ErrorUtils.userNotFound();
+        }
+    };
+
+    /**
+     * Deletes all users that have not been activated in the last X days.
+     * The days are read from the .env file.
+     * @returns {Promise<User[]>} - Array of users.
+     */
+    async deleteInactiveUsers() {
+        try {
+            const days = Config.getInactiveUsersDays();
+            const users = await this.userRepository.deleteInactiveUsers(days);
+            if (!users) {
+                ErrorUtils.userNotFound();
+            }
+            return users;
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error deleting inactive users: ${error.message}`);
+            ErrorUtils.userNotFound();
+        }
+    };
 };
 
 /* Exports */

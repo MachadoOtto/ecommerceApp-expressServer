@@ -1,6 +1,6 @@
-uploads/documents/*
-uploads/products/*
-uploads/profiles/*
+uploads/documents/
+uploads/products/
+uploads/profiles/
 
 # Logs
 logs/

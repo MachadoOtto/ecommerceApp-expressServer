@@ -101,6 +101,35 @@ class UserRepository {
             throw new Error("Error updating user");
         }
     };
+
+    /**
+     * Gets all users.
+     * @returns {Array<User>} All users.
+     */
+    async getAll() {
+        try {
+            const usersDTO = await this.dao.getAll();
+            return usersDTO.map(userDTO => new User(userDTO));
+        } catch (error) {
+            log.logger.debug(`[UserRepository] Error getting all users: ${error}`);
+            throw new Error("Error getting all users");
+        }
+    };
+
+    /**
+     * Deletes all users that have not logged in for more than X days.
+     * @param {Number} days
+     * @returns {Array<User>} The deleted users.
+     */
+    async deleteInactiveUsers(days) {
+        try {
+            const usersDTO = await this.dao.deleteInactiveUsers(days);
+            return usersDTO.map(userDTO => new User(userDTO));
+        } catch (error) {
+            log.logger.debug(`[UserRepository] Error deleting inactive users: ${error}`);
+            throw new Error("Error deleting inactive users");
+        }
+    };
 };
 
 /* Exports */

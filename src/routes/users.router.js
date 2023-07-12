@@ -14,8 +14,13 @@ import upload from '../config/multer.config.js';
 
 const usersRouter = Router();
 const isAuthenticated = AuthMiddleware.isAuthenticated;
+const isAdmin = AuthMiddleware.isAdmin;
 
 /* Routes */
+
+usersRouter.route('/')
+    .get(isAdmin, SessionController.getUsers)
+    .delete(isAdmin, SessionController.deleteInactiveUsers);
 
 usersRouter.route('/premium/:id')
     .get(isAuthenticated, SessionController.changeUserRole);

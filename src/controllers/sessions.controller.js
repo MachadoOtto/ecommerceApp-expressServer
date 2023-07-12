@@ -148,6 +148,28 @@ class SessionController {
             res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to upload the documents.' } );
         }
     };
+
+    // Get all users
+    static async getUsers(req, res) {
+        try {
+            const users = await sessionService.getUsers();
+            res.send( { status: 'success', data: users } );
+        } catch (err) {
+            req.logger.warning(`[SessionController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to retrieve the users.' } );
+        }
+    };
+
+    // Delete all users that have not logged in for more than X days.
+    static async deleteInactiveUsers(req, res) {
+        try {
+            const users = await sessionService.deleteInactiveUsers();
+            res.send( { status: 'success', data: users } );
+        } catch (err) {
+            req.logger.warning(`[SessionController]\n\t${err.name}: ${err.message}\n\tCause: ${err.cause}\n\tError Code: ${err.code}`);
+            res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to delete the users.' } );
+        }
+    };
 };
 
 /* Exports */

@@ -74,6 +74,38 @@ class MongoDBUserDAO {
             log.logger.debug(`[MongoDBUserDAO] Error updating user: ${error}`);
         }
     };
+
+    /**
+     * Get all users from the database.
+     * @returns {Promise<UserDTO[]>} - Array of User DTOs.
+     */
+    async getAll() {
+        try {
+            const users = await UserModel.find().lean();
+            const usersDTO = users.map(user => new UserDTO(user));
+            return usersDTO;
+        } catch (error) {
+            log.logger.debug(`[MongoDBUserDAO] Error getting all users: ${error}`);
+        }
+    };
+
+    /**
+     * Delete a user from the database that haven't logged in in the last X days.
+     * @param {Number} days - Days.
+     * @returns {Promise<UserDTO>} - User DTO.
+     */
+    async deleteInactiveUsers(days) {
+        try {
+            // First find the users that haven't logged in in the last X days.
+            const inactiveUsers = await UserModel.find({ last_connection: { $lt: new Date(Date.now() - (days * 24 * 60 * 60 * 1000)) } }).lean();
+            // Delete the users that haven't logged in in the last X days.
+            await UserModel.deleteMany({ last_connection: { $lt: new Date(Date.now() - (days * 24 * 60 * 60 * 1000)) } });
+            const inactiveUsersDTO = new UserDTO(inactiveUsers);
+            return inactiveUsersDTO;
+        } catch (error) {
+            log.logger.debug(`[MongoDBUserDAO] Error deleting inactive users: ${error}`);
+        }
+    };
 };
 
 /* Exports */
