@@ -1,0 +1,143 @@
+<div class="m-2">
+    <button type="submit" id="deleteInactive" class="btn btn-outline-danger mb-2">
+        <script>
+            document.getElementById("deleteInactive").addEventListener("click", function () {
+                deleteInactiveUsers();
+            });
+        </script>
+        Delete Inactive Users
+    </button>
+</div>
+<u1>
+    {{#each users}}
+    <div class="accordion m-2" id="accordionPanelsStayOpen{{_id}}">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-h{{_id}}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#panelsStayOpen-{{_id}}" aria-expanded="true"
+                    aria-controls="panelsStayOpen-{{_id}}">
+                    <strong>ID: {{_id}} | {{email}}</strong>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-{{_id}}" class="accordion-collapse collapse"
+                aria-labelledby="panelsStayOpen-h{{_id}}">
+                <div class="accordion-body">
+                    <strong>ID: <code>{{_id}}</code></strong><br>
+                    <strong>Email: {{email}}</strong><br>
+                    First Name: {{first_name}}<br>
+                    Last Name: {{last_name}}<br>
+                    Age: {{age}}<br>
+                    Role: <code>{{role}}</code><br>
+                    Last Connection: {{last_connection}}<br>
+                    <div class="m-2">
+                        <button type="submit" id="changeRole-{{_id}}" class="btn btn-outline-success mb-2">
+                            <script>
+                                document.getElementById("changeRole-{{_id}}").addEventListener("click", function () {
+                                    changeRole("{{_id}}");
+                                });
+                            </script>
+                            Change Role
+                        </button>
+                        <button type="submit" id="delete-{{_id}}" class="btn btn-outline-danger mb-2">
+                            <script>
+                                document.getElementById("delete-{{_id}}").addEventListener("click", function () {
+                                    deleteUser("{{_id}}");
+                                });
+                            </script>
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</u1>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toastNotPremium" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            User cannot become Premium! Please upload the documents required in the MyUploads section.
+        </div>
+    </div>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toastNotDelete" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            Cannot delete user.
+        </div>
+    </div>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toastNotDeleteInactive" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body">
+            Cannot delete inactive users.
+        </div>
+    </div>
+</div>
+<script>
+    function changeRole(userId) {
+        fetch('/api/users/premium/' + userId, {
+            method: 'GET',
+        }).then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error('Something went wrong');
+            }
+        }).then(data => {
+            console.log(data);
+            window.location.reload();
+        }).catch(err => {
+            console.log(err);
+            let toastNotPremium = document.getElementById('toastNotPremium');
+            toastNotPremium.classList.add('show');
+            setTimeout(() => {
+                toastNotPremium.classList.remove('show');
+            }, 10000);
+        });
+    };
+
+    function deleteUser(userId) {
+        fetch('/api/users/' + userId, {
+            method: 'DELETE',
+        }).then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error('Something went wrong');
+            }
+        }).then(data => {
+            console.log(data);
+            window.location.reload();
+        }).catch(err => {
+            console.log(err);
+            let toast = document.getElementById('toastNotDelete');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 10000);
+        });
+    };
+
+    function deleteInactiveUsers() {
+        fetch('/api/users/', {
+            method: 'DELETE',
+        }).then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                throw new Error('Something went wrong');
+            }
+        }).then(data => {
+            console.log(data);
+            window.location.reload();
+        }).catch(err => {
+            console.log(err);
+            let toast = document.getElementById('toastNotDeleteInactive');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 10000);
+        });
+    };
+</script>

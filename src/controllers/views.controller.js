@@ -272,6 +272,27 @@ class ViewController {
             res.render('uploads', { uploads, user, isAdmin, isPremium, isUser });
         }
     };
+
+    // User management dashboard.
+    static async getUserManagement(req, res) {
+        let user;
+        try { 
+            user = await sessionService.getUserById(req.session.user._id);
+        } catch (err) {
+            user = req.session.user;
+        }
+        let isAdmin = (user.role === 'Admin') ? true : false;
+        let isPremium = (user.role === 'Premium') ? true : false;
+        let isUser = (user.role === 'User') ? true : false;
+        let users;
+        try {
+            users = await sessionService.getUsers();
+            res.render('userAdministration', { users, user, isAdmin, isPremium, isUser });
+        } catch (err) {
+            users = [];
+            res.render('userAdministration', { users, user, isAdmin, isPremium, isUser });
+        }
+    };
 };
 
 /* Exports */

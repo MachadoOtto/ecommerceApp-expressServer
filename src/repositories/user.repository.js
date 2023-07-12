@@ -130,6 +130,21 @@ class UserRepository {
             throw new Error("Error deleting inactive users");
         }
     };
+
+    /**
+     * Deletes a user by id.
+     * @param {String} id
+     * @returns {User} The deleted user.
+     */
+    async delete(id) {
+        try {
+            const userDTO = await this.dao.delete(id);
+            return new User(userDTO);
+        } catch (error) {
+            log.logger.debug(`[UserRepository] Error deleting user: ${error}`);
+            throw new Error("Error deleting user");
+        }
+    };
 };
 
 /* Exports */

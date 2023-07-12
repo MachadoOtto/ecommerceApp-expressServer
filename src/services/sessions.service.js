@@ -456,6 +456,30 @@ class SessionService {
             ErrorUtils.userNotFound();
         }
     };
+
+    /**
+     * Delete user by ID.
+     * @param {String} userId - User ID.
+     * @returns {Promise<User>} - User object from the database.
+     */
+    async deleteUser(userId) {
+        if (!userId) {
+            let cause = `User ID received: ${userId}`;
+            ErrorUtils.userIdRequiredError(cause);
+        }
+        try {
+            const user = await this.userRepository.delete(userId);
+            if (!user) {
+                let cause = `User ID received: ${userId}`;
+                ErrorUtils.userNotFound(cause);
+            }
+            return user;
+        } catch (error) {
+            log.logger.debug(`[SessionsService] Error deleting user: ${error.message}`);
+            let cause = `User ID received: ${userId}`;
+            ErrorUtils.userNotFound(cause);
+        }
+    };
 };
 
 /* Exports */

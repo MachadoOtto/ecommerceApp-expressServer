@@ -170,6 +170,18 @@ class SessionController {
             res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to delete the users.' } );
         }
     };
+
+    // Delete user by id
+    static async deleteUser(req, res) {
+        let { id } = req.params;
+        try {
+            const user = await sessionService.deleteUser(id);
+            res.send( { status: 'success', data: user } );
+        } catch (err) {
+            console.error(err);
+            res.status(500).send( { status: 'error', message: 'Internal Server Error: An error ocurred while trying to delete the user.' } );
+        }
+    };
 };
 
 /* Exports */

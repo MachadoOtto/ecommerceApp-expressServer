@@ -15,6 +15,7 @@ const viewsRouter = Router();
 const isAuthenticated = middlewares.isAuthenticated;
 const notAdmin = middlewares.notAdmin;
 const restrictSessionRoutes = middlewares.restrictSessionRoutes;
+const isAdmin = middlewares.isAdmin;
 
 /* Routes */
 
@@ -59,6 +60,9 @@ viewsRouter.route('/passwordChange/:token')
 
 viewsRouter.route('/uploads')
     .get(isAuthenticated, ViewController.getUploads);
+
+viewsRouter.route('/userManagement')
+    .get(isAdmin, ViewController.getUserManagement);
 
 /* Exports */
 

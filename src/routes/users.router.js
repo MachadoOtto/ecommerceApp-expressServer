@@ -22,6 +22,9 @@ usersRouter.route('/')
     .get(isAdmin, SessionController.getUsers)
     .delete(isAdmin, SessionController.deleteInactiveUsers);
 
+usersRouter.route('/:id')
+    .delete(isAdmin, SessionController.deleteUser);
+
 usersRouter.route('/premium/:id')
     .get(isAuthenticated, SessionController.changeUserRole);
 

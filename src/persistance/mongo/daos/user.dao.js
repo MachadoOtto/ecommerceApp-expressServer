@@ -106,6 +106,23 @@ class MongoDBUserDAO {
             log.logger.debug(`[MongoDBUserDAO] Error deleting inactive users: ${error}`);
         }
     };
+
+    /**
+     * Delete a user from the database.
+     * @param {String} id - User ID.
+     * @returns {Promise<UserDTO>} - User DTO.
+     */
+    async delete(id) {
+        try {
+            // First find the user.
+            const user = await UserModel.findById(id).lean();
+            await UserModel.deleteOne({ _id: id });
+            const userDTO = new UserDTO(user);
+            return userDTO;
+        } catch (error) {
+            log.logger.debug(`[MongoDBUserDAO] Error deleting user: ${error}`);
+        }
+    };
 };
 
 /* Exports */
