@@ -99,6 +99,10 @@ class Config {
     static getInactiveUsersDays() {
         return process.env.INACTIVE_USERS_DAYS || 2;
     };
+
+    static getDomain() {
+        return process.env.DOMAIN;
+    }
 };
 
 /* Exports */

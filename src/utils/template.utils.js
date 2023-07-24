@@ -72,7 +72,7 @@ export const passwordResetTemplate = (token) => {
                     <h3 style="font-size: 1.2rem; font-weight: 600; color: #000;">Click on the button below to reset your password.</h3>
                 </div>
                 <div style="width: 100%; text-align: center;">
-                    <a href="http://localhost:${Config.getPort()}/passwordChange/${token}" style="display: inline-block; padding: 10px 20px; background-color: #000; color: #fff; text-decoration: none; font-size: 1.2rem; font-weight: 600;">Reset Password</a>
+                    <a href="http://${Config.getDomain()}:${Config.getPort()}/passwordChange/${token}" style="display: inline-block; padding: 10px 20px; background-color: #000; color: #fff; text-decoration: none; font-size: 1.2rem; font-weight: 600;">Reset Password</a>
                 </div>
                 <div style="width: 100%; text-align: center;">
                     <h3 style="font-size: 1.2rem; font-weight: 600; color: #000;">If you did not request a password reset, please ignore this email.</h3>

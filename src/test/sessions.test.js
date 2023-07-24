@@ -13,7 +13,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const appURL = `http://localhost:${process.env.PORT}/api/sessions`;
+const appURL = `http://${process.env.PORT}:${process.env.PORT}/api/sessions`;
 const credentials = {
     email: process.env.TEST_EMAIL,
     password: process.env.TEST_PASSWORD
