@@ -105,10 +105,14 @@ class SessionService {
      */
     async githubSSO(gitUser) {
         try {
-            const user = await this.userRepository.getByEmail(gitUser.email);
-            if (user) {
-                return user;
-            } else {
+            try {
+                const user = await this.userRepository.getByEmail(gitUser.email);
+                if (user) {
+                    return user;
+                } else {
+                    throw new Error("User not found");
+                }
+            } catch (error) {
                 const newCart = await this.cartService.createCart();
                 const newUser = {
                     email: gitUser.email,
