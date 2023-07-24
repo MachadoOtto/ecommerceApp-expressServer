@@ -10,10 +10,12 @@ import SessionService from "./sessions.service.js";
 import Product from "../entities/product.js";
 import ErrorUtils from "./errors/utils.error.js";
 import Logger from "../config/logger.config.js";
+import NodemailerTransporter from "../config/nodemailer.config.js";
 
 /* Main Service Logic */
 
 const log = new Logger();
+const nodemailer = new NodemailerTransporter();
 
 /* Services */
 
@@ -171,6 +173,16 @@ class ProductService {
             const response = await this.productRepository.deleteProduct(id);
             if (response.deletedCount === 0) {
                 throw new Error("Product not found");
+            }
+            // Email notification if the product was deleted and the owner is a premium user
+            try {
+                const ownerProduct = await this.sessionService.getUserByEmail(deletedProduct.owner.email);
+                if (ownerProduct.role === "Premium") {
+                    await nodemailer.sendDeleteProductEmail(ownerProduct.email, deletedProduct);
+                }
+            } catch (error) {
+                // If the email can't be sent, log the error and continue
+                log.logger.debug(`[ProductService] Error sending email: ${error}`);
             }
             return deletedProduct;
         } catch (error) {
